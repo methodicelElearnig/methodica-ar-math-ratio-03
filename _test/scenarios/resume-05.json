@@ -1,0 +1,164 @@
+[
+ {
+  "part": "05",
+  "name": "s2-typed",
+  "screen": 2,
+  "away": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','3x')"
+ },
+ {
+  "part": "05",
+  "name": "s2-wrong1-partial",
+  "screen": 2,
+  "away": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','3x'); set('s2viq-input-wheat','5x'); s2viqCheck(); "
+ },
+ {
+  "part": "05",
+  "name": "s2-correct",
+  "screen": 2,
+  "away": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','3X'); set('s2viq-input-wheat','7x'); s2viqCheck(); "
+ },
+ {
+  "part": "05",
+  "name": "s2-wrong2-answer-view",
+  "screen": 2,
+  "away": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','1x'); set('s2viq-input-wheat','1x'); s2viqCheck(); set('s2viq-input-wheat','2x'); s2viqCheck(); s2viqToggleView()"
+ },
+ {
+  "part": "05",
+  "name": "s3-watched-gate-after-landing-s4",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(3); s3VideoOnEnded(); goTo(4)",
+  "after": "(()=>{ goTo(3); const r={s3vidDone, continueDisabled: s3Continue().disabled, playHidden: s3PlayBtn().classList.contains('hidden'), advancedTo: (advanceScreen(), currentScreen)}; return r; })()"
+ },
+ {
+  "part": "05",
+  "name": "s4-selected",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o1')"
+ },
+ {
+  "part": "05",
+  "name": "s4-wrong1",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o1'); s4scCheck()"
+ },
+ {
+  "part": "05",
+  "name": "s4-correct-gate-read",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o2'); s4scCheck(); rd('s4sc-popup-scroll',s4scCheckScrollGate); ",
+  "after": "({gate: !!scrollGateSatisfied.s4sc, s4scGateOk, chkDisabled: document.getElementById('s4sc-check').disabled})"
+ },
+ {
+  "part": "05",
+  "name": "s4-correct-gate-unread",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o2'); s4scCheck()",
+  "after": "({gate: !!scrollGateSatisfied.s4sc, s4scGateOk, chkDisabled: document.getElementById('s4sc-check').disabled})"
+ },
+ {
+  "part": "05",
+  "name": "s4-wrong2",
+  "screen": 4,
+  "away": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o1'); s4scCheck(); s4scSelect('o3'); s4scCheck(); rd('s4sc-popup-scroll',s4scCheckScrollGate); "
+ },
+ {
+  "part": "05",
+  "name": "s6-wrong1",
+  "screen": 6,
+  "away": 5,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o2'); s6mcCheck()"
+ },
+ {
+  "part": "05",
+  "name": "s6-correct",
+  "screen": 6,
+  "away": 5,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(6); s6mcToggle('o2'); s6mcToggle('o3'); s6mcCheck(); rd('s6mc-popup-scroll',s6mcCheckScrollGate); "
+ },
+ {
+  "part": "05",
+  "name": "s6-wrong2",
+  "screen": 6,
+  "away": 5,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(6); s6mcToggle('o1'); s6mcCheck(); s6mcToggle('o2'); s6mcCheck(); rd('s6mc-popup-scroll',s6mcCheckScrollGate); "
+ },
+ {
+  "part": "05",
+  "name": "s7-typed",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(7); set('s7viq-input-spelt','90')"
+ },
+ {
+  "part": "05",
+  "name": "s7-wrong1",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(7); set('s7viq-input-spelt','90'); set('s7viq-input-wheat','100'); s7viqCheck(); "
+ },
+ {
+  "part": "05",
+  "name": "s7-correct",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(7); set('s7viq-input-spelt','90'); set('s7viq-input-wheat','210'); s7viqCheck(); rd('s7viq-popup-scroll',s7viqCheckScrollGate); "
+ },
+ {
+  "part": "05",
+  "name": "s7-wrong2",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(7); set('s7viq-input-spelt','1'); set('s7viq-input-wheat','2'); s7viqCheck(); set('s7viq-input-wheat','3'); s7viqCheck(); rd('s7viq-popup-scroll',s7viqCheckScrollGate); "
+ },
+ {
+  "part": "05",
+  "name": "revisit-s2-wrong1",
+  "screen": 8,
+  "away": 7,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','3x'); set('s2viq-input-wheat','5x'); s2viqCheck(); goTo(4); s4scSelect('o2'); s4scCheck(); rd('s4sc-popup-scroll',s4scCheckScrollGate); goTo(8)",
+  "revisit": 2
+ },
+ {
+  "part": "05",
+  "name": "revisit-s6-wrong2",
+  "screen": 8,
+  "away": 7,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(6); s6mcToggle('o1'); s6mcCheck(); s6mcToggle('o2'); s6mcCheck(); rd('s6mc-popup-scroll',s6mcCheckScrollGate); goTo(8)",
+  "revisit": 6
+ },
+ {
+  "part": "05",
+  "name": "revisit-s4-correct",
+  "screen": 8,
+  "away": 7,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(4); s4scSelect('o2'); s4scCheck(); rd('s4sc-popup-scroll',s4scCheckScrollGate); goTo(8)",
+  "revisit": 4
+ },
+ {
+  "part": "05",
+  "name": "continue-after-restore",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(7); set('s7viq-input-spelt','90'); set('s7viq-input-wheat','100'); s7viqCheck(); ",
+  "after": "(()=>{ const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const chk=document.getElementById('s7viq-check'); const gate=chk.disabled; set('s7viq-input-wheat','210'); const open=!chk.disabled; s7viqCheck(); const a=__stmts().filter(s=>s.verb.startsWith('answered')); return {retryGateHeld:gate, reopenedOnChange:open, attempts:s7viqAttempts, done:s7viqDone, last:a.slice(-1)[0].verb, success:a.slice(-1)[0].result.success}; })()"
+ },
+ {
+  "part": "05",
+  "name": "end-s8-continue",
+  "screen": 8,
+  "away": 7,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(id,f)=>{const s=document.getElementById(id);s.scrollTop=s.scrollHeight;f();}; goTo(2); set('s2viq-input-spelt','3x'); set('s2viq-input-wheat','7x'); s2viqCheck(); goTo(3); s3VideoOnEnded(); goTo(4); s4scSelect('o2'); s4scCheck(); rd('s4sc-popup-scroll',s4scCheckScrollGate); goTo(6); s6mcToggle('o1'); s6mcCheck(); s6mcToggle('o2'); s6mcCheck(); rd('s6mc-popup-scroll',s6mcCheckScrollGate); goTo(7); set('s7viq-input-spelt','90'); set('s7viq-input-wheat','210'); s7viqCheck(); rd('s7viq-popup-scroll',s7viqCheckScrollGate); goTo(8); document.querySelector('#s8 .btn-continue').click()",
+  "after": "({btnDisabled: document.querySelector('#s8 .btn-continue').disabled, peak: peakQuestionResult().scoredCorrect, completed: __stmts().filter(s=>s.verb==='completed').length})"
+ }
+]

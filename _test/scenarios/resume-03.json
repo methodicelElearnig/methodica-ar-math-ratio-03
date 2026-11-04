@@ -1,0 +1,184 @@
+[
+ {
+  "part": "03",
+  "name": "s1-typed",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','3')"
+ },
+ {
+  "part": "03",
+  "name": "s1-wrong1",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); "
+ },
+ {
+  "part": "03",
+  "name": "s1-correct",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','1'); set('s1viq-input-second','2'); s1viqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s1-wrong2-answerview",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); set('s1viq-input-second','3'); s1viqCheck(); s1viqToggleView()"
+ },
+ {
+  "part": "03",
+  "name": "s2-correct",
+  "screen": 2,
+  "away": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(2); set('s2viq-input','36'); s2viqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s3-wrong2",
+  "screen": 3,
+  "away": 2,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(3); set('s3viq-input-first','7'); set('s3viq-input-second','5'); s3viqCheck(); set('s3viq-input-first','6'); s3viqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s4-selected",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4mcToggle('o2'); s4mcToggle('o3')"
+ },
+ {
+  "part": "03",
+  "name": "s4-wrong1-partial",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4mcToggle('o1'); s4mcToggle('o2'); s4mcCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s4-correct",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4mcToggle('o1'); s4mcToggle('o3'); s4mcCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s4-wrong2",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4mcToggle('o2'); s4mcCheck(); s4mcToggle('o1'); s4mcCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s5-selected",
+  "screen": 5,
+  "away": 4,
+  "setup": "goTo(5); s5dqSelect('קטן מ')"
+ },
+ {
+  "part": "03",
+  "name": "s5-wrong1",
+  "screen": 5,
+  "away": 4,
+  "setup": "goTo(5); s5dqSelect('קטן מ'); s5dqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s5-correct",
+  "screen": 5,
+  "away": 4,
+  "setup": "goTo(5); s5dqSelect('גדול מ'); s5dqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s5-wrong2",
+  "screen": 5,
+  "away": 4,
+  "setup": "goTo(5); s5dqSelect('קטן מ'); s5dqCheck(); s5dqSelect('שווה ל'); s5dqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s7-correct-gate-read",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(7); set('s7viq-input-amit','70'); set('s7viq-input-omer','40'); s7viqCheck(); const sc=document.getElementById('s7viq-popup-scroll'); sc.scrollTop=sc.scrollHeight; s7viqCheckScrollGate()",
+  "after": "[s7viqGateOk, s7viqGateRead, document.getElementById('s7viq-check').disabled]"
+ },
+ {
+  "part": "03",
+  "name": "s7-wrong2",
+  "screen": 7,
+  "away": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(7); set('s7viq-input-amit','70'); set('s7viq-input-omer','30'); s7viqCheck(); set('s7viq-input-omer','20'); s7viqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s8-placed",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8ddqPlacement['s8drag-10x']='s8target-m2'; s8ddqRender()"
+ },
+ {
+  "part": "03",
+  "name": "s8-wrong1",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8ddqPlacement['s8drag-3x']='s8target-m1'; s8ddqPlacement['s8drag-7x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); "
+ },
+ {
+  "part": "03",
+  "name": "s8-correct",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8ddqPlacement['s8drag-7x']='s8target-m1'; s8ddqPlacement['s8drag-3x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); "
+ },
+ {
+  "part": "03",
+  "name": "s8-wrong2",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8ddqPlacement['s8drag-3x']='s8target-m1'; s8ddqPlacement['s8drag-7x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); s8ddqClearAttemptFeedback(); s8ddqPlacement['s8drag-3x']='source'; s8ddqPlacement['s8drag-10x']='s8target-m1'; s8ddqRender(); s8ddqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s9-correct",
+  "screen": 9,
+  "away": 8,
+  "setup": "goTo(9); s9ddqPlacement['s9drag-c']='s9target'; s9ddqRender(); s9ddqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "s10-wrong1",
+  "screen": 10,
+  "away": 9,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(10); set('s10viq-input-m1','210'); set('s10viq-input-m2','80'); s10viqCheck()"
+ },
+ {
+  "part": "03",
+  "name": "cp1-fail-ended-s5",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); set('s1viq-input-second','3'); s1viqCheck(); goTo(2); set('s2viq-input','36'); s2viqCheck(); goTo(3); set('s3viq-input-first','1'); set('s3viq-input-second','1'); s3viqCheck(); set('s3viq-input-first','2'); s3viqCheck(); goTo(4); s4mcToggle('o1'); s4mcToggle('o3'); s4mcCheck(); goTo(5); s5dqSelect('קטן מ'); s5dqCheck(); s5dqSelect('שווה ל'); s5dqCheck(); s5dqCheck()",
+  "after": "[document.getElementById('s5dq-check').disabled, currentScreen]"
+ },
+ {
+  "part": "03",
+  "name": "land10-revisit4",
+  "screen": 10,
+  "revisit": 4,
+  "away": 9,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(4); s4mcToggle('o2'); s4mcCheck(); goTo(8); s8ddqPlacement['s8drag-3x']='s8target-m1'; s8ddqPlacement['s8drag-7x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); s8ddqClearAttemptFeedback(); s8ddqPlacement['s8drag-3x']='source'; s8ddqPlacement['s8drag-10x']='s8target-m1'; s8ddqRender(); s8ddqCheck(); goTo(10); set('s10viq-input-m1','5')"
+ },
+ {
+  "part": "03",
+  "name": "land10-revisit8",
+  "screen": 10,
+  "revisit": 8,
+  "away": 9,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(4); s4mcToggle('o2'); s4mcCheck(); goTo(8); s8ddqPlacement['s8drag-3x']='s8target-m1'; s8ddqPlacement['s8drag-7x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); s8ddqClearAttemptFeedback(); s8ddqPlacement['s8drag-3x']='source'; s8ddqPlacement['s8drag-10x']='s8target-m1'; s8ddqRender(); s8ddqCheck(); goTo(10); set('s10viq-input-m1','5')"
+ },
+ {
+  "part": "03",
+  "name": "s1-continue-after-restore",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); ",
+  "after": "(()=>{const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const gate=document.getElementById('s1viq-check').disabled; set('s1viq-input-second','2'); set('s1viq-input-first','1'); const open=!document.getElementById('s1viq-check').disabled; s1viqCheck(); const L=__stmts().filter(s=>s.verb.startsWith('answered')); return {gateHeld:gate, reopened:open, attempts:s1viqAttempts, result:s1viqResult, done:s1viqDone, answeredTotal:L.length, label:document.getElementById('s1viq-check').textContent.trim()};})()"
+ }
+]

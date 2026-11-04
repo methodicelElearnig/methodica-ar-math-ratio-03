@@ -1,0 +1,93 @@
+[
+ {
+  "nav": "methodica-math-ratio-03-02/index.html",
+  "after": 5000
+ },
+ {
+  "eval": "[typeof sendStatement720, window.XAPI_USING_G, !!window.XAPI_DISABLED, !!window.METADATA]",
+  "label": "CDN lib, no slxapi (regression gate)"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-02/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "__stmts().map(s=>s.verb+' '+s.objectType).join(' | ')",
+  "expect": "initialized onlinelesson",
+  "label": "boot: component initialized only (S0 is null)"
+ },
+ {
+  "eval": "goTo(1); __stmts().slice(-1).map(s=>s.verb+' '+(s.opts&&s.opts.objectId))[0]",
+  "expect": "initialized https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-001/",
+  "label": "S1 opens item 001"
+ },
+ {
+  "eval": "(()=>{ const L=document.getElementById('s1viq-input-left'),R=document.getElementById('s1viq-input-right'); L.value='1'; L.dispatchEvent(new Event('input',{bubbles:true})); R.value='1'; R.dispatchEvent(new Event('input',{bubbles:true})); s1viqCheck(); const s=__stmts().slice(-1)[0]; return [s.verb, s.result.success, s.result.extensions.student_answer[0], s.opts.questionId.split('/').slice(-2).join('/')] })()",
+  "expect": [
+   "answered",
+   false,
+   "1 : 1",
+   "methodica-math-ratio-03-02-001/q1"
+  ],
+  "label": "wrong 1st attempt -> answered (not last)"
+ },
+ {
+  "eval": "s1viqOpenHint(); s1viqCloseHint(); s1viqOpenHint(); __stmts().filter(s=>s.verb.startsWith('requested')).length",
+  "expect": 1,
+  "label": "hint reported once"
+ },
+ {
+  "eval": "(()=>{ const L=document.getElementById('s1viq-input-left'),R=document.getElementById('s1viq-input-right'); L.value='2'; L.dispatchEvent(new Event('input',{bubbles:true})); R.value='3'; R.dispatchEvent(new Event('input',{bubbles:true})); s1viqCheck(); const s=__stmts().slice(-1)[0]; return [s.verb, s.result.success, s.result.extensions.student_answer[0]] })()",
+  "expect": [
+   "answered.last",
+   true,
+   "2 : 3"
+  ],
+  "label": "correct 2nd attempt -> answered.last"
+ },
+ {
+  "eval": "goTo(2); goTo(1); goTo(2); __stmts().filter(s=>s.verb==='completed').length",
+  "expect": 0,
+  "label": "paging inside item 001 closes nothing"
+ },
+ {
+  "eval": "s2scSelect('o2'); s2scCheck(); s2scSelect('o3'); s2scCheck(); __stmts().filter(s=>s.verb.startsWith('answered')).slice(-2).map(s=>s.verb+':'+s.result.extensions.student_answer[0])",
+  "expect": [
+   "answered:3a²",
+   "answered.last:a²"
+  ],
+  "label": "SC wrong x2, answer text from metadata (superscripts)"
+ },
+ {
+  "eval": "(()=>{ goTo(4); const c=__stmts().filter(s=>s.verb==='completed'); return [c.length, c[0]&&c[0].opts.objectId.slice(-5), c[0]&&c[0].result.success, c[0]&&+c[0].result.score.scaled.toFixed(3)] })()",
+  "expect": [
+   1,
+   "-001/",
+   false,
+   0.333
+  ],
+  "label": "forward into item 002 completes 001 with explicit score"
+ },
+ {
+  "eval": "goTo(3); __stmts().filter(s=>s.verb==='completed').length",
+  "expect": 1,
+  "label": "Back into 001 closes nothing (O-1)"
+ },
+ {
+  "eval": "__stmts().filter(s=>s.verb==='initialized').map(s=>(s.opts&&s.opts.objectId||'comp').slice(-5)).join(',')",
+  "log": true,
+  "label": "initialized sequence"
+ },
+ {
+  "eval": "__dupes().length",
+  "expect": 0,
+  "label": "no duplicate completed"
+ }
+]

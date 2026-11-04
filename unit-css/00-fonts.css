@@ -1,0 +1,40 @@
+/* ═══════════════════════════════════════════════════════
+   unit-css/00-fonts.css  —  methodica-math-ratio-03 (all parts)
+
+   The one @font-face set for the whole lomda. Linked FIRST in every
+   part's <head>, before css/style.css. The TTFs live once in
+   unit-assets/fonts/ (they used to be copied into each part's
+   assets/fonts/, byte-identical).
+
+   Path depth: this file is <repo>/unit-css/00-fonts.css, so the fonts
+   are one level up. Browsers fetch only the faces a page actually uses,
+   so declaring all five here costs nothing in a part that needs three.
+     500 Medium    — used only by the 02 graph widget (its own @font-face,
+                     ../../../unit-assets/fonts/ from assets/widgets/)
+     800 ExtraBold — used only by 06
+   ═══════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Assistant';
+  src: url('../unit-assets/fonts/Assistant-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('../unit-assets/fonts/Assistant-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('../unit-assets/fonts/Assistant-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('../unit-assets/fonts/Assistant-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Assistant';
+  src: url('../unit-assets/fonts/Assistant-ExtraBold.ttf') format('truetype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}

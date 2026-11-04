@@ -1,0 +1,14 @@
+[
+  {"nav":"methodica-math-ratio-03-02/index.html?dev=1"},
+  {"eval":"typeof PartNav.forward","expect":"function","label":"PartNav loaded"},
+  {"eval":"sessionStorage.clear(); PartNav.canGoBack()","expect":false,"label":"empty trail on direct entry"},
+  {"eval":"goTo(8); PartNav.forward('03'); true","after":2500},
+  {"eval":"location.pathname.endsWith('/methodica-math-ratio-03-03/index.html')","expect":true,"label":"forward lands on 03"},
+  {"eval":"PartNav.canGoBack()","expect":true,"label":"03 can go back"},
+  {"eval":"!document.getElementById('s0-back').classList.contains('hidden')","expect":true,"label":"03 S0 Back visible"},
+  {"eval":"PartNav.back(); true","after":2500},
+  {"eval":"location.pathname.endsWith('/methodica-math-ratio-03-02/index.html')","expect":true,"label":"back lands on 02"},
+  {"eval":"currentScreen","expect":8,"label":"02 landed on the screen it was left from"},
+  {"eval":"PartNav.forwardOverride()","expect":"03","label":"forwardOverride set after back"}
+]
+

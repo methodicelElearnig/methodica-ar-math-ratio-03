@@ -1,0 +1,2456 @@
+/* ═══════════════════════════════════════════════════════
+   css/style.css  —  methodica-math-ratio-03-06
+   Canvas: 1280 × 710 px   (720 reference engine)
+
+   Part 06 = "רכיב 6 / שאלת שיא ב" (Peak Question B). Its boundary was
+   established from the deck's own component-divider slides, not from
+   numbering: the divider at presentation order 73 opens it and it is
+   the LAST divider in the deck, so the part runs to the final slide —
+   slides 74-83. Slide 73 is production-only and is NOT built.
+
+   Screens implemented so far:
+     00 — TransitionScreen (Peak Question B launch), source slide 74.
+     01 — FullImageWithTextOverlay, full-width-card variant, the
+          הקונטרול game intro, source slide 75.
+
+   Global chrome (fonts, subject tokens, canvas, bottom bar, flag
+   button, Continue / Back pills, nav-label width reservation, focus
+   rings) ported VERBATIM from the same-lomda sibling
+   methodica-math-ratio-03-05, which took it from -04 / -03 / -02 / -01
+   — so all six parts render identical chrome. Question-template rules
+   are added screen by screen rather than up front (720-templates →
+   _common-pitfalls.md warns against carrying an incomplete CSS
+   dependency closure): no question block exists in this file yet
+   because no question screen in this part is built.
+
+   TransitionScreen composition/geometry ported verbatim from
+   methodica-math-ratio-03-05's own S0 (identical screen role — a Peak
+   Question launch transition, and the deck authors slide 74 with
+   BYTE-IDENTICAL learner-facing copy to slide 64), per 720-templates →
+   references/TransitionScreen.md + references/_global-components.md.
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Fonts: @font-face lives in ../../unit-css/00-fonts.css (shared by all parts). ─── */
+
+/* ─── Reset, theme tokens, canvas, .screen and .flag-btn base: ../../unit-css/10-base.css ─── */
+.flag-btn-label {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 600; font-size: 14px; color: var(--subject-500);
+  text-align: center; width: max-content; white-space: nowrap; line-height: normal; /* Arabic build: one line */
+  direction: rtl; display: none;
+}
+.flag-btn:hover .flag-btn-label,
+.flag-btn:focus-visible .flag-btn-label { display: block; }
+
+/* ─── Back button — white pill, bottom-right of the 74px bar.
+   Class name `.scq-back` is this lomda's established shared name for
+   this control (methodica-math-ratio-03-01 → -02 → -03 → -04), ported
+   verbatim rather than renamed per part.
+   Slide 74 mocks it as a LIVE shape (id=3, roundRect, text "חזרה",
+   #019DE5 stroke, adj=50000 → full pill radius) with its right edge
+   15.6px from the slide's right edge — corroborating both the control's
+   presence and its bottom-right placement. Canonical geometry (24px
+   inset, 39px height, --subject-700) is used; the mock's #019DE5 is the
+   deck's stock Science-blue furniture colour, not a Math theme
+   instruction. ── */
+.scq-back {
+  position: absolute;
+  bottom: 17.5px;
+  right: 24px;
+  z-index: 12;
+  width: auto; min-width: 140px; height: 39px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-700);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-back:hover { font-weight: 600; border-width: 1.5px; }
+
+/* ─── Shared: Continue Button — gradient pill, bottom-left of bar.
+   Ported verbatim from methodica-math-ratio-03-05 / -04 / -03 / -02 / -01.
+   LABEL: "המשך" — DIRECT source evidence, not a silent fallback. Slide
+   74 mocks the button as picture id=4 (rId4 → ppt/media/image18.png, a
+   140×39 px blue pill) and the decoded image reads "המשך". Unlike
+   slides 29 and 39 — which author an explicit "אפשר להתחיל!" text
+   overlay for their own kickoff transitions — slide 74 carries no such
+   override, so the stock progression label the image itself shows is
+   what ships. Deliberately NOT copied from those siblings' overrides. ── */
+.btn-continue {
+  position: absolute;
+  bottom: 17.5px; left: 24px;  /* true 39px-pill centering: (74-39)/2 = 17.5px */
+  z-index: 12;                /* above the ::after white bar (z-index 9) */
+  min-width: 140px;
+  height: 39px;
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary-action-gradient);
+  color: #fff;
+  border: none; border-radius: 1000px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+  text-align: center; white-space: nowrap;
+}
+.btn-continue:not(:disabled):hover { font-weight: 600; }
+.btn-continue.hidden { display: none !important; }
+.btn-continue:disabled {
+  background: #AEAEAE;
+  color: #303030;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ─── Nav-button width consistency (Foundation rule) — ported verbatim.
+   HOVER STABILITY: the pill's hover state bumps the label to weight 600,
+   which would otherwise widen the button mid-hover. `.nav-label`
+   reserves the bold width up front via an invisible ::before carrying
+   the same string, so the box never reflows. Every runtime label change
+   must go through main.js → setNavLabel(), never textContent, or this
+   reservation is destroyed. ── */
+.nav-label { display: inline-grid; }
+.nav-label::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.nav-label > span { grid-area: 1 / 1; }
+
+/* ─── Visible focus (keyboard) — ported verbatim from
+   methodica-math-ratio-03-05. Every interactive control on this screen
+   is covered: there are only three (flag, Continue, Back). ── */
+.btn-continue:focus-visible,
+.scq-back:focus-visible,
+.flag-btn:focus-visible {
+  outline: 3px solid var(--subject-500);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen (Screen 00 / #s0)
+   Peak Question B launch screen. Source: slide 74 (presentation order
+   74 → ppt/slides/slide74.xml, resolved through presentation.xml's
+   <p:sldIdLst> r:id → ppt/_rels/presentation.xml.rels; the mapping is
+   1:1 with no offset across all 83 slides, DERIVED from a fresh
+   extraction this session rather than assumed).
+
+   Presenter note resolved through slide74's OWN .rels
+   (rId3 → ppt/notesSlides/notesSlide67.xml — part-name numbering is NOT
+   slide numbering, and 74 ≠ 67). Its cached <a:fld type="slidenum">
+   reads "74", corroborating the identification:
+       הנחיות הפקה:
+       מסך הזנקה שאלת שיא
+       שם המסך בפיגמה: TransitionScreen
+       הדמות נראית מטפסת על הר
+
+   Composition ported verbatim from the same-lomda sibling
+   methodica-math-ratio-03-05's own S0 — not merely the same screen
+   ROLE this time but the same authored copy: slide 74's five
+   paragraphs are byte-identical to slide 64's, run for run, including
+   their point sizes and bold flags. Only the presenter note's pose
+   direction differs (climbing a mountain here, start of a race there).
+   720-templates → references/TransitionScreen.md, canonical composition
+   (text block + character media centred as one unit above the bar).
+
+   720-templates → TransitionScreen.md → "B. Video clipping / overflow
+   structure" requires a dedicated `.s1-video-clip` inner layer even on
+   an instance with no active fit shim and no speech-bubble overlay
+   (slide 74 authors neither — its whole shape inventory is the flag
+   picture, the bottom rule, the Continue picture, the Back roundRect,
+   one TextBox and one character picture) — kept here for contract
+   compliance and so a later bubble addition never needs to restructure
+   this screen.
+
+   The `.s1-*` prefix is this COMPONENT's own historical prefix, not a
+   claim that this is "screen 1" (TransitionScreen.md → "Naming note");
+   it is deliberately not renamed to match the hosting screen index.
+   ═══════════════════════════════════════════════════════ */
+#s0 { background: #fff; }
+
+/* The whole stack — text block + character media — is centred as ONE
+   unit in the content zone above the bar, so the surplus a taller
+   viewport introduces splits evenly above/below rather than pinning
+   either element to a raw deck coordinate. Slide 74's own layout agrees:
+   the character picture is centred on the slide's horizontal midline
+   (x 5268676 + cx 1654648/2 = 6096000 EMU = exactly half of 12192000),
+   and the text box is centred to within 2px of it
+   (3151158 + 6400799/2 = 6351558 EMU ≈ 0.5209 of slide width — the box
+   itself sits slightly right of centre, but every one of its paragraphs
+   carries algn="ctr", so the rendered text block reads as centred; the
+   fresh PowerPoint render confirms it). */
+.s1-content {
+  position: absolute;
+  inset: 0 0 74px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* One rhythm for every line in the stack — a single `gap` (not
+   per-paragraph margins) keeps the rhythm even regardless of how many
+   lead-in lines a given instance has (720-templates →
+   TransitionScreen.md → "Text roles"). Slide 74 centres every rendered
+   paragraph (algn="ctr" on all five), which this matches.
+
+   THIS INSTANCE HAS THREE LEAD-IN LINES — the most of any transition
+   screen in this lomda so far — 03-05 ships the same three from the
+   same authored copy (03-02 and 03-03 ship one each, 03-04 ships
+   none). TransitionScreen.md → "Text roles" states the lead-in count is
+   explicitly not fixed, so three is a normal shape of the component,
+   not an overflow risk to design around. */
+.s1-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+/* Headline — Assistant 40px/700 (Heading / H-5). Slide 74's own run is
+   40pt Bold in "Assistant"; TransitionScreen.md → "Headline type-size
+   mapping" is explicit that this role snaps to 40px/700 regardless of
+   the authored run's point size (its two references cite 54pt and 44pt
+   sources doing exactly this, and the approved siblings in this lomda
+   ship 40/700 from 54pt and 48pt sources). Here the source point value
+   and the role value coincide at 40 — that is a coincidence, not a new
+   rule: the mapping is still role-driven. */
+.s1-title {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #303030;
+  margin: 0;
+}
+
+/* Closing line under the headline — 28px/400 (Body / B-1). Slide 74
+   authors this run at 20pt with b="1". The approved sibling
+   methodica-math-ratio-03-03 ships the IDENTICAL source shape from
+   slide 39 — a 20pt b="1" mastery-threshold sentence in the closing
+   slot ("ענו נכון על 2 שאלות ומעלה כדי להתקדם.") — as 28px/400, so this
+   is the established mapping for this role in this lomda, applied
+   again rather than re-decided. The source bold is authored emphasis on
+   the run, not a weight instruction for the role (pptx-script-extraction
+   → "Bold is not color"); the role's own 400 weight wins, exactly as it
+   does on 03-03. */
+.s1-subtitle {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #303030;
+  margin: 0;
+}
+/* Lead-in line above the headline — 24px/400 (Body / B-3). Slide 74
+   authors all three of these runs at 20pt regular; ported at 24px to
+   match the established TransitionScreen lead-in role already shipped
+   by the approved siblings for the same 20pt source. */
+.s1-subtitle--regular { font-size: 24px; font-weight: 400; }
+
+/* Companion-character video stage. Fixed 640×360 box with
+   object-fit: contain — the established box for this template's video
+   variant in all four approved siblings. `.s1-video-clip` is the
+   dedicated clipping inner layer (template contract "B"); it is a
+   no-op today (no fit shim, no bubble) and is kept unconditionally.
+
+   ASPECT MATCH: both supplied clips are 1280×720 (16:9) and this box is
+   640×360 (16:9), so `contain` fits exactly with no letterboxing and no
+   crop — the full authored frame of each clip is shown, which is what
+   preserves each character's own framing. Neither clip is cropped,
+   stretched, or normalised against the other. */
+.s1-video-wrap {
+  position: relative;
+  width: 640px;
+  height: 360px;
+  flex-shrink: 0;
+}
+.s1-video-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* PER-CHARACTER FIT SHIM — `--char-scale` / `--char-shift-y`, both
+   defaulting to a no-op, and both written unconditionally by
+   js/main.js on every character switch so a previous character's scale
+   can never persist on the element.
+
+   THIS INSTANCE SHIPS NO `fit` VALUES — measured, not assumed. The
+   derivation and the evidence live in the S0_CHARACTER block in
+   js/main.js. TransitionScreen.md → "C" forbids deriving a shim by
+   analogy to another clip pair, so 03-01's / 03-04's / 03-05's
+   decisions were not copied here; this pair was measured on its own.
+   The measurement DID surface a real framing difference between the two
+   Climbing clips — the producer ruled on 2026-09-14 that it is an asset
+   characteristic, not a layout defect, so it is reported rather than
+   compensated for here. See js/main.js for the numbers.
+
+   The clips' near-white background was a separate matter and IS fixed —
+   in the ASSET FILES, not here. Nothing in this stylesheet compensates
+   for it: there is no filter, mix-blend-mode, mask, backdrop or white
+   panel anywhere in this file. See docs/asset-corrections.md and
+   tests/verify-plate-seam.mjs. ── */
+.s1-char-media {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  transform: translateY(var(--char-shift-y, 0px)) scale(var(--char-scale, 1));
+  transform-origin: center center;
+  /* Decorative only: some browsers surface their own hover overlay on a
+     <video> regardless of controlsList, and nothing on this screen
+     should be interactive except the nav buttons. */
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — FullImageWithTextOverlay (Screen 01 / #s1)
+   "הקונטרול" game intro. Source: slide 75 (presentation order 75 →
+   ppt/slides/slide75.xml, resolved through presentation.xml's
+   <p:sldIdLst> r:id → ppt/_rels/presentation.xml.rels; 1:1 with no
+   offset across all 83 slides, re-derived on a FRESH extraction —
+   the producer saved the deck again at 10:14 while this part was being
+   built, so nothing was carried over from the 09:01 extraction).
+
+   Presenter note resolved through slide75's OWN .rels
+   (rId2 → ppt/notesSlides/notesSlide68.xml — 75 ≠ 68). Its cached
+   <a:fld type="slidenum"> reads "75":
+       שם המסך בפגימה: FullImageWithTextOverlay
+       שם התמונה:<קונטרול>
+   The note names the template and the image and nothing else — no
+   behaviour, no gate, no animation. (Contrast slides 80/82, whose notes
+   DO gate Continue on an orange button; slide 75 authors no such rule,
+   and none is invented here.)
+
+   VARIANT — FULL-WIDTH CARD. FullImageWithTextOverlay.md documents the
+   card as a floating box at the RTL reading start (lower-right) with
+   `width: fit-content`. Slide 75 does NOT author that shape: its card
+   (id=8) is 11850694 EMU wide on a 12192000 EMU canvas — 97.2%, a
+   full-width narrative band across the bottom of the photo. This is
+   built as authored.
+   The template's `fit-content` rule exists for one specific reason: a
+   right-aligned RTL box wider than its longest line puts the surplus on
+   the physical LEFT, so padding cannot be equal. That reasoning does
+   not apply to a deliberately full-width band, where the surplus is the
+   composition. This part's sibling -01 already ships a second
+   undocumented shape of the same template (its Variant C, the no-card
+   widget band on #s2), so treating the component as having variants is
+   this lomda's established reading, not a new liberty.
+   Flagged for skill-maintainer: the template file should record this
+   full-width-card variant alongside Variant C.
+
+   SHAPE INVENTORY — slide 75, by unique XML id, in document order,
+   reconciled against a fresh PowerPoint render:
+     id=1   grpSp  empty spTree root
+     id=11  pic    "Picture 10", rId4 → image76.jpeg, srcRect
+                   t="23801" b="965" — the radar photo, full-bleed
+     id=2   pic    "תמונה 3", rId5 → image18.png — stock "המשך" pill
+     id=3   cxnSp  "מחבר ישר 4" — the full-bleed bottom rule
+     id=4   sp     roundRect "חזרה", #019DE5 — the Back pill
+     id=8   sp     roundRect, bg1 fill, no line, NO effectLst — the card
+     id=6   sp     Oval "A"  — label, fill 04294C, ring 00B0F0
+     id=9   sp     Oval "B"  — label, fill 04294C, ring accent3 #196B24
+     id=12  sp     Oval "P"  — label, fill 04294C, ring 00B0F0
+   That is the whole slide. No off-canvas shapes, no tables, no OMML.
+   NOTE: slide 75 authors NO flag graphic (unlike slide 74) — the live
+   global component is used regardless, as on every 720 screen.
+
+   COMMENT on this slide — rId3 → comments/modernComment_315_B6356A31,
+   author {408A77E5…}, created 2026-08-30, **status="resolved"
+   complete="100000"**: "מאיה - לפרש מה זה מכ״ם". Already actioned in
+   the authored copy, which now reads "על המכ״ם (מגלה כיוון ומרחק)".
+   Closed; nothing outstanding.
+   ═══════════════════════════════════════════════════════ */
+#s1 { background: #fff; }
+
+/* ── Image band ───────────────────────────────────────────
+   Expressed as an INSET against this project's own 74px bar, never as a
+   copied absolute height (FullImageWithTextOverlay.md → "Band
+   geometry"). The top edge is 93.73px, the SAME value the sibling
+   methodica-math-ratio-03-01 already uses for its own band on #s2, so
+   both screens in this lomda clear the persistent flag button (y
+   16..54) identically and it reads against the page background.
+
+   Slide 75's own mock runs the photo full-bleed to y=-3.76px, i.e. past
+   the top of the canvas, and authors no flag at all. The template is
+   explicit that where the project's chrome position differs from the
+   source's, the PROJECT's shared position wins — consistency across the
+   lomda outranks one screen matching its mock. The white strip above
+   the band is that rule, not an oversight. */
+.fito-img {
+  position: absolute;
+  left: 0; right: 0;
+  top: 93.73px;
+  bottom: 74px;
+  overflow: hidden;
+  background: #fff;
+  z-index: 1;            /* below the nav chrome — never over it */
+  container-type: size;  /* the frame below sizes itself from this band */
+}
+
+/* ── The producer's own crop, reproduced exactly ───────────
+   The supplied asset is the FULL game frame (1536×873) and carries
+   chrome the producer deliberately cropped away: a star badge, a
+   "1-2-3-trophy" progress strip and a gear across the top, and a
+   control console with a yellow play button across the bottom. Slide 75
+   removes the top band with `<a:srcRect t="23801" b="965"/>` — 23.801%
+   off the top, 0.965% off the bottom.
+
+   `object-fit: cover` cannot express a srcRect, and a plain `cover` on
+   the whole asset would put that game chrome back on screen. So the
+   crop is reproduced structurally: .fito-img-frame is the FULL source
+   image at its own aspect ratio, pulled up by exactly the producer's
+   top-crop, inside the band's `overflow: hidden`.
+
+       frame width   = 1280px (the canvas width, = the band width)
+       frame height  = 1280 × 873/1536 = 727.50px
+       top offset    = -10.997% × 727.50 = -80.00px
+
+   The BOTTOM is cropped further than the producer's own srcRect, to
+   source row 790 of 1024, and that is deliberate. Their crop keeps the
+   console because their own card covers it; this band is ~90px shorter
+   than their photo area, so the console rises relative to the card and
+   the yellow play button leaks out from under it. The leak is
+   height-dependent and was NOT visible at the design viewport — at
+   1280×900 a 3x magnified crop of the 28px strip above the card shows
+   the button's amber housing plainly, while every geometric assertion
+   still passed. Cropping to row 790 removes the console from the band
+   entirely, at every canvas height, instead of relying on the card to
+   hide it.
+
+   Cropping MORE than the producer did is what the template sanctions —
+   FullImageWithTextOverlay.md → "Image fitting" asks that the visible
+   region sit INSIDE the region their own crop kept, so that nothing
+   they cut is reintroduced and nothing they kept in the subject area is
+   lost. Row 790 is exactly where their own card's top edge falls on the
+   photo (their card top 443.4px ⇒ source row 780.3), so this shows what
+   they showed and hides what they hid. The console is not subject area;
+   it was never visible in their composition.
+   Measured, not guessed: the play button occupies source rows 804..893
+   (densest yellow run in the lower half, peak at row 877), so row 790
+   clears it with the console's own dark rim to spare.
+
+       visible source rows: 243.7 .. 790.0  of 1024   (kept 53.347%)
+
+   and that window is INVARIANT — the same rows at every canvas height.
+
+   THE FRAME MUST COVER A GROWING BAND. This canvas is fluid on both
+   axes, so the band gets TALLER on a tall viewport (552.28px at a 720
+   canvas, 732.28px at a 900 canvas) while its width stays at the
+   canvas's 1280. A frame sized only from the width stops covering at
+   around a 790px canvas and leaves a white strip along the band's
+   bottom edge — caught by tests/verify-s1.mjs, not by eye. So the frame
+   is sized from BOTH axes:
+
+       height = max( 160.2923cqh , 56.8359cqw )
+
+   where the container is the band itself. The first term makes the kept
+   slice (62.386% of the frame) exactly as tall as the band; the second
+   makes the frame at least as wide as the band (873/1536 of the band
+   width, the current source's own ratio). `max()` takes whichever
+   constraint binds, `aspect-ratio` derives the width, and it is centred
+   horizontally so any surplus width is split evenly rather than sliding
+   the subject sideways.
+   Consequence to accept: on a tall canvas the height term binds and the
+   photo is cropped at the SIDES instead — the airport context narrows
+   while the radar, which is the subject and which the copy refers to,
+   stays centred and whole. That is the normal cost of `cover`, and the
+   alternative is letterboxing a full-bleed band.
+
+   `object-view-box` would express a source crop directly and is
+   supported here (Edge 153), but it is deliberately NOT used: it
+   applies the crop inside the <img>, which would leave the A/B/P
+   labels with no shared coordinate space to be positioned in, and they
+   would drift off the radar as the band's height changed. The frame IS
+   that shared space, which is the whole reason it exists as an element
+   rather than as image properties. */
+/* The crop is PARAMETERISED, because two screens in this part show the
+   SAME photo with deliberately different bottoms:
+
+     --crop-top    fraction of the source cut off the top. Both screens
+                   use the producer's own srcRect, re-expressed against
+                   the CURRENT 1536x873 asset: 0.10997 (source row 96).
+     --crop-keep   fraction of the source height that stays visible.
+                   S1 keeps 0.62386 — down to source row 640.6, eleven
+                   rows above the play button at 652 — so the game
+                   console can never appear from under its text card.
+                   S2 keeps the producer's own frame, 0.87972, down to
+                   row 864, because on THAT slide the console and its
+                   yellow play button are deliberately part of the
+                   composition rather than something to hide.
+
+                   NEITHER number is the old one rescaled by eye. Both
+                   were re-derived from the new asset; S1's reproduces
+                   the SAME cut the approved build made, which is why
+                   its composition is unchanged.
+
+   --frame-h is computed once and reused by both `height` and `top`, so
+   the two can never drift apart when a screen overrides the crop. */
+/* ═══ ONE MEDIA BOX FOR EVERY MEDIA SCREEN (producer, 2026-09-23) ═══
+   S1, S2 and S9 (the still) and S6 and S8 (the clips) must occupy the
+   SAME width and height on screen, so the radar tablet does not jump
+   between screens. So the still no longer has its own crop-driven frame
+   (the --crop-top / --crop-keep derivation above is kept as history of
+   how the old window was chosen); its frame is sized from the very same
+   expression the clips use — see .fito-media and the --ess-* vars on the
+   sections:
+
+     clip box height   = min( max(100cqh, 56.25cqw), --ess-fit × 100cqh )
+     still frame height = that × 1.010417
+
+   1.010417 = (1280/720) / (1536/873): the still is 1% squarer than the
+   clip, so matching WIDTHS (which is what the eye compares — the
+   tablet's edges) means a 1% taller frame; the top clamp absorbs it.
+
+   The vertical placement is the clips' rule too: the essential span
+   (rows 96..763 of 873 — the alert panel's top edge to two rows under
+   the Play button) is CENTRED in the window, clamped so the frame never
+   leaves the band uncovered. --ess-fit is one common ceiling for all
+   five screens (1.2954 = 873 / (667 × 1.010417)): the size at which
+   S2's 667 essential rows exactly fill the band; the clips need fewer
+   rows than that, so at the ceiling they fit with room to spare. */
+/* ONE exception to "same box", for content's sake: the still's top 96
+   rows (0.10997 of 873) are game chrome the producer cut out of the deck
+   with srcRect — a star badge, a progress strip, a gear — and must never
+   be on screen. Hiding them needs frame ≥ band / (1 − 0.10997) =
+   1.1236 × band; on a 710 canvas the shared box is already taller than
+   that (727 vs 625), so the boxes stay identical there. Only on TALL
+   canvases (above ~794px, where the shared box would be barely taller
+   than the band) does the still's frame grow past the clips' box — up to
+   ~11% wider at 960 — because showing the chrome would be the worse
+   fault. The clamp's floor pins the cut to exactly those 96 rows
+   whenever centring would show fewer. */
+.fito-img-frame {
+  --frame-h: max(calc(1.010417 * min(max(100cqh, 56.25cqw), var(--ess-fit) * 100cqh)), 112.36cqh);
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  height: var(--frame-h);
+  aspect-ratio: 1536 / 873;    /* the supplied asset's own ratio */
+  top: calc(-1 * clamp(0.10997 * var(--frame-h), var(--ess-mid) * var(--frame-h) - 50cqh, var(--frame-h) - 100cqh));
+}
+/* The BASE PHOTO fills the frame exactly — that is what makes the frame
+   a usable coordinate space for everything overlaid on it.
+   Scoped to `.fito-photo` rather than to a bare `img`: S2 puts its alert
+   panel and its diagram INSIDE the same frame, and a bare descendant
+   selector out-specifies their own class rules and stretched both to the
+   full frame. Caught by tests/verify-s2.mjs, which measures each
+   overlay's box as a fraction of the frame. */
+.fito-img-frame img.fito-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;   /* contextual art — nothing here is clickable */
+}
+
+/* ── Route labels A / B / P ───────────────────────────────
+   LIVE elements, not baked into the photo — the supplied
+   `קונטרול.jpg` genuinely does not contain them (checked by eye), and
+   the card's own copy refers to them by name ("שני נתיבי טיסה, A ו-B,
+   שנפגשים בנקודה P"), so they are content, not decoration.
+
+   Positioned as percentages of .fito-img-frame — the FULL source image
+   — so they stay pinned to the radar features under any future change
+   to the band's height or crop. Each centre was taken from the slide's
+   own EMU offsets, converted to a fraction of the displayed photo rect
+   and then back through the srcRect into full-source coordinates:
+
+     label  slide centre (px)   of photo rect      of full source
+       A    854.4, 62.4         .66750, .10309     .66750, .20068
+       B    409.4, 62.4         .31987, .10309     .31987, .20068
+       P    634.3, 253.9        .49553, .40134     .49553, .46306
+
+   The "of full source" column is against the CURRENT 1536x873 asset.
+   Only the vertical figures moved: the source width is unchanged, so
+   every horizontal value is the one already approved. Diameter is a
+   percentage of the frame WIDTH, so it is unaffected too.
+
+   Diameter 368301 EMU = 38.67px, i.e. 3.021% of the 1280px frame width,
+   so the label scales with the photo rather than drifting off it.
+
+   Colours are the slide's own and are SEMANTIC: A and P ring #00B0F0,
+   matching the cyan flight path in the photo; B rings accent3 #196B24,
+   matching the green one. Do not unify them — the colour is how a
+   learner ties the label to its route. Fill #04294C for all three. */
+.fito-label {
+  position: absolute;
+  width: 3.021%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #04294C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  /* 20pt in the source = 26.67px at this canvas's 9525 EMU/px. There is
+     no approved token for a diagram-annotation label in
+     720-design-guidelines → typography.md, so this is the SLIDE's own
+     value rounded to 26px, flagged for producer approval rather than
+     silently mapped onto an unrelated Body/Button token. */
+  font-size: 26px;
+  font-weight: 800;       /* Assistant ExtraBold, per the slide's run */
+  color: #fff;
+  line-height: 1;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 2;
+}
+.fito-label--a { left: 66.750%; top: 20.068%; border: 2px solid #00B0F0; }
+.fito-label--b { left: 31.987%; top: 20.068%; border: 2px solid #196B24; }
+.fito-label--p { left: 49.553%; top: 46.306%; border: 2px solid #00B0F0; }
+
+/* ── The narrative card ───────────────────────────────────
+   Full-width band (see the VARIANT note above), sitting on the photo
+   with its own bottom edge just clear of the nav bar.
+
+   Horizontal inset is 24px, this project's own canvas-edge inset — the
+   same value the Continue and Back pills use. Slide 75's mock is
+   20.3px on the left and 15.6px on the right; that asymmetry is
+   authoring jitter in a hand-drawn box, not a design decision, so the
+   project's own symmetric inset is used instead.
+
+   Vertical: the bottom edge sits 12px above the bar, the gap the slide
+   authors (card bottom 626.19px against the bar line at 638.24px).
+   The gap shows the console's own dark rim, as it does on the slide —
+   it is safe here only because the band itself is cropped at source row
+   790, above the play button (see .fito-img-frame). Do not restore a
+   looser crop and keep this gap.
+
+   HEIGHT IS NOT SET — it follows the copy, per the template. The
+   slide's own 182.8px box is a hand-drawn container, not a contract.
+
+   Radius 16px: the slide's roundRect adj=8509 resolves to 15.56px, and
+   16px is already an established radius in this lomda (18 uses across
+   the five siblings), so the authored value lands on an existing one
+   rather than introducing a new number.
+   NO shadow: the slide's <a:effectLst> is empty and its effectRef is
+   idx="0". Nothing is invented. */
+.fito-text {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 86px;           /* 74px bar + the slide's own 12px gap */
+  z-index: 3;             /* above the photo and the labels */
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;                 /* the slide authors no paragraph spacing */
+  direction: rtl;
+  text-align: right;      /* master otherStyle: algn="r", rtl="1" */
+}
+
+/* Body / B-3 — Assistant 24px Regular. This is not a role guess: the
+   card's runs carry no `sz`, so they inherit the master's otherStyle
+   default of sz="1800" (18pt), and 18pt at this deck's 9525 EMU/px is
+   exactly 24.0px, which is Body/B-3 in
+   720-design-guidelines → typography.md. Colour is the lomda's own
+   approved text colour, NOT the source's tx1 black — text colour comes
+   from the design system, never from the authoring source. */
+.fito-text p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #303030;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — FullImageWithTextOverlay (Screen 02 / #s2)
+   "התראה במכ״ם" — the radar-alert screen. Source: slide 76
+   (presentation order 76 → ppt/slides/slide76.xml, resolved through
+   presentation.xml's <p:sldIdLst> r:id → ppt/_rels/presentation.xml.rels;
+   1:1 with no offset across all 83 slides, re-derived on a fresh
+   extraction of the current deck, md5 0eb1ccb8…).
+
+   Presenter note resolved through slide76's OWN .rels
+   (rId2 → ppt/notesSlides/notesSlide69.xml — 76 ≠ 69). Its cached
+   <a:fld type="slidenum"> reads "76":
+       שם המסך בפגימה: FullImageWithTextOverlay
+       שם התמונה:<קונטרול>
+       שם התמונה:<התראה>
+       שם התמונה:<ארבע הזוויות>
+       סאונד של התראה (אבל משהו חביב ולא מטרגר), והחלונית עולה
+       באנימציה מתאימה.
+   Three images and TWO pieces of authored behaviour: an alert sound
+   ("but something friendly, not triggering") and the panel rising with
+   a suitable animation. The animation is built (see the reveal block
+   below). The SOUND IS NOT — no audio asset exists anywhere in this
+   lomda (every part's assets/audio/ is empty), so it is reported as an
+   outstanding producer asset rather than invented or stubbed with a
+   dead <audio> src.
+
+   SHAPE INVENTORY — slide 76, by unique XML id, in document order
+   (= z-order, bottom first), reconciled against a fresh PowerPoint
+   render:
+     id=11  pic     rId3 → image76.jpeg, srcRect t="23801" b="965",
+                    off 0,-3.8 ext 1280×642 — the SAME radar photo, at
+                    the SAME placement and crop as slide 75
+     id=2   pic     rId4 → image18.png — the stock "המשך" pill
+     id=3   cxnSp   the full-bleed bottom rule
+     id=4   sp      roundRect "חזרה" #019DE5 — the Back pill
+     id=15  sp      "Trapezoid 14", prstGeom trapezoid adj=6510,
+                    fill #000C26 at alpha 80% — the scrim
+     id=7   pic     rId5 → image77.png — the alert panel art
+     id=13  sp      "TextBox 12", noFill, both paragraphs algn="ctr"
+     id=12  pic     rId6 → image78.png — the four-angles diagram
+   That is the whole slide. No off-canvas shapes, no tables, no OMML,
+   and — unlike slide 75 — no comment attached.
+
+   THE CONSOLE IS PART OF THIS COMPOSITION. Slide 76 places the photo
+   identically to slide 75, but authors no text card over its bottom, so
+   the game console and its yellow play button are visible below the
+   alert panel and are meant to be. S1 crops them away because its card
+   could not be relied on to hide them at every canvas height; S2 must
+   NOT inherit that crop, so it restores the producer's own srcRect via
+   --crop-keep. The two screens differ in exactly that one number.
+   ═══════════════════════════════════════════════════════ */
+#s2 { background: #fff; }
+
+/* The producer's own crop, re-derived against the CURRENT 1536x873
+   asset: keep source rows 96 .. 864 of 873, i.e. 87.972%. This is the
+   SAME visible frame the deck shows — slides 75, 76 and 80 all place
+   image76.jpeg with one identical srcRect — expressed in the new
+   asset's own coordinates rather than the superseded 1024-tall ones.
+   See .fito-img-frame for the mechanism. */
+/* (S2 no longer carries its own frame rule: every media screen shares
+   the one box — see .fito-img-frame. Its alert overlay is a percentage
+   of the frame and moves with it.) */
+
+/* S2 ONLY — the band starts higher than S1's 93.73px.
+
+   RE-DERIVED against the current 1536x873 asset, not carried over. The
+   value comes out unchanged at 62px, and that is a result, not an
+   assumption: the check below was run again from scratch.
+
+   Why the band has to start higher: at the 720 canvas the photo is
+   already at its MINIMUM zoom. The frame is sized
+   max(100cqh / keep, 56.8359cqw), and at that height the WIDTH term
+   binds — the source is displayed 1536px wide into a 1280px band, i.e.
+   exactly the scale the slide itself uses. There is no zooming out left
+   to do: a smaller frame would be narrower than the band and letterbox
+   it. The only remaining lever on how far down the photo reaches is the
+   band's own height.
+
+   And it still has to reach further. On the CURRENT asset the play
+   button occupies source rows 652..761 of 873 — re-measured by
+   connected-component analysis rather than a colour threshold alone, so
+   the runway lights no longer contaminate the bounding box; the solid
+   button mass ends at 745 and the darker lip and drop shadow carry it
+   to 761. (Cross-check: the old rows 794..912 of 1024 map through
+   new_row = old_row × 0.996983 − 146.98 to 644.6..762.2, which agrees
+   with the direct measurement to within a couple of rows.)
+
+       band top 93.73px → window ends at source row 758.7  → clips ~2 rows
+       band top 62px    → window ends at source row 796.8  → ~36 rows clear
+
+   so 93.73px would still shave the button's bottom lip and 62px still
+   clears it.
+
+   The crop TOP cannot move instead: the alert panel is pinned to
+   --crop-top (its own top now lands on .10990 against a crop top of
+   .10997), so sliding the crop down would carry the panel up out of the
+   band and clip the warning symbol. The panel stays registered to the
+   tablet exactly as before; only the band grows upward.
+
+   62px WAS derived from the flag button's rendered box, y 16..55 —
+   but that box is the icon only. On hover/focus the button shows its
+   label under the icon (16 + 38 + 4 + a 14px line ≈ y 77), and at 62px
+   the band ran under that label, which then read against the artwork
+   (producer, 2026-09-23: "צריך לעשות קרופ לסרטון כדי שטקסט של כפתור
+   הדגל יהיה קריא במצב HOVER"). The band now starts at 80px:
+   4px under the label's bottom edge (y 76 measured) — the producer's
+   own line ("up to the red line") — and as high as it can go without
+   covering it. Not the shared 93.73px: these three screens need every
+   row of artwork they can get.
+
+   At a 900 canvas the HEIGHT term binds instead and the window reaches
+   the producer's own bottom row 864 regardless; this offset does not
+   affect it. S1 keeps 93.73px — its own crop already stops at row
+   640.6, eleven rows ABOVE the button, so it needs no extra room and
+   its approved composition is unchanged. */
+#s2 .fito-img { top: 80px; }
+
+/* ── The alert overlay ────────────────────────────────────
+   Every piece of it is positioned as a percentage of .fito-img-frame —
+   the FULL source image — exactly as the A/B/P labels on S1 are, and
+   for the same reason: these elements are registered to the radar
+   tablet, not to the canvas. The band changes shape with the viewport,
+   which moves and rescales the tablet; anchoring to the canvas would
+   slide the alert off it.
+
+   Each slide coordinate was converted the same way: a canvas position
+   on the slide maps into the base photo's source space through that
+   photo's own placement (off 0,-3.8, ext 1280×642, showing source rows
+   243.7..1014.1), i.e.
+       src_x = canvas_x × 1.2
+       src_y = (canvas_y + 3.76) × 1.2 + 243.7
+   and is then divided by 1536 / 1024 — which is how the ORIGINAL
+   figures below were obtained. They are then carried into the CURRENT
+   1536x873 asset through the audit's row mapping,
+   new_row = old_row × 0.996983 − 146.98, which moves every TOP and
+   rescales every HEIGHT while leaving lefts and widths untouched (the
+   source width never changed).
+
+     element        slide px (x,y,w,h)        of 1536x1024 source        of 1536x873 source
+     scrim          364.2, 36.9, 531.8×345.9  .284531 .285637 .415469 .405352  → .284531 .16567 .415469 .47403
+     alert panel    227.1, -3.8, 792.3×528.2  .177422 .237942 .618984 .618984  → .177422 .10990 .618984 .72385
+     text block     315.4, 137.4, 621.7×135.7 .246406 .403410 .485703  (auto)  → .246406 .30340 .485703  (auto)
+
+   The alert panel's new top, .10990, lands on --crop-top (.10997) to
+   within a twentieth of a percent — the producer pinned that panel to
+   the crop top, so the two agreeing is an independent check that the
+   row mapping is right.
+     four angles    515.5, 250.7, 214.8×143.2 .402734 .536184 .167813 .167813
+
+   TYPOGRAPHY DOES NOT SCALE WITH THE FRAME. The boxes track the photo,
+   but the type stays at its design px size, as everywhere else in this
+   lomda. That is safe rather than lucky: the frame is at its SMALLEST
+   when the width constraint binds (853.33px tall), which is exactly the
+   slide's own scale, so the text can only ever have more room than the
+   slide gives it, never less. */
+.s2-alert-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;   /* nothing here is interactive */
+}
+
+/* Scrim — the tablet screen dimmed behind the translucent panel. The
+   slide's shape is prstGeom trapezoid with adj=6510; in DrawingML that
+   insets the TOP edge by adj × min(w,h) / 100000 on each side, which
+   here is 0.0651 × 345.9 = 22.5px of 531.8 = 4.235%. Reproduced with
+   clip-path rather than approximated with a rectangle.
+   Fill #000C26 at the slide's own 80% alpha. It is almost entirely
+   covered by the panel; what it actually does is darken the radar grid
+   showing through the panel's translucent interior. */
+.s2-scrim {
+  position: absolute;
+  left: 28.4531%;
+  top: 16.567%;
+  width: 41.5469%;
+  height: 47.403%;
+  background: rgba(0, 12, 38, 0.8);
+  clip-path: polygon(4.235% 0, 95.765% 0, 100% 100%, 0 100%);
+}
+
+/* Alert panel art. Decorative: its warning triangle repeats what the
+   live title says in words, so it stays out of the accessibility tree
+   and the title carries the meaning. */
+.s2-panel {
+  position: absolute;
+  left: 17.7422%;
+  top: 10.990%;
+  width: 61.8984%;
+  height: 72.385%;
+  display: block;
+}
+
+/* The authored copy. Both paragraphs are algn="ctr" on the slide, in a
+   noFill textbox — the panel art behind them is the only background.
+   Height is NOT set: the box is anchored by its top and left, so copy
+   that reflows can never overflow a fixed height. */
+.s2-alert-text {
+  position: absolute;
+  left: 24.6406%;
+  top: 30.340%;
+  width: 48.5703%;
+  text-align: center;
+  direction: rtl;
+}
+
+/* Title — 24pt b="1" on the slide = 32px at this deck's 9525 EMU/px.
+   COLOUR: white, the same #FFFFFF as the body below it — PRODUCER RULING
+   2026-09-23 ("לשנות את הטקסט לצבע הלבן של שאר הטקסט באותו מסך"), which
+   closes the question the build had left open. The slide authored the
+   title in #FF0000; that shipped as a flagged exception because the
+   lomda's feedback red (#B20010) fails contrast on this dark navy panel
+   while the slide's red passed. The ruling resolves it the other way:
+   the alert is carried by the panel art (the warning triangle) and the
+   bold weight, not by a second colour — white-on-navy is ~14:1 and needs
+   no token substitution. */
+.s2-alert-title {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* Body — no `sz` on the run, so it inherits the master otherStyle's
+   sz="1800" (18pt) = exactly 24px = Body / B-3, the same resolution as
+   S1's card. Colour is the slide's schemeClr bg1 = #FFFFFF, which is
+   also simply white-on-dark and needs no token substitution. */
+.s2-alert-body {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* The four-angles diagram — the one genuinely instructional image on
+   this screen (it shows the two paths crossing and the angles they
+   make), so it carries real alt text, mounted from js/main.js. */
+.s2-angles {
+  position: absolute;
+  left: 40.2734%;
+  top: 53.6184%;
+  width: 16.7813%;
+  height: 16.7813%;
+  display: block;
+}
+
+/* ── Entrance — AUTHORED, screen-local, deliberately outside the
+   screen-reveal system ─────────────────────────────────────
+   "והחלונית עולה באנימציה מתאימה" — slide 76's note authors the panel
+   rising, paired with the alert sound, on EVERY entry to the screen
+   (s2ReplayEntrance() + s2PlayAlert(), both from resetScreenState(2)).
+   The animation-system engine IS wired in this lomda (css/motion.css,
+   js/motion.js, data-reveal on the other screens), but its screen
+   reveal plays once per session via the seen-set and cannot express a
+   per-entry authored sequence — so this block stays screen-local as the
+   screen's FUNCTIONAL animation (animation-system → DECISIONS.md → Rule
+   precedence #2), and #s2 carries no data-reveal on these four elements
+   or on their band. The keyframes it uses, m-fade-in / m-float-in, are
+   the engine's own (defined once in css/motion.css, linked after this
+   file) — the local duplicates that lived here before the engine landed
+   were removed so one definition serves both.
+   The scrim fades rather than rises: it is a backdrop, and translating
+   it would pull its clipped edges away from the tablet it dims. */
+#s2 .s2-scrim  { animation: m-fade-in 400ms ease both; }
+#s2 .s2-panel,
+#s2 .s2-alert-text,
+#s2 .s2-angles { animation: m-float-in 600ms ease both; animation-delay: 120ms; }
+
+/* Reduced motion: everything is simply present. Continue is ungated on
+   this screen either way, so nothing else has to change. */
+@media (prefers-reduced-motion: reduce) {
+  #s2 .s2-scrim,
+  #s2 .s2-panel,
+  #s2 .s2-alert-text,
+  #s2 .s2-angles { animation: none !important; opacity: 1; }
+}
+/* ===== ported from part 04 — Hint button (.scq-hint) ===== */
+/* ═══════════════════════════════════════════════════════
+   Hint button (.scq-hint) — shared chrome, ported VERBATIM from the
+   approved sibling methodica-math-ratio-03-02 (720-templates →
+   _global-components.md → "Nav bar button geometry"). Slide 52 mocks
+   this control in the bar at its own x=229 / 261×53; the sibling's
+   canonical geometry is used instead, as with every other nav pill in
+   this lomda.
+   ═══════════════════════════════════════════════════════ */
+.scq-hint {
+  position: absolute;
+  bottom: 17.5px; left: 268px;  /* Arabic build: clear of the wider check button (was 180px) */   /* 24 (.btn-continue's own left) + 140 (its min-width) + 16 (same-side gap) */
+  z-index: 12;
+  min-width: 140px; height: 39px;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-500);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-hint:hover:not(:disabled) { font-weight: 600; }
+.scq-hint:disabled { border-color: #aeaeae; color: #aeaeae; cursor: default; }
+.scq-hint.hidden { display: none !important; }
+.scq-hint-ico { width: 26px; height: 22.3px; flex: 0 0 26px; display: block; }
+.scq-hint:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+
+/* ===== ported from part 04 — shared question container ===== */
+.scq-question {
+  position: absolute; top: 121px; right: 40px;
+  width: 1188px; height: auto;
+}
+
+/* ===== ported from part 04 — Feedback popup + Hint overlay ===== */
+/* ═══════════════════════════════════════════════════════
+   Feedback popup — draggable, NO close button of any kind
+   (720-templates → _global-components.md → Feedback popup system →
+   "No manual close"). Ported verbatim from the approved sibling
+   methodica-math-ratio-03-02.
+
+   Slide 52's own two feedback mock-ups are light green and #FFE5E5;
+   the design-system tokens Green/5 #edf8ed and Red/10 #ffdbdc are used
+   instead, exactly as both approved siblings do — popup chrome colour
+   is design-system role styling, not authored content
+   (_question-template-defaults.md → "Source formatting is evidence of
+   intent, not automatic visual authority").
+   ═══════════════════════════════════════════════════════ */
+.scq-popup {
+  position: absolute;
+  left: 2px; bottom: 76px;
+  width: 426px; height: auto;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  display: flex; flex-direction: column; gap: 4px;
+  direction: rtl; z-index: 50;
+  cursor: move;
+  touch-action: none;   /* drag surface claims touch gestures: no pointercancel mid-drag (_global-components.md, drag rule 5) */
+}
+.scq-popup.hidden { display: none !important; }
+.scq-popup-header {
+  display: flex; align-items: flex-start; gap: 8px;
+  direction: ltr; width: 100%;
+}
+.scq-popup-title {
+  flex: 1;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 700;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0;
+  padding-top: 4px;
+}
+/* The title+body column. Without `.is-scroll` it is a plain flex column
+   carrying the popup's own 4px title/body rhythm, so the short retry
+   popup renders exactly as it did before this wrapper existed; the
+   scroll-gated variant re-declares it below with Figma's own 24px gap
+   and turns it into the scroll container. */
+.scq-popup-scroll { display: flex; flex-direction: column; gap: 4px; }
+.scq-popup-body { direction: rtl; }
+.scq-popup-body p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0 0 4px;
+}
+.scq-popup-body p:last-child { margin-bottom: 0; }
+
+/* A genuinely empty source paragraph is an intentional group break and
+   is preserved as one line-height of space, not an invented pixel gap
+   (_question-template-defaults.md → "Paragraph structure maps to
+   line-height, not invented spacing"). Slide 52's correct-feedback body
+   carries six of them. */
+.scq-popup-body p.scq-gap { height: 1em; margin: 0; }
+
+/* Inline mathematical expression inside RTL prose — one isolated LTR
+   unit that can never be split across lines or reordered by the
+   surrounding paragraph. `white-space: nowrap` is the load-bearing
+   half: `dir="ltr"` alone still lets a line break fall inside
+   "BD = x" or "1 : 3". Same role as the approved sibling
+   methodica-math-ratio-03-01's `.scq-expr`. */
+.scq-expr {
+  direction: ltr; unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+/* ── Long-feedback variant — scroll-gated popup ──
+   720-templates → _global-components.md → "Long-feedback variant —
+   scroll-gated popup", with GEOMETRY taken from the canonical Figma
+   component inspected 2026-09-09: file eSbp4bKHgBky0rakDb8l9N, node
+   217:4135 "Popup Feedback", variant 2287:21169
+   "state=Scrolling, size=Bottom, type=Correct, Table=False".
+
+   Activated for THIS question's correct and final-incorrect feedback
+   only (never the short retry popup), because slide 52's presenter
+   note asks for it in as many words ("שימו לב שבמשוב ארוך, לאפשר
+   גלילה") and its two feedback shapes are 438×935 px — taller than the
+   whole 710px canvas.
+
+   CANONICAL BOX (Figma): 426 × 474, radius 12, padding 24px top and
+   bottom, 24px physical-LEFT, 8px physical-RIGHT, and a 12px gap
+   between the text column and the scrollbar. Physically, right to
+   left: 8 padding | 10 scrollbar | 12 gap | 372 text column | 24
+   padding. The width stays this template's approved 426px, which is
+   also Figma's own.
+
+   ONE CONTENT COLUMN. The title and the body are BOTH children of the
+   scroll container (Figma's `2287:21170`, a single flex column with a
+   24px gap, sitting to the left of the scrollbar), so the scrollbar
+   runs the full height of title + body rather than starting below the
+   title. This supersedes _global-components.md's "only the body
+   scrolls / the header stays fixed" wording for this component —
+   producer decision 2026-09-09, citing this node. ── */
+.scq-popup.is-scroll {
+  /* height: auto, capped at the canonical 474px (producer, 2026-09-22):
+     a fixed 474px left visible dead space below short feedback bodies
+     (this box is anchored by `bottom` on .scq-popup, so shrinking it
+     only pulls the top edge down — nothing else moves). Feedback that
+     genuinely exceeds 474px still hits the cap and scrolls exactly as
+     before; pending-assets.md item 4's ruling to keep the gate wired even
+     when there is no overflow is unaffected — that is gate LOGIC, not
+     this box's height, and .scq-popup-scroll's own scrollHeight/
+     clientHeight check (scrollGateNeeded) is untouched by this rule. */
+  height: auto;
+  max-height: 474px;
+  padding: 24px 8px 24px 24px;
+  gap: 0;
+}
+/* The scroll container = Figma's single content column. `direction:
+   ltr` is a scrollbar-only flip so the native bar renders on the
+   physical RIGHT under RTL; every descendant restores its own
+   direction below. */
+.scq-popup.is-scroll .scq-popup-scroll {
+  flex: 1; min-height: 0; width: 100%;
+  overflow-y: auto;
+  direction: ltr;
+  padding-right: 12px;     /* Figma's gap between the text column and the scrollbar */
+  display: flex; flex-direction: column; gap: 24px;
+}
+.scq-popup.is-scroll .scq-popup-header,
+.scq-popup.is-scroll .scq-popup-body { width: 100%; }
+/* Content stays RTL regardless of the container flip above. */
+.scq-popup.is-scroll .scq-popup-body p { direction: rtl; text-align: right; }
+.scq-popup.is-scroll .scq-popup-scroll:focus-visible {
+  outline: 2px solid var(--subject-500); outline-offset: 2px;
+}
+/* Scrollbar — Figma's own track/thumb (node I2287:21175;2287:20826):
+   10px wide, track rgba(201,206,216,0.4) with a 0.5px #F3F4F5 hairline
+   and radius 16, thumb rgba(0,0,0,0.56) radius 24. A NATIVE scrollbar
+   is kept deliberately: it is the only implementation where wheel,
+   drag, touch and keyboard all work without rebuilding them. */
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar { width: 10px; }
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar-track {
+  background: rgba(201, 206, 216, 0.4);
+  border: 0.5px solid #f3f4f5;
+  border-radius: 16px;
+}
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.56);
+  border-radius: 24px;
+}
+
+/* ── Scrolling hint tooltip ──
+   Rebuilt 2026-09-09 against the canonical Figma component, inspected
+   live: file eSbp4bKHgBky0rakDb8l9N, node 2286:19351
+   "ScrollFeedbackTooltip". Its own structure, verbatim:
+
+     symbol  ScrollFeedbackTooltip   210 × 97
+       frame Hint Card               x=31  y=0   179 × 97   radius 24
+         text run text               x=20  y=24  139 × 49
+       regular-polygon Polygon 3     x=0   y=20   57 × 57
+
+   So the card is inset 31px from the tooltip's left edge, its padding
+   is 20px horizontal / 24px vertical (139 + 2×20 = 179; 49 + 2×24 =
+   97), and the text is Assistant Regular 24px white centred on two
+   hard-broken lines at 24.5px line-height (2 × 24.5 = the text node's
+   own 49px).
+
+   THE ARROW IS THE EXPORTED FIGMA VECTOR, not a redrawn triangle. The
+   previous build approximated it with a CSS border triangle, which is
+   a hard-edged isoceles wedge; the real Polygon 3 is a rounded-corner
+   triangle. Its exported path is inlined verbatim in index.html — only
+   the fill is rebound to `currentColor` so the shape follows the
+   Subject token instead of Figma's baked #3B2FC2 (identical in this
+   Math theme; hardcoding it would break the token contract).
+
+   ARROW PLACEMENT is derived from Figma's own transform stack rather
+   than guessed. The polygon sits in a 57×57 box at (0,20); inside it
+   the vector occupies inset top 7.02% / bottom 25% / left 11.83% /
+   right 11.83% (= 43.519 × 38.75, the exported viewBox), and the box
+   is `rotate(-90deg) scaleX(-1)`. Resolving that rotation about the
+   box centre puts the rendered arrow at x 4.001..42.751 and
+   y 26.743..70.257 within the tooltip — i.e. 38.75 wide × 43.519 tall,
+   its tip 4px in from the tooltip's left edge, its base 11.75px behind
+   the card, and its centre on the tooltip's exact vertical midline
+   (26.743 + 43.519/2 = 48.5 = 97/2). The triangle is symmetric, so the
+   scaleX(-1) is visually a no-op and only the rotation is baked in.
+
+   OFFSET — right: -210px, the component's own overall width. Because
+   the tooltip's first 4px are that transparent margin before the
+   arrow's tip, this places the whole component clear of the popup with
+   a 4px visual gap and NOTHING overlapping the title, body or
+   scrollbar. (The earlier -214px was compensating for a redrawn arrow
+   whose tip started at x=0.) ── */
+.scq-scroll-hint {
+  position: absolute; top: 0; right: -210px;
+  width: 210px; height: 97px;
+  pointer-events: none;                        /* never interactive */
+  display: none;
+}
+.scq-popup.is-scroll.needs-scroll .scq-scroll-hint { display: block; }
+.scq-scroll-hint-card {
+  position: absolute; inset: 0 0 0 31px;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: var(--subject-500); color: #fff;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 400;
+  font-size: 24px; line-height: 24.5px;
+  text-align: center; direction: rtl;
+}
+.scq-scroll-hint-arrow {
+  position: absolute;
+  left: 4.001px; top: 26.743px;
+  width: 38.75px; height: 43.519px;
+  display: block;
+  overflow: visible;             /* the exported path overruns its box by ~1px, as in Figma */
+  color: var(--subject-500);     /* drives the path's currentColor fill */
+}
+/* Narrow-fit flip: the whole component mirrors — card and the same
+   exported vector, not a substitute shape — when the canvas does not
+   leave room for its 210px on the popup's right. */
+.scq-scroll-hint.is-flipped { right: auto; left: -210px; }
+.scq-scroll-hint.is-flipped .scq-scroll-hint-card { inset: 0 31px 0 0; }
+.scq-scroll-hint.is-flipped .scq-scroll-hint-arrow {
+  left: auto; right: 4.001px;
+  transform: scaleX(-1);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Hint overlay — full-canvas centred modal on a translucent white
+   scrim, Subject/500 card. Ported verbatim from the approved sibling
+   methodica-math-ratio-03-02. Unlike the feedback popup, this
+   component legitimately keeps its own dismissal paths (the authored
+   "חזרה לשאלה" button, backdrop click, Esc) — slide 52 authors that
+   same button inside its own off-canvas hint group.
+   ═══════════════════════════════════════════════════════ */
+.scq-hint-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.78);
+  display: flex; align-items: center; justify-content: center;
+}
+.scq-hint-overlay.hidden { display: none !important; }
+.scq-hint-popup {
+  background: var(--subject-500); border-radius: 48px;
+  padding: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  width: 546px; max-width: 92%;
+}
+.scq-hint-content {
+  display: flex; flex-direction: column; gap: 24px;
+  width: 462px; max-width: 100%; direction: rtl;
+  color: #fff;
+}
+.scq-hint-title {
+  width: 100%; text-align: right; position: relative;
+  padding-right: 56px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 700; font-size: 32px;
+  color: #fff; line-height: normal; margin: 0;
+}
+.scq-hint-title-ico {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 34.3px; display: block; color: #fff;
+}
+.scq-hint-body {
+  width: 100%; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 400; font-size: 24px;
+  color: #fff; line-height: normal;
+}
+.scq-hint-body p { margin: 0; }
+.scq-hint-close {
+  min-width: 196px; width: auto; padding: 16px 40px;  /* Arabic build: grows with the label */
+  border: none; border-radius: 1000px; background: #fff;
+  color: #303030;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 400;
+  cursor: pointer; white-space: nowrap;
+}
+.scq-hint-close:hover { font-weight: 600; }
+.scq-hint-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+
+/* ===== ported from part 04 — Progress Question nav ===== */
+/* ═══════════════════════════════════════════════════════
+   GLOBAL COMPONENT — Progress Question nav
+   720-templates → _global-components.md → "Progress Question".
+   FOUR positions, one per authored question: slide 52 = question 1,
+   slide 53 = question 2, slides 54-56 = question 3 (sections א/ב/ג),
+   slide 57 = question 4. Question 3's dot spans three screens and
+   resolves only after section ג. The model and its evidence live in
+   the PROGRESS + SCORING MODEL block in js/main.js.
+
+   The bar renders on every question screen of the series — #s1, #s2,
+   #s3, #s4, #s5 and #s3 — from one shared component with identical
+   markup. Only slides 54-56 carry its raster mock; that the other
+   three slides do not is a gap in the deck's mock-ups, not a reason
+   for the live component to disappear (producer ruling, 2026-09-14).
+
+   FOUR positions, NOT the six drawn in slide 54's own image22.png mock.
+   That PNG is 618×44 — pixel-for-pixel the canonical Figma instance
+   (1045:13076, 618×43, six sample items) exported and then stretched
+   to 824×59 on the slide. It is stock component art, not this
+   series' length; the length is 4, from the corrected presenter notes
+   "שאלה 1 / 2 / 3 / 4 מתוך 4" on slides 52-57.
+
+   GEOMETRY is the Figma instance's own: 618 = 6×43 items + 5×64
+   connectors + 10×4 gaps, so item 43, connector 64, gap 4; four items
+   therefore measure 4×43 + 3×64 + 6×4 = 388px, centred.
+
+   TOP = 48px, DELIBERATELY DIFFERENT FROM THE TWO APPROVED SIBLINGS.
+   methodica-math-ratio-03-02 and -03 both ship this component at
+   top: 16px. Figma's instance sits at y=48 inside the 1280×710
+   template frame, and slide 54's own mock sits at y=43.9 — the two
+   independent sources agree with each other and not with 16. Figma
+   outranks a sibling implementation in this project's source order, so
+   48 is used here and the 32px difference is reported for a producer
+   decision: if the lomda should stay internally consistent at 16, this
+   is a one-value change here rather than in two approved parts.
+   ═══════════════════════════════════════════════════════ */
+.progress-question {
+  position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 4px; direction: rtl; z-index: 20;
+}
+.progress-question__item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; width: 43px; flex: 0 0 auto;
+}
+.progress-question__connector {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 11.5px; width: 64px; flex: 0 0 auto;
+}
+.progress-question__connector-line {
+  width: 100%; height: 1.5px; border-radius: 2px;
+  background: #ececec;
+}
+.progress-question__connector--visited .progress-question__connector-line {
+  background: rgba(0, 0, 0, 0.6);
+}
+.progress-question__icon {
+  position: relative;
+  width: 24px; height: 24px; flex: 0 0 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px #ececec;
+}
+.progress-question__icon::after {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 7.2px; height: 7.2px; border-radius: 50%;
+  background: #d9d9d9; box-shadow: 0 0 0 1px #ececec;
+}
+.progress-question__icon-check,
+.progress-question__icon-x {
+  display: none;
+  position: absolute; inset: 0; margin: auto;
+  color: #fff;
+}
+.progress-question__icon-check { width: 12.7px; height: 9.2px; }
+.progress-question__icon-x { width: 10px; height: 10px; }
+.progress-question__icon--current {
+  background: var(--subject-300); box-shadow: none;
+}
+.progress-question__icon--current::before {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 19.2px; height: 19.2px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 0 2px var(--subject-500);
+}
+.progress-question__icon--current::after {
+  background: var(--subject-500); box-shadow: none;
+  z-index: 1;
+}
+.progress-question__icon--correct,
+.progress-question__icon--incorrect {
+  background: var(--subject-500); box-shadow: none;
+}
+.progress-question__icon--correct::after,
+.progress-question__icon--incorrect::after { content: none; }
+.progress-question__icon--correct .progress-question__icon-check { display: block; }
+.progress-question__icon--incorrect .progress-question__icon-x { display: block; }
+.progress-question__label {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 15px; font-weight: 400; color: #ececec;
+  text-align: right; white-space: nowrap; line-height: normal;
+}
+/* 15px is this component's own documented typography, deliberately
+   unbound to the approved token table (720-design-guidelines →
+   typography.md → "Component-specific typography exceptions"). Not a
+   minimum-size violation. */
+.progress-question__label--visited { color: #222; text-align: center; }
+
+
+/* ===== ported from part 04 — MultipleChoiceQuestion (#s3) ===== */
+/* ═══════════════════════════════════════════════════════
+   Screen 06 (#s3) — MultipleChoiceQuestion, text-pill variant
+   Source: slide 57. Presenter note: "מסך לא בתבנית, צריך להיות
+   multiplechoice" / "שם התמונה:< טיול>" / "שימו לב שבמשוב ארוך, לאפשר
+   גלילה." / "שאלה 4 מתוך 4" (the last line added by the producer's
+   2026-09-14 note correction — this screen is QUESTION 4 of the
+   four-question progress model). — the producer names the template explicitly; the slide's own
+   drawing (four stroked capsules with square markers) is a mock of it.
+   Contract: 720-templates → MultipleChoiceQuestion.md (text-only pills,
+   selection is a Set, per-option checkbox markers) which inherits
+   SingleChoiceQuestion's workflow, pill look and content-driven capsule
+   width; + _question-template-defaults.md; + _global-components.md
+   (Feedback popup / Long-feedback scroll gate / Image zoom).
+   Approved sibling reused: methodica-math-ratio-03-03's S4 (slide 43),
+   the same lomda's only shipped MultipleChoiceQuestion — pill, checkbox
+   marker and reveal rules ported from it; the pill chrome itself is this
+   part's own #s1 SingleChoice pill (same component, toggle semantics).
+
+   GEOMETRY — slide 57's own resolved shape offsets (EMU/9525):
+     id=6   stem textbox   x 489.4  y  94.0  725.0 × 138.9
+     id=15  picture        x  61.7  y 125.4  353.3 × 265.0
+     options (4 capsules)  x 455.8  w 758.7  h 69.7
+                           y 255.4 / 341.0 / 426.1 / 516.2
+     markers               30.2 × 30.2, at the capsule's right end
+   The stem starts HIGHER than this part's canonical 121px container top
+   (94.0), so the container itself is placed at 94 and everything hangs
+   off it. Its left edge is put at the picture's own x (62 → width 1178
+   against the canonical right 40), so the picture sits at left 0 with
+   an honest, positive offset. The answers column is the capsules' own
+   759px, which is WIDER than the stem box (725) and starts 34px further
+   left — so the column takes the capsules' width and the stem simply
+   wraps inside it (automatic wrapping is not authored, so the stem's
+   deck line breaks are not reproduced).
+   ═══════════════════════════════════════════════════════ */
+#s3 { background: #fff; }
+/* TOP = 106px, NOT slide 57's own resolved 94px. The one deliberate
+   deviation from this screen's authored geometry, and the smallest
+   possible one: a single value on the group's existing wrapper, so
+   every distance INSIDE it — stem paragraphs, image, option capsules —
+   is carried along untouched, and the hint/check controls (siblings of
+   this wrapper, anchored to the bottom bar) do not move at all.
+
+   Why: the shared Progress Question bar renders on every question
+   screen of this series, and its painted bottom sits at y 99. At the
+   authored 94 the stem's first text line ran 95-127, so the rightmost
+   label "שאלה 1" and that line overlapped by a 43 × 4 px band —
+   measured from the live per-line rects, not from the paragraph's
+   element box, which a right-aligned paragraph leaves empty on its
+   left. The bar itself is NOT moved: its position is canonical and
+   identical on all six screens (720-templates → _global-components.md →
+   Progress Question), and an S6-specific bar position would fork the
+   shared component.
+
+   Why 12px and not more: 4px removes the collision exactly, and 8px is
+   the component's own internal gap (.progress-question__item), so 12
+   leaves one component-unit of clear air — the smallest whole-pixel
+   shift that is both collision-free and visibly clear. The measured
+   clearances on the other screens are S1 23px, S3-S5 58px, S2 93px, so
+   8px stays the tightest in the part and nothing else needed touching. */
+#s3 .scq-question { top: 106px; right: 40px; width: 1178px; }
+#s3 .scq-right-col {
+  position: absolute; right: 25.6px; top: 0;
+  width: 759px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+/* ¶1-¶2 body, ¶3 the bold instruction ("mark ALL the true claims") —
+   weight-only, plain body colour: slide 57's stem textbox carries zero
+   <a:solidFill> (audited), same as every stem in this part. All three
+   are consecutive non-blank paragraphs → line-height alone. */
+#s3 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s3 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+
+/* ── Content image ──
+   The picture the note names ("טיול"): assets/img/טיול.jpg, this part's
+   committed approved asset — the same photograph the deck embeds as
+   media/image58.jpeg (354×265), at 1448×1086 instead. Frame is the
+   slide's own 353×265 at (61.7,125.4) → left 0 / top 31 inside the
+   container. Rounded 16px media viewport per 720-design-guidelines →
+   components-icons-states.md → Image Zoom → "Media" (the established
+   720 language for displayed media), exactly as the approved siblings
+   03-01 (#s8) and 03-03 (#s4) do; no fill, no border — the picture is
+   the visible object. `object-fit: cover`: the asset's 4:3 (1.333) and
+   the frame's 1.332 differ by under one pixel, so cover crops nothing
+   visible and avoids a hairline of ground showing through. */
+#s3 .viq-img-frame {
+  position: absolute; left: 0; top: 31px;
+  width: 353px; height: 265px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+#s3 .viq-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Answer pills ──
+   WIDTH IS CONTENT-DRIVEN (SingleChoiceQuestion.md → "Answer-capsule
+   width — content-driven sizing", inherited by name by the MCQ text
+   variant): the column is fit-content up to this screen's approved
+   ceiling — the slide's own 758.7px capsule — and every pill is
+   width:auto, so the column's default align-items: stretch resolves all
+   four to the widest one's width. Three of these four claims are long
+   sentences, so the column genuinely reaches the ceiling here.
+   margin-top 22px = the slide's own stem-bottom (232.9) → first capsule
+   (255.4) gap; the 16px pitch gap is the slide's own (85.6 / 85.1 pitch
+   on a 69.7 pill; the fourth capsule is a separate, slightly lower
+   shape at 90.1 and is not reproduced as a special case). min-height
+   70 = the authored 69.7 capsule. */
+#s3 .scq-answers {
+  width: fit-content; max-width: 759px;
+  align-self: flex-start;
+  margin-top: 22px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+#s3 .scq-opt {
+  width: auto; min-height: 70px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  overflow: visible;
+}
+/* Same option text role as this part's own #s1 pills (22px) — one pill
+   component, one size, across the part. */
+#s3 .scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.15;
+}
+#s3 .scq-opt-text strong { font-weight: 700; }
+#s3 .scq-opt:disabled { cursor: default; }
+#s3 .scq-opt:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+#s3 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s3 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+
+/* ═══════════════════════════════════════════════════════
+   S4 — SingleChoiceQuestion (slide 78)
+
+   Every value below is slide 78's own EMU offset / 9525, measured from
+   the shapes named in the comment. The screen reuses S3's .scq-*
+   components unchanged; only the geometry and the marker shape differ.
+
+     stem textbox (id=6)   x=489.4 y=127.3 w=725   h=171.3 → right 1214.4
+     option pills          x=530.6 w=683.8 h=55.3
+                           y = 314.8 / 392.3 / 471 / 547.1
+     image (id=16)         x=49    y=138.7 w=388.8 h=259.2
+
+   container: right = 1280 - 1214.4 = 65.6, top = 127.3 (the stem, the
+   higher of the two columns), width = 1214.4 - 49 = 1165.4.           */
+#s4 .scq-question { top: 127.3px; right: 65.6px; width: 1165.4px; }
+#s4 .scq-right-col {
+  position: absolute; right: 0; top: 0;
+  width: 725px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+/* ¶1-¶3 body, ¶4 the bold question line. That last line is the one run
+   on this slide carrying an explicit colour (#019DE5) — which is the
+   Science :root value of --subject-500, i.e. it identifies the ROLE,
+   not a literal hex. This build runs data-subject-theme="math", where
+   the same token resolves to #3b2fc2, so the token is bound rather
+   than the deck's hex. Same rule already applied on S3. */
+#s4 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s4 .scq-intro strong { font-weight: 700; }
+#s4 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* The control image — the SAME asset S3 shows, per the note's
+   "<קונטרול שאלה 1>" and confirmed by both slides referencing
+   media/image79.png. Slide 78 draws it slightly larger and higher than
+   slide 77 does, so the frame is sized from THIS slide's own offsets:
+   left 49-49=0, top 138.7-127.3=11.4. */
+#s4 .viq-img-frame {
+  position: absolute; left: 0; top: 11.4px;
+  width: 388.8px; height: 259.2px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+#s4 .viq-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Answer pills — CONTENT-DRIVEN width, per SingleChoiceQuestion.md →
+   "Answer-capsule width — content-driven sizing". The slide draws all
+   four capsules at a fixed 683.8px slab, but that is mock geometry, not
+   the component contract: the rule is one rule for every screen —
+   `.scq-answers` is fit-content capped by the screen's approved
+   answers-column ceiling (here the slide's own 683.8px capsule), and
+   `.scq-opt` stays width:auto so the column's default align-items:
+   stretch resolves ALL FOUR to the widest option's own max-content
+   width. The four labels here are short ("זיו" / "שחר" /
+   "שתיהן צודקות" / "שתיהן טועות"), so the column genuinely shrinks.
+
+   The resolved width is therefore the longest rendered label plus the
+   canonical internal geometry, which the spec fixes and this screen
+   does not override: 20px padding on BOTH sides, the 26px radio and
+   the 10px gap. Nothing is hand-measured or hardcoded — the layout
+   engine resolves it, which is what keeps it correct at every viewport
+   and if the copy ever changes. tests/verify-s4.mjs asserts the
+   resolved width equals that sum.
+
+   Kept as one aligned column at the reading start (the physical RIGHT
+   in RTL), where the slide aligns the capsules' right edge with the
+   stem's. margin-top 16.2 = first capsule (314.8) - stem box bottom
+   (298.6); gap 22.2 = pitch 77.5 - capsule 55.3. */
+#s4 .scq-answers {
+  width: fit-content; max-width: 683.8px;
+  align-self: flex-start;
+  margin-top: 16.2px;
+  display: flex; flex-direction: column; gap: 22.2px;
+}
+#s4 .scq-opt {
+  width: auto; min-height: 55.3px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  overflow: visible;
+}
+#s4 .scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.15;
+}
+#s4 .scq-opt:disabled { cursor: default; }
+#s4 .scq-opt:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+#s4 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s4 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+
+/* RADIO marker — the one visual delta from S3's checkbox, because only
+   one option can be chosen here. Slide 78's own markers are ellipses
+   (ids 10 / 29 / 34 / 39) at x=1184.3 — the pill's RIGHT end, which is
+   the reading start in RTL, so order:-1 puts it there. Ported from the
+   approved sibling 03-05 (#s4), same template. Green/red are
+   theme-independent feedback colours, deliberately NOT subject tokens. */
+#s4 .scq-radio {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  position: relative; box-sizing: border-box;
+  order: -1;
+}
+#s4 .scq-opt.selected .scq-radio { background: var(--subject-500); }
+#s4 .scq-opt.correct  .scq-radio { background: #609e12; border-color: #609e12; }
+#s4 .scq-opt.wrong    .scq-radio { background: #b20010; border-color: #b20010; }
+#s4 .scq-opt.correct .scq-radio::after,
+#s4 .scq-opt.wrong .scq-radio::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+#s4 .scq-opt.correct .scq-radio::after {
+  width: 15px; height: 13px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s4 .scq-opt.wrong .scq-radio::after {
+  width: 13px; height: 13px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* CHECKBOX marker — the one visual delta from SingleChoiceQuestion's
+   radio. A rounded SQUARE, because more than one option can be checked
+   at a time and because slide 57's own markers are 30.2×30.2 rounded
+   squares (ids 14 / 20 / 21 / 25) rather than circles. RTL: `order: -1`
+   puts it at the pill's reading start, i.e. the physical RIGHT, where
+   the deck places it. Ported from the approved sibling 03-03 (#s4).
+   Green/red feedback colours are theme-independent and deliberately
+   NOT subject tokens. */
+.scq-check {
+  width: 30px; height: 30px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 8px;
+  position: relative; box-sizing: border-box;
+  order: -1;
+}
+.scq-opt.selected .scq-check { background: var(--subject-500); }
+.scq-opt.correct  .scq-check { background: #609e12; border-color: #609e12; }
+.scq-opt.wrong    .scq-check { background: #b20010; border-color: #b20010; }
+.scq-opt.selected .scq-check::after,
+.scq-opt.correct  .scq-check::after,
+.scq-opt.wrong    .scq-check::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+/* A plain selected box and a correct box both carry the tick; only the
+   wrong box carries the cross. Type 1 icons, white on the fill. */
+.scq-opt.selected .scq-check::after,
+.scq-opt.correct .scq-check::after {
+  width: 17px; height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+.scq-opt.wrong .scq-check::after {
+  width: 14px; height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+
+/* ===== ported from part 04 — Zoom trigger + close button ===== */
+/* ═══════════════════════════════════════════════════════
+   Zoom trigger (`Zoom`) — canonical component
+   720-design-guidelines → components-icons-states.md → "`Zoom`";
+   placement from 720-templates → _global-components.md → "Zoom
+   trigger": top-right INSIDE the frame at 10/10, above the media.
+   44×44 white pill, 2px inside-aligned Subject/500 outline (so it
+   changes no geometry), Subject/500 magnifier, hover inverts to a
+   Subject/500 fill with a white icon. The magnifier is inline SVG so it
+   inherits currentColor and one rule recolours surface and icon
+   together. Ported verbatim from the approved sibling
+   methodica-math-ratio-03-02, which is where this part's applet zoom
+   comes from. ═══════════════════════════════════════════ */
+/* PLACEMENT — bottom-right of the image frame, not top-right.
+   The canonical component owns the trigger.s APPEARANCE; its placement
+   belongs to this project (720-design-guidelines: "Current canonical
+   Figma places no instance of this component in any composition, so it
+   establishes NO placement contract"). The template.s suggested
+   top-right lands exactly on the "A" route label, which is information
+   a learner needs to answer the question, so it is corrected here for
+   every question screen at once rather than per screen.
+
+   The corner was chosen by MEASUREMENT, not by eye. The button.s 44x44
+   footprint at its 10px inset projects onto a 173.8px square in the
+   1536x1024 source; the ink inside that square, per corner:
+
+       corner          q1 bright / saturated     q4 bright / saturated
+       top-left          25.23% / 18.85%           10.37% /  4.69%
+       top-right          9.96% /  9.49%            9.32% /  5.55%
+       bottom-left        0.00% /  0.38%            0.00% /  0.00%
+       bottom-right       0.06% /  0.01%            0.00% /  0.00%
+
+   Both bottom corners are clear; bottom-right is the cleaner of the two
+   on the Q1-Q3 diagram and is the producer.s stated preference on a
+   tie. Nearest artwork to it is the lower-right aircraft, 68px away in
+   source pixels. Size, inset and the canonical glyph are unchanged —
+   only the vertical anchor moved. tests/verify-zoom-icon.mjs asserts
+   the no-overlap result on the rendered artwork at every viewport. */
+.img-zoom-btn {
+  position: absolute; bottom: 10px; right: 10px; z-index: 3;
+  width: 44px; height: 44px; border-radius: 100px;
+  background: #fff;
+  border: none;
+  box-shadow: inset 0 0 0 2px var(--subject-500);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; color: var(--subject-500);
+}
+.img-zoom-btn:hover { background: var(--subject-500); color: #fff; box-shadow: none; }
+.img-zoom-btn:focus-visible { outline: 3px solid var(--subject-700); outline-offset: 2px; }
+.img-zoom-btn__icon { width: 20px; height: 20px; display: block; }
+
+/* Close control (`Close`, Blue) — 44×44, 2px Subject/500 stroke, 15px
+   glyph, Subject/700 focus ring, pinned at the library's physical
+   16/16 top-left inset (`left` is physical, so RTL does not mirror it).
+   Same implementation both approved siblings ship. */
+.img-zoom-close-btn {
+  position: absolute; top: 16px; left: 16px;
+  z-index: 2;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--subject-500);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; color: var(--subject-500);
+}
+.img-zoom-close-btn:hover { background: var(--subject-500); color: #fff; }
+.img-zoom-close-btn:focus-visible { outline: 3px solid var(--subject-700); outline-offset: 2px; }
+.img-zoom-close-btn svg { width: 15px; height: 15px; display: block; }
+
+
+/* ===== ported from part 04 — Image zoom modal ===== */
+/* ═══════════════════════════════════════════════════════
+   IMAGE ZOOM — canonical component, one modal per part.
+   720-templates → _question-template-defaults.md → "Image zoom": zoom
+   is REQUIRED for any question template that presents a content image
+   — the default, not an add-on. Slide 57 draws no trigger (it also drew
+   none for the applet the producer then asked to make zoomable), so the
+   trigger and modal come from the template contract, ported verbatim
+   from the approved sibling methodica-math-ratio-03-02 (whose zoom the
+   producer had explicitly confirmed must visibly enlarge). A DISTINCT
+   component from this part's applet zoom: this one clones the image
+   wrapper onto a shared stage; they share only the canonical backdrop
+   and the same Close/Blue control. `.img-zoom-btn` and
+   `.img-zoom-close-btn` are already defined above for the applet zoom
+   and are reused as-is. ═══════════════════════════════════════ */
+.img-zoom-modal {
+  position: absolute; inset: 0;
+  z-index: 70;
+  display: flex; align-items: center; justify-content: center;
+}
+.img-zoom-modal.hidden { display: none !important; }
+.img-zoom-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+/* The canonical Image Zoom Surface: 1200×640 envelope, radius 24, no
+   stroke or shadow, 64px top band for the Close control, 24px sides
+   and bottom. Sized by content — openImageZoom() writes the media
+   viewport's own size, so the surface shrinks to it. */
+.img-zoom-panel {
+  position: relative; z-index: 1;
+  max-width: 1200px; max-height: 640px;
+  background: #fff;
+  border-radius: 24px;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 64px 24px 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+/* The media viewport: rounded 16px, clips the clone. */
+.img-zoom-stage {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  border-radius: 16px;
+}
+.img-zoom-stage .viq-img-frame {
+  position: relative;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  border-radius: 0;
+}
+.img-zoom-stage .viq-img { width: 100%; height: 100%; object-fit: contain; }
+
+
+/* ═══════════════════════════════════════════════════════
+   Screen 03 (#s3) — MultipleChoiceQuestion, slide 77's own geometry
+
+   The component rules above are ported verbatim from the sibling
+   methodica-math-ratio-03-04's S6, the same template and variant. Only
+   the numbers in this block are slide 77's own, resolved from its shape
+   tree (EMU / 9525) on the 1280×710 canvas:
+
+     id=6   stem textbox      458.0, 127.4   756.4 × 106.6
+     id=19  question image     49.0, 138.7   388.8 × 259.2
+     id=31  option "זיו"      533.1, 249.4   683.8 ×  55.3
+     id=25  option "עומר"     533.1, 319.6   683.8 ×  95.7
+     id=13  option "שחר"      533.1, 429.6   683.8 ×  98.4
+     id=38/40/36 checkboxes  1166.3           30.2 ×  30.2
+
+   The content block therefore spans x 49.0 … 1216.9 and starts at
+   y 127.4, which is the container below. Everything inside is
+   right-anchored, as RTL requires.
+
+   TYPE SIZES are role-driven, not point-derived: every run on this
+   slide is 20pt, yet the stem and the options are deliberately NOT the
+   same size — the stem takes Body/B-3 24px and the options Question/Q-1
+   22px, exactly as the donor and the rest of this lomda's question
+   screens do. Copying 20pt → 26.67px would invent a size the token
+   table does not have.
+   ═══════════════════════════════════════════════════════ */
+
+/* Container: right edge 1216.9 → 63.1px from the canvas edge. */
+#s3 .scq-question { top: 127.4px; right: 63.1px; width: 1167.9px; }
+
+/* Text column: from the stem's own left edge (458.0) to the container's
+   right edge (1216.9). */
+#s3 .scq-right-col { right: 0; width: 758.9px; }
+
+/* Question image — slide 77's own box, top-aligned 11.3px below the
+   container's top (138.7 − 127.4). The donor's 16px radius and
+   object-fit: cover come across unchanged. */
+#s3 .viq-img-frame { left: 0; top: 11.3px; width: 388.8px; height: 259.2px; }
+
+/* The three option pills are all the SAME width on the slide (683.8),
+   not hugging their own text — the render shows identical left and
+   right edges on all three — so the column is fixed and each pill
+   fills it. Authored vertical gaps are 14.9 and 14.3px; 15px is used
+   for both rather than reproducing a 0.6px authoring wobble.
+   margin-top 15.4px puts the first pill's top on the authored 249.4. */
+#s3 .scq-answers {
+  width: 683.8px; max-width: 683.8px;
+  /* 17.6px, not the 15.4px a naive (249.4 − 127.4 − 106.6) suggests:
+     the stem's own authored BOX is 106.6px tall but its three rendered
+     lines occupy 104.4px (3 × 24px × 1.45), so the gap is measured from
+     the text, not from the hand-drawn box. Verified on the rendered
+     page — the first pill's top lands on 249.4. */
+  margin-top: 17.6px; gap: 15px;
+}
+#s3 .scq-opt { width: 100%; min-height: 55px; }
+
+/* The instruction line is the one run on this slide that carries its
+   own colour — #019DE5, which IS this theme's --subject-500 token, not
+   an arbitrary hex. Bold, per the run's b="1". */
+#s3 .scq-setup { color: var(--subject-500); }
+
+
+/* ── ValueInputQuestion component rules ───────────────────
+   Ported from the approved sibling methodica-math-ratio-03-06's
+   template source of record, methodica-math-ratio-03-03, whose own
+   fields use the identical authored box (103.4x55.3). Unscoped because
+   they are the template's shared vocabulary, exactly as `.scq-*` is.
+
+   BORDER COLOUR — slide 79 draws these boxes with a 1pt #00B0F0 line
+   on a white fill. #00B0F0 is this deck's cyan, the same value the A
+   and P route labels use, where it is SEMANTIC (it ties a label to its
+   flight path). On an input box it is not semantic, and
+   ValueInputQuestion.md owns the field's resting appearance. The
+   canonical neutral border therefore ships, matching the approved
+   sibling's fields, and the authored cyan is reported rather than
+   silently adopted — a field that rests in an outcome-like colour is
+   exactly what the "field surface invariant" rule exists to prevent. */
+.viq-field {
+  width: 103px; height: 55px;
+  box-sizing: border-box;
+  border: 1.5px solid rgba(174, 174, 174, 0.5);
+  border-radius: 10px;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 8px;
+}
+.viq-field:focus-within { border-color: var(--subject-500); }
+.viq-input {
+  border: none; background: transparent; outline: none;
+  flex: 0 0 auto; width: 2.2ch;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 700;
+  color: #303030; text-align: center; direction: ltr;
+}
+/* Field surface invariant: Natural/100 in EVERY state, including the
+   locked one — only the border and the icon carry outcome colour
+   (ValueInputQuestion.md → "Field surface invariant"), so a locked
+   value keeps its own colour instead of greying out. readOnly rather
+   than disabled is what keeps it focusable and selectable after the
+   question resolves. */
+.viq-input:read-only { color: #303030; -webkit-text-fill-color: #303030; opacity: 1; }
+.viq-field.viq-correct { border-color: #609e12; }
+.viq-field.viq-wrong   { border-color: #b20010; }
+
+.viq-blank-line {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+  display: flex; align-items: center; justify-content: flex-start;
+}
+.viq-field--inline {
+  display: inline-flex;
+  vertical-align: middle;
+  width: 103px; height: 55px;
+  padding: 0 10px;
+  gap: 6px;
+  /* An LTR island: its own DOM order [value, unit, verdict icon] maps
+     to physical left-to-right, so the icon sits to the RIGHT of the
+     number. Without this it would inherit the row's direction and put
+     the icon on the wrong side of the value. */
+  direction: ltr;
+}
+/* Verdict icon for a single-value field: exactly one icon, INSIDE the
+   field's own border, immediately after the value — ValueInputQuestion.md
+   → Variant A is explicit that it must never float outside it. It
+   collapses while empty so the value stays centred before any verdict
+   exists, and only shifts to make room once one appears. */
+.viq-input-ico {
+  flex: 0 0 16px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.viq-input-ico:empty { display: none; }
+.viq-input-ico svg { display: block; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 05 — ValueInputQuestion (slide 79). PEAK QUESTION 3 of 4.
+
+   Same composition as S3/S4 — the radar image on the physical LEFT,
+   the stem on the right — because slide 79 places the picture at the
+   same [49, 138.7, 388.8x259.2] box those two use. Only the answer
+   area differs: two value fields instead of option capsules.
+
+   The image is `קונטרול שאלה 1`, the same asset S3 and S4 mount, per
+   the slide's own note. A/B/P and the alpha/beta sizes therefore match
+   Q1 and Q2 by construction rather than by a second copy of the art.
+   ═══════════════════════════════════════════════════════════ */
+#s5 .scq-question { top: 127.3px; right: 65.6px; width: 1165.4px; }
+
+/* 742.1px, not S4's 725: slide 79's stem box is wider. Its right edge
+   still lands on 1214.4, the shared reading-start edge every question
+   screen in this part uses. */
+#s5 .scq-right-col {
+  position: absolute; right: 0; top: 0; width: 742.1px;
+  display: flex; flex-direction: column; direction: rtl;
+}
+/* Missing on this screen too — same gap as #s7 (producer, 2026-09-22,
+   full-lomda text-size sweep): the two intro paragraphs here had no
+   `#s5 .scq-intro` rule at all and fell to the browser default (16px),
+   unlike every sibling screen. Matches S3/S4/S7's rule exactly. */
+#s5 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s5 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s5 .viq-img-frame {
+  position: absolute; left: 0; top: 11.4px;
+  width: 388.8px; height: 259.2px;
+  border-radius: 16px; overflow: hidden;
+}
+#s5 .viq-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ── The two value rows ───────────────────────────────────
+   FLOWED after the prompt, not pinned to the slide's absolute y.
+
+   The slide puts the first box at y=307.1 because its own stem happens
+   to wrap to three lines in PowerPoint's renderer. The browser wraps
+   the same copy to two, so reproducing 307.1 literally would open a
+   ~117px hole between "השלימו:" and the first box — geometry copied
+   past the point where it still means anything. What the slide
+   actually authors is the RELATIONSHIP, and that is what is
+   reproduced:
+
+     margin-top 24    = 312 (first box top) - 288 (prompt baseline box
+                        bottom), both measured on the PowerPoint render
+     gap 18           = 73.3 (authored row pitch) - 55.3 (box height)
+     padding-right 9.3 = 1214.4 (block right) - 1101.7 - 103.4, the
+                        authored inset from the shared reading-start edge
+
+   Box size, row pitch and the right inset are therefore all the
+   slide's own; only the block's vertical origin follows the copy.
+   tests/verify-s5.mjs asserts the pitch, the inset and the box size
+   against the authored numbers, and asserts the prompt never collides
+   with the first row. */
+#s5 .s5viq-rows {
+  margin-top: 24px;
+  padding-right: 9.3px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+/* Each row is an LTR island — label, box and degree mark are one
+   mathematical expression, so DOM order is visible order. */
+#s5 .s5viq-row {
+  direction: ltr;
+  display: flex; align-items: center; gap: 12px;
+  justify-content: flex-end;
+  margin: 0;
+}
+#s5 .s5viq-lead {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  white-space: nowrap;
+}
+/* The degree mark is CHROME, not something the learner types — slide
+   79's note is explicit: "נדרש סימון המעלות (התלמידים לא צריכים להזין
+   אותו, הוא קבוע בחלונית הזנת הטקסט)". It therefore lives in the field
+   next to the input, is aria-hidden (each input's own label already
+   says "במעלות"), and is never part of the compared value. */
+#s5 .s5viq-unit {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #303030;
+  flex: 0 0 auto; margin-inline-start: -4px;
+}
+#s5 .viq-field--inline { margin: 0; width: 103.4px; height: 55.3px; }
+#s5 .viq-field--inline .viq-input { width: 42px; }
+
+
+/* View My Answer Toggle action row — 24px net gap under the body
+   (20px margin + the popup's own 4px flex gap), per the spacing
+   contract in _global-components.md → Feedback popup system → "View My
+   Answer Toggle" → Spacing contract. Ported with the toggle itself
+   from methodica-math-ratio-03-03, the sibling this part's
+   ValueInputQuestion comes from. */
+.scq-popup-actions { margin-top: 20px; }
+.popup-action {
+  height: 39px; padding: 0 20px;
+  border: 1px solid #484848; border-radius: 1000px; background: #fff;
+  color: #222222;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.popup-action:hover { font-weight: 600; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   SCREENS 06 / 08 / 09 — the airplane clips and the mission-complete
+   screen (slides 80, 82, 83).
+   ═══════════════════════════════════════════════════════════ */
+
+/* S6 and S8 restore the producer's full crop, exactly as S2 does, and
+   start their band at the same 62px — the console and its button are
+   the point of these screens, and 93.73px would shave the button's
+   lower lip (the derivation is under #s2 .fito-img). S9 instead uses
+   S1's crop, which stops above the console: it is not a video screen,
+   so an inert button must not be on show. */
+/* 80px, NOT 62px (producer, 2026-09-23): 62px cleared the flag
+   button's icon but ran under its hover/focus label (bottom edge y 76),
+   which then sat on the artwork. 80px is 4px under that label — the
+   producer's own line — and every row of the clip below it is kept;
+   what does not fit is decided in .fito-media's crop rule. */
+#s6 .fito-img, #s8 .fito-img { top: 80px; }
+/* (Neither clip screen uses .fito-img-frame any more — the still's
+   srcRect crop belongs to `קונטרול.jpg`, which only S1, S2 and S9 show.) */
+
+/* The clip fills its own content box (see .fito-media), which already
+   carries the clip's 1280/720 aspect — so nothing here scales, crops or
+   stretches it. The clip does NOT live in the still's frame: that frame
+   reproduces the producer's srcRect for `קונטרול.jpg`, whose top 11% is
+   game chrome to be removed, and on the clip that same 11% is where the
+   A and B route labels are. */
+.fito-video {
+  display: block;
+  width: 100%; height: 100%;
+}
+/* Neither clip screen has a still any more: each one's own opening
+   frame is its pre-play state, so nothing has to step aside. */
+
+/* The Play control. Transparent: the button drawn INSIDE the clip is
+   its appearance, and this is the hit target over it. It still takes
+   focus and still shows a focus ring, so a keyboard learner can find
+   it. Its box comes from .fito-play-btn--video, measured on the clips
+   themselves.
+
+   (The earlier `קונטרול-כפתור.png` button overlay and its
+   `.fito-play-art` rule were retired when the clip screens were rebuilt;
+   the file was removed from the tree in the 2026-09-23 cleanup.) */
+.fito-play-btn {
+  position: absolute;
+  padding: 0; margin: 0; border: none; background: transparent;
+  border-radius: 14px;
+  cursor: pointer;
+  z-index: 3;
+}
+.fito-play-btn:focus-visible { outline: 3px solid var(--subject-700); outline-offset: 3px; }
+/* Once the clip has run, the control has done its job: it stops being
+   an activation target so a second press cannot restart anything. */
+.is-done .fito-play-btn { pointer-events: none; }
+.is-playing .fito-play-btn { pointer-events: none; }
+
+/* The narrow right-hand card slides 80 and 82 author, as against S1's
+   full-width band. Widths are the slides' own; the horizontal inset is
+   this project's shared 24px, the same substitution S1 documents. */
+.fito-text--right { left: auto; right: 24px; }
+#s6 .fito-text--right { width: 471.3px; }
+#s8 .fito-text--right { width: 468.6px; }
+/* The card is registered to the ARTWORK's right edge, not the canvas's
+   (producer, 2026-09-23). Since .fito-media stopped covering wide bands
+   (its essential-fit ceiling leaves white strips at the sides), a card
+   at a fixed 24px from the canvas edge sat on the white strip instead of
+   on the picture. So the 24px inset is measured from the media box's
+   right edge: that box is centred, so the strip on each side is
+   (band width − box width) / 2, and the box width is 16/9 of the same
+   --box-h expression .fito-media uses — written out against the SCREEN
+   as the container (the card is the band's sibling, not its child, so
+   the band's own container units do not reach it): band height =
+   100cqh − 80 (band top) − 74 (bottom bar). The max(0px, …) clamps the
+   correction to zero whenever the box still covers the band, so at
+   1280 wide and on tall canvases nothing moves. Making these two
+   screens size containers is safe — they are absolutely positioned,
+   inset:0 boxes whose size never came from their content — and the
+   band inside keeps its own container, so nothing in it re-resolves. */
+#s6, #s8 { container-type: size; }
+#s6 .fito-text--right,
+#s8 .fito-text--right {
+  right: calc(24px + max(0px, (100cqw - 1.77778 * min(max(100cqh - 154px, 56.25cqw), var(--ess-fit) * (100cqh - 154px))) / 2));
+}
+/* S1's full-width card, registered the same way to ITS artwork (producer,
+   2026-09-23, consistency with S6/S8). S1's frame is band / 0.62386 tall
+   at the still's 1536/873 ratio, i.e. 2.82026 × band height wide; the
+   band is 100cqh − 80 − 74. Both edges get the same correction so the
+   card stays centred on the picture; max(0px, …) makes it a no-op while
+   the frame still covers the band (every window narrower than 2.82:1). */
+#s1 { container-type: size; }
+#s1 .fito-text {
+  left:  calc(24px + max(0px, (100cqw - 1.77778 * min(max(100cqh - 154px, 56.25cqw), var(--ess-fit) * (100cqh - 154px))) / 2));
+  right: calc(24px + max(0px, (100cqw - 1.77778 * min(max(100cqh - 154px, 56.25cqw), var(--ess-fit) * (100cqh - 154px))) / 2));
+}
+
+/* ── S9, mission complete ────────────────────────────────
+   Slide 83 centres the authored success panel over the radar tablet and
+   sets the copy inside it. Panel box 534.5x300.8 at [365.1, 81.8];
+   the copy's own box is [401.9, 199.1, 462.7x106.6], i.e. inset 36.8
+   from the panel's left and 117.3 from its top. Both are expressed as
+   percentages of the panel so the group scales as one. */
+/* S1 and S9 framed like S2/S6/S8 (producer, 2026-09-23, "לשם האחידות"):
+   the same 80px band top (just under the flag button's hover label), and
+   the same essential-fit rule — the kept rows always fill the band's
+   HEIGHT, so on a window wide enough for the width term to win the frame
+   stops growing and the band's white shows at the sides instead of the
+   bottom of the kept window being lost. For this crop (rows 96..640.6,
+   keep 0.62386) that is simply frame = band / keep; the width term
+   (56.8359cqw) never exceeds it below a 2.82:1 band, so at every normal
+   window nothing changes but the 14px the band gained at the top. */
+#s1 .fito-img, #s9 .fito-img { top: 80px; }
+/* (S1 and S9 share the one media box too — see .fito-img-frame. Their
+   old crop stopped above the console; the shared framing shows the same
+   rows as S2, and on S1 the console sits behind the narrative card.) */
+.s9-panel {
+  position: absolute;
+  /* Centred on the picture band, not at the slide's authored [365.1,
+     81.8] (producer, 2026-09-23: "אמור להיות ממורכז באמצע התמונה"). The
+     band is .fito-img: `top: 93.73px; bottom: 74px` of the screen, so
+     its centre is 93.73 + (screen height − 93.73 − 74) / 2 — written as
+     a calc against the screen's own height rather than a number,
+     because this part's canvas is 1280×960, not the 710 the sibling
+     parts use, and a hardcoded 710-based value landed 125px too high
+     (measured). The frame is horizontally centred on the canvas, so 50%
+     is the picture's centre too. Size unchanged; the text block inside
+     is percentage-based, so it moves with the panel. */
+  left: 50%; top: calc(80px + (100% - 80px - 74px) / 2);   /* band top is 80px on S9 (see #s9 .fito-img) */
+  /* Centring WITHOUT `transform` (animation-system → DECISIONS.md →
+     Step 7 "Transform conflict"): this panel floats in as reveal group 2,
+     and m-float-in drives the element's own `transform`, so the former
+     `transform: translate(-50%, -50%)` would have been overridden for the
+     whole reveal and the panel would have sat off-centre until it ended.
+     The box is fixed-size, so the same offset is exact as negative
+     margins: -534.5/2 and -300.8/2. Rest geometry is unchanged. */
+  margin-left: -267.25px; margin-top: -150.4px;
+  width: 534.5px; height: 300.8px;
+  z-index: 3;
+}
+.s9-panel-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.s9-panel-text {
+  position: absolute;
+  left: 6.885%;            /* 36.8 / 534.5 */
+  top: 38.996%;            /* 117.3 / 300.8 */
+  width: 86.566%;          /* 462.7 / 534.5 */
+  direction: rtl; text-align: center;
+  display: flex; flex-direction: column; gap: 0;
+}
+.s9-panel-text p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #FFFFFF;   /* body 24px, as S2's alert body (producer, 2026-09-30) */
+  line-height: 1.35; margin: 0;
+}
+.s9-panel-text p.s9-title {
+  font-size: 32px; font-weight: 800; color: #FFFFFF; margin-bottom: 4px;   /* title 32px, as S2's alert title (producer, 2026-09-30) */
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   SCREEN 07 — SingleChoiceQuestion with image (slide 81).
+   PEAK QUESTION 4 of 4, and the one screen whose diagram changes: the
+   asset is `קונטרול שאלה 4`, where α is the SMALLER angle and β the
+   larger, because this question introduces the 1 : 3 ratio. A stays
+   blue on the upper right and B green on the upper left, exactly as on
+   every other screen — only the α/β sizes differ.
+   ═══════════════════════════════════════════════════════════ */
+#s7 .scq-question { top: 127.3px; right: 65.6px; width: 1165.4px; }
+#s7 .scq-right-col {
+  position: absolute; right: 0; top: 0; width: 754.2px;
+  display: flex; flex-direction: column; direction: rtl;
+}
+/* Missing on this screen only — S3/S4 both carry the matching rule,
+   S7 shipped without it, so these five paragraphs (including the two
+   that hold Omer's fraction) fell through to the unstyled UA default
+   (16px), and the fraction's own 0.86em then computed off THAT, not
+   off the intended 24px (producer, 2026-09-22: caught at 16px text /
+   ~13.8px fraction).
+
+   The fraction itself is left at the SHARED 0.86em (no per-screen
+   override): a first attempt forced it to a literal 1em to match the
+   body text exactly, but a stacked fraction is two full text lines
+   (numerator + denominator) — at 1em that is roughly TWO line-heights
+   tall, which `vertical-align` cannot reconcile with a single line of
+   surrounding prose. That is what the producer then reported as the
+   fraction sitting too low with an oversized gap to the next line
+   (2026-09-23): not a mispositioned offset, but the two-line box itself
+   being too tall for one line. 0.86em keeps `vertical-align: -0.45em`
+   the value it was already tuned against everywhere else `.math-frac`
+   appears — including this exact fraction shape in this screen's OWN
+   feedback popup, where it was never flagged — so the fix is to match
+   that proven rendering rather than override it again. At a 24px
+   parent this still renders at ~20.6px, comfortably larger and more
+   legible than the original 13.8px bug. */
+#s7 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s7 .scq-intro strong { font-weight: 700; }
+#s7 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s7 .viq-img-frame {
+  position: absolute; left: 0; top: 0;
+  width: 399.7px; height: 266.5px;
+  border-radius: 16px; overflow: hidden;
+}
+#s7 .viq-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Capsules: the SAME content-driven rule S4 ships — .scq-answers is
+   fit-content capped by the slide's own capsule width, .scq-opt is
+   width:auto, and the column's default align-items:stretch resolves all
+   three to the widest label's own width. Nothing is hand-measured. */
+#s7 .scq-answers {
+  width: fit-content; max-width: 683.8px;
+  align-self: flex-start;
+  margin-top: 16.2px;
+  display: flex; flex-direction: column; gap: 22.2px;
+}
+#s7 .scq-opt {
+  width: auto; min-height: 55.3px;
+  border: 2px solid var(--subject-500); border-radius: 1000px; background: #fff;
+  padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 22px; font-weight: 400;
+  color: #222; direction: rtl; text-align: right; cursor: pointer;
+}
+#s7 .scq-radio {
+  width: 26px; height: 26px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  order: -1; flex: 0 0 auto; box-sizing: border-box;
+  position: relative;   /* the ::after check/X below is absolute TO THIS box — without it the icon was painted off the circle (producer, 2026-09-23) */
+}
+/* Correct/wrong fill + check/X icon — missing entirely on this screen
+   (producer, 2026-09-22: no icon appeared on check, unlike every other
+   single-choice screen). #s4 ships the identical set for its own
+   .scq-radio (same template, same element, same class names the JS
+   here already applies via s7scCheck's classList.add('correct'/'wrong'))
+   — ported verbatim, only the scope changed. */
+#s7 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s7 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+#s7 .scq-opt.selected .scq-radio { background: var(--subject-500); }
+#s7 .scq-opt.correct  .scq-radio { background: #609e12; border-color: #609e12; }
+#s7 .scq-opt.wrong    .scq-radio { background: #b20010; border-color: #b20010; }
+#s7 .scq-opt.correct .scq-radio::after,
+#s7 .scq-opt.wrong .scq-radio::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+#s7 .scq-opt.correct .scq-radio::after {
+  width: 15px; height: 13px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s7 .scq-opt.wrong .scq-radio::after {
+  width: 13px; height: 13px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ── Stacked fraction ─────────────────────────────────────
+   Slide 81 sets its fractions as real stacked fractions (a numerator
+   over a rule over a denominator), so they are built as such rather
+   than flattened to "1x/3x", which would read differently and would be
+   announced differently. The whole unit is an LTR island so the
+   numerator can never be reordered under the surrounding RTL, and it
+   carries its own spoken label because the visual stacking is the only
+   thing that expresses "divided by". */
+/* SITS ON THE LINE, not through it (producer, 2026-09-23). The earlier
+   inline-flex column + `vertical-align: -0.45em` could never put the
+   denominator on the text baseline: a column flex container's baseline
+   is its FIRST item (the numerator), so the whole stack hung below the
+   line however the offset was tuned — that was the fraction "sitting too
+   low" with a gap opening under it. An inline-block's baseline is the
+   baseline of its LAST line box — the denominator — so with plain
+   `vertical-align: baseline` the denominator sits exactly where the
+   surrounding digits sit and the numerator stands above the line, which
+   is how a stacked fraction reads in running text. The line-height is
+   tightened to 1.05 so the stack takes only what two digit rows need. */
+.math-frac {
+  display: inline-block; vertical-align: baseline; text-align: center;
+  direction: ltr; unicode-bidi: isolate;
+  line-height: 1.05; margin: 0 4px;
+  font-size: 0.86em;
+}
+.math-frac__n { display: block; padding: 0 5px 1px; border-bottom: 1.5px solid currentColor; }
+.math-frac__d { display: block; padding: 1px 5px 0; }
+.math-frac i { font-family: 'Times New Roman', serif; font-style: italic; }
+
+
+/* (The hit target's percentages now live with .fito-media, where they
+   are a constant share of the clip's own content box rather than a
+   figure derived from how the clip was fitted into the still's frame.) */
+
+
+/* (S8 no longer draws a success panel after its clip — the `הצלחה.png`
+   overlay that lived here was ruled S9-only by the producer, 2026-09-23.
+   The clip's held final frame is the resolved state.) */
+
+/* Visually-hidden live region — the completion still has to reach a
+   screen reader in words. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+  overflow: hidden; white-space: nowrap;
+}
+
+
+/* ── The clip's own content box ───────────────────────────
+   A real element occupying exactly the rectangle `object-fit: cover`
+   would give the clip against the band — which is what lets the Play
+   target be a constant percentage of the ARTWORK instead of a figure
+   that changes with the band's shape.
+
+       height = max(100cqh, 56.25cqw)
+                 |            |
+                 |            +-- 720/1280: the width-bound case
+                 +-- the height-bound case
+       top    = -(overflow) x 0.34
+
+   TWO terms, both derived. The essential content spans video rows
+   64..613 (A and B at 64..115, the Play control to 613: 549 rows).
+
+   (1) 0.35 is the split of the cropped rows between top and bottom. At
+   a 1280-wide, 710-tall canvas the band is 556px and 164 rows are
+   cropped: 0.35 puts the window at rows 57.4..613.4 — A and B clear,
+   the whole button in.
+
+   (2) The ESSENTIAL-FIT ceiling. On WIDE windows the box covers the
+   band by WIDTH (56.25cqw wins), so the clip is scaled up and far more
+   rows are cropped — at a 1406-wide canvas (a 2000×1010 window, the
+   producer's) a cover-sized box shows only 506 of 720 rows, and 549
+   essential rows do not fit in 506 whatever the split: something is
+   cut, either the A/B circles or the Play control. PRODUCER RULING
+   2026-09-23: neither — give up full-width cover instead. So the box
+   height is capped at 130.199cqh = band × 720/553: the size at which
+   rows 62..615 (the essential span plus a 2-row margin each side)
+   exactly fill the band. Below that ceiling the box covers the band as
+   before; at it, the box is narrower than the band and the band's
+   white shows as equal strips at both sides (the box is centred) —
+   ~60px each at 1406 wide, none at 1280.
+
+   (3) The top cut CENTRES the essential span in the window: the window
+   is 720 × band / box rows tall, so the cut that puts the span's middle
+   row on the window's middle is  ess-mid × box − band / 2  (ess-mid =
+   the span's centre row / 720), clamped to [0, box − band] — 0 when the
+   whole clip fits (tall canvases), never past the clip's end. This
+   replaces the earlier fixed split-plus-cap, which assumed one
+   composition: it could not follow a clip whose essential rows sit
+   elsewhere.
+
+   PER SCREEN (producer, 2026-09-23 — S6's clip was re-supplied with a
+   different composition, 4.37s/30fps; S8's is unchanged). Both numbers
+   are measured on the clips' own frames, first and last, and are
+   identical on both:
+     S8  Green_airplane_moving_on_radar  A/B rings from row 64, button
+         rows 522..613 → span 62..615 (2-row margins), 553 rows →
+         --ess-fit 720/553 = 1.30199, --ess-mid 338.5/720 = 0.47014.
+     S6  Blue_airplane_moving_on_radar   A/B rings from row ~125,
+         button rows 535..616 → span 120..618, 498 rows →
+         --ess-fit 720/498 = 1.44578, --ess-mid 369/720 = 0.5125.
+   The vars live on the SECTION so the text card's registration rule
+   below can read the same --ess-fit; .fito-media inherits them. */
+#s1, #s2, #s6, #s8, #s9 { --ess-fit: 1.2954; }   /* ONE ceiling → one box width on every screen */
+#s1, #s2, #s9 { --ess-mid: 0.49198; }   /* still: rows 96..763 of 873, centre 429.5 */
+#s8 { --ess-mid: 0.47014; }             /* green clip: rows 62..615 of 720, centre 338.5 */
+#s6 { --ess-mid: 0.5125; }              /* blue clip (re-supplied): rows 120..618, centre 369 */
+.fito-media {
+  --box-h: min(max(100cqh, 56.25cqw), calc(var(--ess-fit) * 100cqh));
+  position: absolute;
+  left: 50%; translate: -50% 0;
+  height: var(--box-h);
+  top: calc(-1 * clamp(0px, var(--ess-mid) * var(--box-h) - 50cqh, var(--box-h) - 100cqh));
+  aspect-ratio: 1280 / 720;
+  overflow: hidden;
+  z-index: 1;
+}
+.fito-media > video {
+  display: block; width: 100%; height: 100%;
+  /* The box already carries the clip's own 1280/720 ratio, so `cover`
+     is a no-op here — it is declared anyway as a guard: if the box ever
+     drifts from that ratio, the clip gets cropped rather than stretched. */
+  object-fit: cover;
+}
+
+/* The Play target, as a constant share of the clip's content box.
+   Measured on the clips' own frames (yellow button mass, first and last
+   frame — the console is static in both clips).
+   S8, Green_airplane_moving_on_radar (unchanged):
+     left   490/1280 = 38.281%      width  250/1280 = 19.531%
+     top    522/720  = 72.500%      height  91/720  = 12.639%
+   S6, Blue_airplane_moving_on_radar — RE-SUPPLIED 2026-09-23 (4.37s,
+   30fps, a different composition: button x 500..721, y 535..616), with
+   a 4px margin on each side:
+     left   496/1280 = 38.750%      width  230/1280 = 17.969%
+     top    531/720  = 73.750%      height  90/720  = 12.500% */
+.fito-play-btn--video {
+  left: 38.281%; top: 72.500%;
+  width: 19.531%; height: 12.639%;
+}
+#s6 .fito-play-btn--video {
+  left: 38.750%; top: 73.750%;
+  width: 17.969%; height: 12.500%;
+}
+
+/* Both clip screens show their clip from the moment the screen opens —
+   the poster frame IS the pre-play state. */

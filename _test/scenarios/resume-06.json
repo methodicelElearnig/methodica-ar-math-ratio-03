@@ -1,0 +1,177 @@
+[
+ {
+  "part": "06",
+  "name": "s3-selected",
+  "screen": 3,
+  "away": 2,
+  "setup": "goTo(3); s3mcToggle('omer'); s3mcToggle('ziv')"
+ },
+ {
+  "part": "06",
+  "name": "s3-wrong1-partial",
+  "screen": 3,
+  "away": 2,
+  "setup": "goTo(3); s3mcToggle('omer'); s3mcToggle('ziv'); s3mcCheck()",
+  "after": "(()=>({attempts:s3mcAttempts, checkDisabled:document.getElementById('s3mc-check').disabled}))()"
+ },
+ {
+  "part": "06",
+  "name": "s3-correct-read",
+  "screen": 3,
+  "away": 2,
+  "setup": "goTo(3); s3mcToggle('ziv'); s3mcToggle('shachar'); s3mcCheck();const sc=document.getElementById('s3mc-popup-scroll'); sc.scrollTop=sc.scrollHeight; s3mcCheckScrollGate();",
+  "after": "(()=>({gateOk:s3mcGateOk, gateDone:s3mcGateDone, checkDisabled:document.getElementById('s3mc-check').disabled}))()"
+ },
+ {
+  "part": "06",
+  "name": "s3-wrong2-unread",
+  "screen": 3,
+  "away": 2,
+  "setup": "goTo(3); s3mcToggle('omer'); s3mcCheck(); s3mcToggle('ziv'); s3mcCheck()",
+  "after": "(()=>({gateOk:s3mcGateOk, gateDone:s3mcGateDone, checkDisabled:document.getElementById('s3mc-check').disabled}))()"
+ },
+ {
+  "part": "06",
+  "name": "s4-wrong1",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4scSelect('shachar'); s4scCheck()"
+ },
+ {
+  "part": "06",
+  "name": "s4-correct",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4scSelect('ziv'); s4scCheck();"
+ },
+ {
+  "part": "06",
+  "name": "s4-wrong2",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4scSelect('shachar'); s4scCheck(); s4scSelect('both-wrong'); s4scCheck()"
+ },
+ {
+  "part": "06",
+  "name": "s5-typed",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(5); set('s5viq-input-alpha','108')"
+ },
+ {
+  "part": "06",
+  "name": "s5-wrong1",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(5); set('s5viq-input-alpha','108'); set('s5viq-input-beta','70'); s5viqCheck()"
+ },
+ {
+  "part": "06",
+  "name": "s5-correct",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(5); set('s5viq-input-alpha','108'); set('s5viq-input-beta','72'); s5viqCheck();"
+ },
+ {
+  "part": "06",
+  "name": "s5-wrong2",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(5); set('s5viq-input-alpha','1'); set('s5viq-input-beta','1'); s5viqCheck(); set('s5viq-input-alpha','2'); s5viqCheck();"
+ },
+ {
+  "part": "06",
+  "name": "s5-wrong2-answer-view",
+  "screen": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(5); set('s5viq-input-alpha','1'); set('s5viq-input-beta','1'); s5viqCheck(); set('s5viq-input-alpha','2'); s5viqCheck(); s5viqToggleView();",
+  "after": "(()=>({view:s5viqView, alpha:document.getElementById('s5viq-input-alpha').value, beta:document.getElementById('s5viq-input-beta').value}))()"
+ },
+ {
+  "part": "06",
+  "name": "s6-watched",
+  "screen": 6,
+  "away": 5,
+  "setup": "goTo(6); s6Ended()",
+  "after": "(()=>({s6Done, checkDisabled:document.getElementById('s6-check').disabled, fired:[...SUCCESS_FIRED]}))()"
+ },
+ {
+  "part": "06",
+  "name": "s6-unwatched",
+  "screen": 6,
+  "away": 5,
+  "setup": "goTo(6)",
+  "after": "(()=>({s6Done, checkDisabled:document.getElementById('s6-check').disabled}))()"
+ },
+ {
+  "part": "06",
+  "name": "s7-correct",
+  "screen": 7,
+  "away": 6,
+  "setup": "goTo(7); s7scSelect('no'); s7scCheck();"
+ },
+ {
+  "part": "06",
+  "name": "s7-wrong2",
+  "screen": 7,
+  "away": 6,
+  "setup": "goTo(7); s7scSelect('yes'); s7scCheck(); s7scSelect('unknown'); s7scCheck()"
+ },
+ {
+  "part": "06",
+  "name": "s8-watched",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8Ended()",
+  "after": "(()=>({s8Done, checkDisabled:document.getElementById('s8-check').disabled, status:document.getElementById('s8-done-status').textContent}))()"
+ },
+ {
+  "part": "06",
+  "name": "revisit-s3-from-s9",
+  "screen": 9,
+  "revisit": 3,
+  "away": 2,
+  "setup": "goTo(3); s3mcToggle('omer'); s3mcCheck(); s3mcToggle('ziv'); s3mcCheck(); goTo(9)",
+  "after": "(()=>({gateOk:s3mcGateOk, gateDone:s3mcGateDone, checkDisabled:document.getElementById('s3mc-check').disabled}))()"
+ },
+ {
+  "part": "06",
+  "name": "revisit-s5-from-s9",
+  "screen": 9,
+  "revisit": 5,
+  "away": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(3); s3mcToggle('omer'); s3mcToggle('ziv'); s3mcCheck(); goTo(5); set('s5viq-input-alpha','108'); set('s5viq-input-beta','72'); s5viqCheck(); goTo(9)"
+ },
+ {
+  "part": "06",
+  "name": "revisit-s3-wrong1-from-s5",
+  "screen": 5,
+  "revisit": 3,
+  "away": 2,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(3); s3mcToggle('omer'); s3mcToggle('ziv'); s3mcCheck(); goTo(5); set('s5viq-input-beta','72')"
+ },
+ {
+  "part": "06",
+  "name": "continue-after-restore-s4",
+  "screen": 4,
+  "away": 3,
+  "setup": "goTo(4); s4scSelect('shachar'); s4scCheck()",
+  "after": "(()=>{ const chk=document.getElementById('s4sc-check'); const gate=chk.disabled; s4scSelect('ziv'); const open=!chk.disabled; s4scCheck(); const a=__stmts().filter(s=>s.verb.startsWith('answered')); return {retryGateHeld:gate, reopenedOnChange:open, attempts:s4scAttempts, done:s4scDone, last:a.slice(-1)[0].verb, success:a.slice(-1)[0].result.success}; })()"
+ },
+ {
+  "part": "06",
+  "name": "end-s9-completed",
+  "screen": 9,
+  "away": 8,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));};goTo(3); s3mcToggle('ziv'); s3mcToggle('shachar'); s3mcCheck();goTo(4); s4scSelect('ziv'); s4scCheck();goTo(5); set('s5viq-input-alpha','108'); set('s5viq-input-beta','72'); s5viqCheck();goTo(7); s7scSelect('no'); s7scCheck(); goTo(6); s6Ended(); goTo(8); s8Ended(); goTo(9); s9Continue();",
+  "after": "(()=>({s9CheckDisabled:document.getElementById('s9-check').disabled, s9Crossed, completed:__stmts().filter(s=>s.verb==='completed').length, mastery:s9MasteryCount()}))()"
+ },
+ {
+  "part": "06",
+  "name": "s3-wrong2-gate-unmet-forced",
+  "screen": 9,
+  "away": 8,
+  "setup": "const st=document.createElement('style'); st.id='p06-shrink'; st.textContent='#s3mc-popup-scroll{max-height:120px!important;height:120px!important}'; document.head.appendChild(st);goTo(3); s3mcToggle('omer'); s3mcCheck(); s3mcToggle('ziv'); s3mcCheck(); window.__g=[s3mcGateOk,s3mcGateDone]; goTo(9)",
+  "after": "(()=>{ const restored={gateOk:s3mcGateOk, gateDone:s3mcGateDone, done:s3mcDone}; const st=document.createElement('style'); st.id='p06-shrink'; st.textContent='#s3mc-popup-scroll{max-height:120px!important;height:120px!important}'; document.head.appendChild(st); goTo(3); const chk=document.getElementById('s3mc-check'); const onEntry={gateOk:s3mcGateOk, checkDisabled:chk.disabled, needsScroll:document.getElementById('s3mc-popup').classList.contains('needs-scroll'), advanceBlocked:(advanceScreen(), currentScreen===3)}; const sc=document.getElementById('s3mc-popup-scroll'); sc.scrollTop=sc.scrollHeight; s3mcCheckScrollGate(); return {restored, onEntry, afterRead:{gateOk:s3mcGateOk, gateDone:s3mcGateDone, checkDisabled:chk.disabled}}; })()"
+ }
+]

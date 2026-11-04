@@ -1,0 +1,246 @@
+[
+ {
+  "part": "01",
+  "name": "s0-char2-land-s1",
+  "screen": 1,
+  "away": 0,
+  "setup": "selectOption(document.querySelector('#s0 .option-card[data-value=\"character-2\"]')); goTo(1)",
+  "after": "[window.lomdaState.selectedCharacter, document.getElementById('s1-char-img').getAttribute('src')]"
+ },
+ {
+  "part": "01",
+  "name": "s0-char2-land-s0",
+  "screen": 0,
+  "away": 1,
+  "setup": "selectOption(document.querySelector('#s0 .option-card[data-value=\"character-2\"]'))",
+  "after": "[document.querySelector('#s0 .option-card.selected').dataset.value, document.getElementById('s0-continue').disabled]"
+ },
+ {
+  "part": "01",
+  "name": "s2-widget-done",
+  "screen": 2,
+  "away": 1,
+  "setup": "goTo(2); unlockS2Continue()",
+  "after": "[s2WidgetCompleted, document.getElementById('s2-continue').disabled]"
+ },
+ {
+  "part": "01",
+  "name": "s5-comic-done",
+  "screen": 5,
+  "away": 4,
+  "setup": "goTo(5); cmcShowAll()",
+  "after": "[cmcSequenceDone, document.getElementById('s5-continue').disabled, cmcTimers.length]"
+ },
+ {
+  "part": "01",
+  "name": "s7-all-flipped",
+  "screen": 7,
+  "away": 6,
+  "setup": "goTo(7); document.querySelectorAll('#s7 .frc-card').forEach(c=>frcFlip(c))",
+  "after": "[frcDone, document.getElementById('s7-continue').disabled, document.getElementById('frc-gh').classList.contains('frc-gh-stopped')]"
+ },
+ {
+  "part": "01",
+  "name": "s7-two-flipped-one-back",
+  "screen": 7,
+  "away": 6,
+  "setup": "goTo(7); const c=document.querySelectorAll('#s7 .frc-card'); frcFlip(c[0]); frcFlip(c[1]); frcFlip(c[1])",
+  "after": "[frcDone, document.getElementById('s7-continue').disabled]"
+ },
+ {
+  "part": "01",
+  "name": "s8-selected",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8scSelect('o3')",
+  "after": "document.getElementById('s8sc-check').disabled"
+ },
+ {
+  "part": "01",
+  "name": "s8-wrong1",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8scSelect('o3'); s8scCheck()",
+  "after": "document.getElementById('s8sc-check').disabled"
+ },
+ {
+  "part": "01",
+  "name": "s8-correct",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8scSelect('o2'); s8scCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s8-wrong2",
+  "screen": 8,
+  "away": 7,
+  "setup": "goTo(8); s8scSelect('o3'); s8scCheck(); s8scSelect('o1'); s8scCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s10-revealed",
+  "screen": 10,
+  "away": 9,
+  "setup": "goTo(10); s10Unlock()",
+  "after": "[s10Revealed, s10Timer, document.getElementById('s10-continue').disabled]"
+ },
+ {
+  "part": "01",
+  "name": "s11-correct",
+  "screen": 11,
+  "away": 10,
+  "setup": "goTo(11); s11Pick('o6')"
+ },
+ {
+  "part": "01",
+  "name": "s11-wrong",
+  "screen": 11,
+  "away": 10,
+  "setup": "goTo(11); s11Pick('o10')"
+ },
+ {
+  "part": "01",
+  "name": "s15-correct",
+  "screen": 15,
+  "away": 14,
+  "setup": "goTo(15); s15Pick('yes')"
+ },
+ {
+  "part": "01",
+  "name": "s15-wrong",
+  "screen": 15,
+  "away": 14,
+  "setup": "goTo(15); s15Pick('no')"
+ },
+ {
+  "part": "01",
+  "name": "s17-correct",
+  "screen": 17,
+  "away": 16,
+  "setup": "goTo(17); s17Pick('r25')"
+ },
+ {
+  "part": "01",
+  "name": "s17-wrong",
+  "screen": 17,
+  "away": 16,
+  "setup": "goTo(17); s17Pick('r51')"
+ },
+ {
+  "part": "01",
+  "name": "s21-wrong1",
+  "screen": 21,
+  "away": 20,
+  "setup": "goTo(21); s21hsSelect('c1'); s21hsCheck()",
+  "after": "document.getElementById('s21hs-check').disabled"
+ },
+ {
+  "part": "01",
+  "name": "s21-correct",
+  "screen": 21,
+  "away": 20,
+  "setup": "goTo(21); s21hsSelect('c3'); s21hsCheck()",
+  "after": "JSON.stringify(sectionResult)"
+ },
+ {
+  "part": "01",
+  "name": "s21-wrong2",
+  "screen": 21,
+  "away": 20,
+  "setup": "goTo(21); s21hsSelect('c1'); s21hsCheck(); s21hsSelect('c2'); s21hsCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s22-typed",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','5')",
+  "after": "[document.getElementById('s22viq-input').value, document.getElementById('s22viq-check').disabled]"
+ },
+ {
+  "part": "01",
+  "name": "s22-wrong1",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','5'); s22viqCheck()",
+  "after": "document.getElementById('s22viq-check').disabled"
+ },
+ {
+  "part": "01",
+  "name": "s22-correct",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','7'); s22viqCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s22-wrong2-view-answer",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','5'); s22viqCheck(); set('s22viq-input','6'); s22viqCheck(); s22viqToggleView()",
+  "after": "[s22viqView, s22viqAnswer, document.getElementById('s22viq-input').value]"
+ },
+ {
+  "part": "01",
+  "name": "s22-wrong2-solution",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','5'); s22viqCheck(); set('s22viq-input','6'); s22viqCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s23-correct",
+  "screen": 23,
+  "away": 22,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(23); set('s23viq-input','8'); s23viqCheck()"
+ },
+ {
+  "part": "01",
+  "name": "s23-wrong1",
+  "screen": 23,
+  "away": 22,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(23); set('s23viq-input','4'); s23viqCheck()"
+ },
+ {
+  "part": "01",
+  "name": "revisit-s21-wrong2-from-s23",
+  "screen": 23,
+  "revisit": 21,
+  "away": 20,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(21); s21hsSelect('c1'); s21hsCheck(); s21hsSelect('c2'); s21hsCheck(); goTo(22); set('s22viq-input','7'); s22viqCheck(); goTo(23); set('s23viq-input','8'); s23viqCheck()",
+  "after": "JSON.stringify(sectionResult)"
+ },
+ {
+  "part": "01",
+  "name": "revisit-s8-wrong1-from-s23",
+  "screen": 23,
+  "revisit": 8,
+  "away": 7,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(8); s8scSelect('o3'); s8scCheck(); goTo(23); set('s23viq-input','4')"
+ },
+ {
+  "part": "01",
+  "name": "revisit-s7-from-s8",
+  "screen": 8,
+  "revisit": 7,
+  "away": 6,
+  "setup": "goTo(7); document.querySelectorAll('#s7 .frc-card').forEach(c=>frcFlip(c)); goTo(8); s8scSelect('o2'); s8scCheck()"
+ },
+ {
+  "part": "01",
+  "name": "revisit-s22-correct-from-s23",
+  "screen": 23,
+  "revisit": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','7'); s22viqCheck(); goTo(23)"
+ },
+ {
+  "part": "01",
+  "name": "continue-after-restore-s22",
+  "screen": 22,
+  "away": 21,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(22); set('s22viq-input','5'); s22viqCheck()",
+  "after": "(()=>{ const chk=document.getElementById('s22viq-check'); const gate=chk.disabled; const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; set('s22viq-input','7'); const open=!chk.disabled; s22viqCheck(); const a=__stmts().filter(s=>s.verb.startsWith('answered')); return {retryGateHeld:gate, reopenedOnChange:open, attempts:s22viqAttempts, last:a.slice(-1)[0].verb, success:a.slice(-1)[0].result.success, section:sectionResult[22]}; })()"
+ }
+]

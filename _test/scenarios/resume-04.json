@@ -1,0 +1,165 @@
+[
+ {
+  "part": "04",
+  "name": "s1-selected",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o2')",
+  "away": 0
+ },
+ {
+  "part": "04",
+  "name": "s1-wrong1",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o2'); s1scCheck()",
+  "away": 0
+ },
+ {
+  "part": "04",
+  "name": "s1-correct-read",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o1'); s1scCheck(); rd('s1sc')",
+  "away": 0,
+  "after": "({gateOk:s1scGateOk, read:s1scGateRead, disabled:document.getElementById('s1sc-check').disabled})"
+ },
+ {
+  "part": "04",
+  "name": "s1-wrong2-unread",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o2'); s1scCheck(); s1scSelect('o3'); s1scCheck()",
+  "away": 0,
+  "after": "(()=>{const d=document.getElementById('s1sc-check').disabled; const g=s1scGateOk; advanceScreen(); return {gateOk:g, checkDisabled:d, screenAfterArrow:currentScreen};})()"
+ },
+ {
+  "part": "04",
+  "name": "s2-wrong1",
+  "screen": 2,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('גדול מ-1'); s2dqCheck()",
+  "away": 1
+ },
+ {
+  "part": "04",
+  "name": "s2-correct-read",
+  "screen": 2,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('הוא 1:1'); s2dqCheck(); rd('s2dq')",
+  "away": 1
+ },
+ {
+  "part": "04",
+  "name": "s2-wrong2-answerview",
+  "screen": 2,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect(\"גדול מ-1\"); s2dqCheck(); s2dqSelect(\"חיובי וקטן מ-1\"); s2dqCheck(); rd('s2dq'); s2dqToggleView()",
+  "away": 1,
+  "after": "({view:s2dqView, gateOk:s2dqGateOk, disabled:document.getElementById('s2dq-check').disabled})"
+ },
+ {
+  "part": "04",
+  "name": "s3-typed",
+  "screen": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(3); set('s3viq-input-first','4')",
+  "away": 2
+ },
+ {
+  "part": "04",
+  "name": "s3-wrong1",
+  "screen": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(3); set('s3viq-input-first','3'); set('s3viq-input-second','1'); s3viqCheck()",
+  "away": 2
+ },
+ {
+  "part": "04",
+  "name": "s3-correct-read",
+  "screen": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(3); set('s3viq-input-first','4'); set('s3viq-input-second','1'); s3viqCheck(); rd('s3viq')",
+  "away": 2,
+  "after": "({gateOk:s3viqGateOk, disabled:document.getElementById('s3viq-check').disabled})"
+ },
+ {
+  "part": "04",
+  "name": "s3-wrong2-read",
+  "screen": 3,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(3); set('s3viq-input-first','3'); set('s3viq-input-second','1'); s3viqCheck(); set('s3viq-input-first','5'); s3viqCheck(); rd('s3viq')",
+  "away": 2
+ },
+ {
+  "part": "04",
+  "name": "s4-correct-read",
+  "screen": 4,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(4); set('s4viq-input-first','2'); set('s4viq-input-second','1'); s4viqCheck(); rd('s4viq')",
+  "away": 3
+ },
+ {
+  "part": "04",
+  "name": "s5-wrong2-unread",
+  "screen": 5,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(5); set('s5viq-input','10'); s5viqCheck(); set('s5viq-input','12'); s5viqCheck()",
+  "away": 4,
+  "after": "({gateOk:s5viqGateOk, disabled:document.getElementById('s5viq-check').disabled})"
+ },
+ {
+  "part": "04",
+  "name": "s6-selected",
+  "screen": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o3')",
+  "away": 5
+ },
+ {
+  "part": "04",
+  "name": "s6-wrong1",
+  "screen": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o3'); s6mcCheck()",
+  "away": 5
+ },
+ {
+  "part": "04",
+  "name": "s6-correct-read",
+  "screen": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o2'); s6mcToggle('o4'); s6mcCheck(); rd('s6mc')",
+  "away": 5,
+  "after": "({gateOk:s6mcGateOk, disabled:document.getElementById('s6mc-check').disabled})"
+ },
+ {
+  "part": "04",
+  "name": "s6-wrong2-read",
+  "screen": 6,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o3'); s6mcCheck(); s6mcToggle('o3'); s6mcToggle('o2'); s6mcCheck(); rd('s6mc')",
+  "away": 5
+ },
+ {
+  "part": "04",
+  "name": "s8-correct",
+  "screen": 8,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(8); s8scAnswer('o2')",
+  "away": 7
+ },
+ {
+  "part": "04",
+  "name": "s8-wrong",
+  "screen": 8,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(8); s8scAnswer('o1')",
+  "away": 7
+ },
+ {
+  "part": "04",
+  "name": "revisit-s1-correct-from-s11",
+  "screen": 11,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o1'); s1scCheck(); rd('s1sc'); goTo(11)",
+  "away": 0,
+  "revisit": 1
+ },
+ {
+  "part": "04",
+  "name": "revisit-s6-wrong2-from-s11",
+  "screen": 11,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(6); s6mcToggle('o1'); s6mcToggle('o3'); s6mcCheck(); s6mcToggle('o3'); s6mcToggle('o2'); s6mcCheck(); goTo(11)",
+  "away": 5,
+  "revisit": 6
+ },
+ {
+  "part": "04",
+  "name": "continue-after-restore",
+  "screen": 1,
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(1); s1scSelect('o2'); s1scCheck()",
+  "away": 0,
+  "after": "(()=>{ const chk=document.getElementById('s1sc-check'); const gate=chk.disabled; s1scSelect('o1'); const open=!chk.disabled; s1scCheck(); const a=__stmts().filter(s=>s.verb.startsWith('answered')); return {retryGateHeld:gate, reopenedOnChange:open, attempts:s1scAttempts, result:s1scResult, last:a.slice(-1)[0].verb, success:a.slice(-1)[0].result.success}; })()"
+ }
+]

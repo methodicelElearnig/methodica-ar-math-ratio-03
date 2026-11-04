@@ -1,0 +1,122 @@
+[
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-01/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ goTo(11); s11Pick('o5'); goTo(15); s15Pick('yes'); goTo(17); s17Pick('r25'); return __stmts().filter(s=>s.verb.startsWith('answered')).map(s=>[s.verb, s.result.success, s.result.extensions.student_answer[0], s.opts.questionId.split('/').pop()].join(':')) })()",
+  "expect": [
+   "answered.last:false:5:q1",
+   "answered.last:true:כן:q2",
+   "answered.last:true:2 : 5:q3"
+  ],
+  "label": "01 guided picks report once, as final"
+ },
+ {
+  "eval": "(()=>{ s11Pick('o6'); return __stmts().filter(s=>s.verb.startsWith('answered')).length })()",
+  "expect": 3,
+  "label": "01 a resolved pick never re-reports"
+ },
+ {
+  "eval": "(()=>{ goTo(21); s21hsSelect('c1'); s21hsCheck(); const s=__stmts().slice(-1)[0]; return [s.verb, s.result.extensions.student_answer[0]] })()",
+  "expect": [
+   "answered",
+   "x : 6"
+  ],
+  "label": "01 hotspot answer text"
+ },
+ {
+  "eval": "__stmts().filter(s=>s.verb==='completed').map(s=>s.opts.objectId.slice(-5)).join(',')",
+  "log": true,
+  "label": "01 items completed so far"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ goTo(8); s8ddqPlacement['s8drag-3x']='s8target-m1'; s8ddqPlacement['s8drag-7x']='s8target-m2'; s8ddqRender(); s8ddqCheck(); const s=__stmts().slice(-1)[0]; return [s.verb, s.result.success, s.result.extensions.student_answer[0]] })()",
+  "expect": [
+   "answered",
+   false,
+   "מכונה 1: 3x, מכונה 2: 7x"
+  ],
+  "label": "03 drag board answer text + verdict"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-04/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ goTo(8); s8scAnswer('o2'); s8scAnswer('o1'); const a=__stmts().filter(s=>s.verb.startsWith('answered')); return [a.length, a[0].verb, a[0].result.success, a[0].opts.questionId.split('/').slice(-2).join('/')] })()",
+  "expect": [
+   1,
+   "answered.last",
+   true,
+   "methodica-math-ratio-03-04-005/q1"
+  ],
+  "label": "04 S8 riddle: one shot, final"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-05/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "__stmts().map(s=>s.verb+' '+(s.opts&&s.opts.objectId?s.opts.objectId.slice(-5):s.objectType)).join(' | ')",
+  "expect": "initialized onlinelesson | initialized -001/",
+  "label": "05 lands inside item 001"
+ },
+ {
+  "eval": "(()=>{ goTo(4); s4scOpenHint(); return __stmts().slice(-1)[0].opts.questionId.split('/').slice(-2).join('/') })()",
+  "expect": "methodica-math-ratio-03-05-001/q2",
+  "label": "05 hint id"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-06/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ goTo(5); const a=s5viqInput('alpha'), b=s5viqInput('beta'); a.value='108'; a.dispatchEvent(new Event('input',{bubbles:true})); b.value='70'; b.dispatchEvent(new Event('input',{bubbles:true})); s5viqCheck(); const s=__stmts().slice(-1)[0]; return [s.verb, s.result.success, s.result.extensions.student_answer[0]] })()",
+  "expect": [
+   "answered",
+   false,
+   "α: 108, β: 70"
+  ],
+  "label": "06 two-field answer text"
+ }
+]

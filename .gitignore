@@ -1,0 +1,11 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+**/tests/_out/
+QA/
+.claude/
+kata-api-key.txt
+docs-and-tools/kata-api-key.txt
+metadata-from/
+_test/.resume-*.png

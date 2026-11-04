@@ -1,0 +1,162 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/",
+  "title": "בואו נאתגר את עצמנו",
+  "learningUnitId": "methodica-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": false,
+  "recommendedAfterFail": [],
+  "isRequired": false,
+  "relativeDifficulty": 5,
+  "masteryLevel": null,
+  "order": 4,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "interpretation-and-reasoning"
+  ],
+  "languages": [
+    "Hebrew"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 14,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-09-30T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-001/",
+      "title": "יחס שטחים של משולשים בעלי גובה משותף",
+      "informationToBot": "מטרת הפריט: הבנה שיחס בין בסיסים של משולשים בעלי גובה משותף שווה ליחס בין שטחיהם. מה התלמיד אמור להבין/לתרגל: אם BD = x ו-CD = 3x ולשני המשולשים אותו גובה AE, אז שטח ADB הוא 2.5x ושטח ACD הוא 7.5x, ולכן יחס השטחים הוא 1 : 3. כיווני חשיבה ואסטרטגיות: לזהות את הגובה המשותף, לסמן את הבסיסים באמצעות x ו-3x ולחשב את שני השטחים. טעויות נפוצות: סברה שאי אפשר לדעת בלי מידע נוסף; התעלמות מכך שהגובה של המשולש הקהה נופל על המשך הצלע. מידע נוסף: סעיף יחיד עם תרשים; שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-001/q1",
+          "questionType": "choice",
+          "questionText": "הנקודה D נמצאת על צלע BC של המשולש ABC. נתון: היחס בין אורך הקטע BD לבין אורך הקטע CD הוא 1 : 3. גובה המשולש AE הוא 5 ס\"מ. נסמן: BD = x. האם היחס בין שטח משולש ADB לבין שטח משולש ACD הוא גם 1 : 3?",
+          "answers": [
+            "כן",
+            "לא",
+            "אי אפשר לדעת"
+          ],
+          "correctAnswers": [
+            "כן"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-002/",
+      "title": "יחס שטחים במשולש קהה זווית",
+      "informationToBot": "מטרת הפריט: הכללת הרעיון של גובה משותף — כאשר הבסיסים שווים גם השטחים שווים. מה התלמיד אמור להבין/לתרגל: אם BD = DC = x ול-AE גובה משותף למשולשים ADB ו-ADC, אז שני השטחים שווים ויחסם 1 : 1. כיווני חשיבה ואסטרטגיות: לבטא כל שטח כ-(x · h)/2 ולהשוות. טעויות נפוצות: בחירה ב\"גדול מ-1\" או ב\"חיובי וקטן מ-1\" עקב אי זיהוי שהבסיסים שווים; בלבול לגבי מיקום הגובה במשולש קהה זווית. מידע נוסף: רשימה נפתחת אחת להשלמת משפט; שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-002/q1",
+          "questionType": "matching",
+          "questionText": "בסרטוט נתון משולש ABC. AE הוא גובה לצלע BC. AD יוצא מקודקוד A של המשולש ונפגש עם הצלע BC. היחס בין הקטע BD לבין הקטע DC הוא 1 : 1. השלימו את המשפט כך שיהיה נכון: היחס בין שטח משולש ADC לבין שטח משולש ADB __.",
+          "answers": {
+            "source": [
+              "היחס בין שטח משולש ADC לבין שטח משולש ADB"
+            ],
+            "target": [
+              "גדול מ-1",
+              "הוא 1:1",
+              "חיובי וקטן מ-1"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "היחס בין שטח משולש ADC לבין שטח משולש ADB",
+              "target": "הוא 1:1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-003/",
+      "title": "הזמנה ותמונה ריבועית",
+      "informationToBot": "מטרת הפריט: חקירה באמצעות יישומון של הקשר בין יחס צלעות ליחס היקפים ויחס שטחים, ושימוש ביחס לפתרון משוואה. מה התלמיד אמור להבין/לתרגל: אם יחס הצלעות הוא 2 : 1 אז יחס השטחים 4 : 1 (x² : 4x²), יחס ההיקפים 2 : 1 (8x : 4x), ואם סכום ההיקפים 48 ס\"מ אז 2x + x = 48, היקף הריבוע הקטן 16 ס\"מ, צלעו 4 ס\"מ ושטחו 16 סמ\"ר. כיווני חשיבה ואסטרטגיות: לסמן ב-x את צלע הריבוע הקטן; לחשב היקף ושטח של כל ריבוע ולצמצם; להשתמש ביחס ההיקפים כדי לבנות משוואה. טעויות נפוצות: קביעת יחס שטחים 2 : 1 כמו יחס הצלעות; בלבול בין היקף לשטח בסעיף ג'. מידע נוסף: שלושה סעיפים עם יישומון לשינוי גודל התמונה; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-003/q1",
+          "questionType": "fill-in",
+          "questionText": "נוי מארגנת מסיבת הפתעה לאחותה. במרכז ההזמנה היא רוצה לשלב תמונה ריבועית, כך שהיחס בין אורך צלע ההזמנה לאורך צלע התמונה יהיה 2 : 1. א. עזרו לנוי לעצב את ההזמנה. שנו את גודל התמונה ביישומון ובדקו איך הוא משפיע על ההזמנה. היעזרו במה שגיליתם והשלימו: היחס המצומצם בין שטח הריבוע הגדול לשטח הריבוע הקטן הוא: __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "4 : 1",
+            "4:1"
+          ]
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-003/q2",
+          "questionType": "fill-in",
+          "questionText": "נוי מארגנת מסיבת הפתעה לאחותה. במרכז ההזמנה היא רוצה לשלב תמונה ריבועית, כך שהיחס בין אורך צלע ההזמנה לאורך צלע התמונה יהיה 2 : 1. ב. עזרו לנוי לעצב את ההזמנה. שנו את גודל התמונה ביישומון ובדקו איך הוא משפיע על ההזמנה. היעזרו במה שגיליתם והשלימו: היחס המצומצם בין היקף הריבוע הגדול להיקף הריבוע הקטן הוא: __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "2 : 1",
+            "2:1"
+          ]
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-003/q3",
+          "questionType": "numeric",
+          "questionText": "נוי מארגנת מסיבת הפתעה לאחותה. במרכז ההזמנה היא רוצה לשלב תמונה ריבועית, כך שהיחס בין אורך צלע ההזמנה לאורך צלע התמונה יהיה 2 : 1. נזכיר שגם היחס בין היקף הריבוע הגדול להיקף הריבוע הקטן הוא 2 : 1. ג. עזרו לנוי לעצב את ההזמנה. שנו את גודל התמונה ביישומון ובדקו איך הוא משפיע על ההזמנה. היעזרו במה שגיליתם והשלימו: אם סכום ההיקפים של הריבוע הגדול והריבוע הקטן הוא 48 ס\"מ, אז שטח הריבוע הקטן הוא __ סמ\"ר.",
+          "answers": [],
+          "correctAnswers": [
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-004/",
+      "title": "זמני הליכה בטיול השנתי",
+      "informationToBot": "מטרת הפריט: בדיקת הבנה של ייצוג יחס כשבר, חלק מן השלם, הרחבה ותוספת קבועה. מה התלמיד אמור להבין/לתרגל: ביחס a : b, השבר a/b הוא היחס בין הזמנים, השבר a/(a+b) הוא חלקו של זמן ההליכה במישור מתוך הכול, הגדלה פי x נותנת ax + bx, והוספת מספר קבוע לכל חלק אינה שומרת על היחס. כיווני חשיבה ואסטרטגיות: להציב ערכים מספריים במקום a ו-b ולבדוק כל טענה בנפרד. טעויות נפוצות: סימון \"הוספת 10 דקות שומרת על היחס\"; בלבול בין a/b לבין a/(a+b). מידע נוסף: בחירה מרובה (הטענות הנכונות: הראשונה, השנייה והרביעית); שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-004/q1",
+          "questionType": "choice",
+          "questionText": "השנה תלמידי כיתה ח' לוקחים חלק בתכנון הטיול השנתי! הם מתכננים מסלול שבו היחס בין זמן ההליכה במישור לבין זמן ההליכה בנחל הוא a : b. סמנו את כל הטענות הנכונות.",
+          "answers": [
+            "a/(a+b) הוא חלקו של זמן ההליכה במישור מתוך כלל זמן ההליכה.",
+            "a/b הוא היחס בין זמן ההליכה במישור לבין זמן ההליכה בנחל.",
+            "הוספת 10 דקות לכל חלק במסלול תשמור על היחס בין זמני ההליכה.",
+            "הגדלת זמן ההליכה בכל חלק פי x תיתן זמן מסלול כולל של ax + bx."
+          ],
+          "correctAnswers": [
+            "a/(a+b) הוא חלקו של זמן ההליכה במישור מתוך כלל זמן ההליכה.",
+            "a/b הוא היחס בין זמן ההליכה במישור לבין זמן ההליכה בנחל.",
+            "הגדלת זמן ההליכה בכל חלק פי x תיתן זמן מסלול כולל של ax + bx."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-005/",
+      "title": "יחס הזהב באמנות ובאדריכלות",
+      "informationToBot": "מטרת הפריט: העשרה — היכרות עם יחס הזהב כדוגמה ליחס מיוחד המתואר באמצעות משתנים a ו-b. מה התלמיד אמור להבין/לתרגל: חלוקת קטע לשני חלקים כך שהיחס בין הארוך לקצר שווה ליחס בין הקטע כולו לארוך (a/b = (a+b)/a ≈ 1.618); דוגמאות מהחיים — גלקסיה, מונה ליזה ומוזיאון בטוקיו שתכנן לה קורבוזיה — ושיחס הזהב שימש במכוון רק באחרון. כיווני חשיבה ואסטרטגיות: לחפש מה משותף לשלוש התמונות לפני קריאת ההסבר. טעויות נפוצות: הנחה שכל צורה שנראית הרמונית תוכננה לפי יחס הזהב. מידע נוסף: חידת פתיחה עם ניסיון אחד בלי רמז (מסומנת התשובה הנכונה), ואחריה מסכי הסבר ודוגמאות; מסך הפתיחה כולל דמות מלווה. צילום מסך: לא צורף.",
+      "contentType": "motivational",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-04/methodica-math-ratio-03-04-005/q1",
+          "questionType": "choice",
+          "questionText": "חידה: מה משותף לתמונות האלו?",
+          "answers": [
+            "בכולן יש סימטריה מושלמת",
+            "אפשר להמחיש בעזרתן יחס מתמטי מיוחד",
+            "כולן תוכננו לפי אותם כללי עיצוב"
+          ],
+          "correctAnswers": [
+            "אפשר להמחיש בעזרתן יחס מתמטי מיוחד"
+          ]
+        }
+      ]
+    }
+  ]
+}

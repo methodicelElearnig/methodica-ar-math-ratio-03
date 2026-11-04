@@ -1,0 +1,108 @@
+[
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-02/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ goTo(1); const L=document.getElementById('s1viq-input-left'),R=document.getElementById('s1viq-input-right'); L.value='1'; L.dispatchEvent(new Event('input',{bubbles:true})); R.value='1'; R.dispatchEvent(new Event('input',{bubbles:true})); s1viqCheck(); goTo(0); return __stmts().filter(s=>s.verb==='completed').length })()",
+  "expect": 0,
+  "label": "B-2: s1 wrong, Back onto item-less S0 closes nothing"
+ },
+ {
+  "eval": "(()=>{ goTo(1); const L=document.getElementById('s1viq-input-left'),R=document.getElementById('s1viq-input-right'); L.value='2'; L.dispatchEvent(new Event('input',{bubbles:true})); R.value='3'; R.dispatchEvent(new Event('input',{bubbles:true})); s1viqCheck(); goTo(2); s2scSelect('o1'); s2scCheck(); goTo(3); const a=document.getElementById('s3viq-input-left'),b=document.getElementById('s3viq-input-right'); a.value='4'; a.dispatchEvent(new Event('input',{bubbles:true})); b.value='3'; b.dispatchEvent(new Event('input',{bubbles:true})); s3viqCheck(); goTo(4); const c=__stmts().filter(s=>s.verb==='completed'); return [c.length, c[0]&&c[0].opts.objectId.slice(-5), c[0]&&c[0].result.success] })()",
+  "expect": [1, "-001/", true],
+  "label": "B-2: the real close of 001 is sent once, with the learner's final result"
+ },
+ {
+  "eval": "(()=>{ const k=Object.keys(XAPI_Q_RESULTS).filter(x=>x.startsWith('003/')); k.forEach(x=>delete XAPI_Q_RESULTS[x]); XAPI_Q_RESULTS['003/q1']=false; XAPI_Q_RESULTS['003/q2']=true; XAPI_Q_RESULTS['003/q3']=true; const r=xapiItemResult('003'); return [r.success, +r.score.scaled.toFixed(3)] })()",
+  "expect": [false, 0.667],
+  "label": "F-6: 02 item 003 at 2 of 3 sections is not a success (all-sections rule)"
+ },
+ {
+  "eval": "(()=>{ XAPI_Q_RESULTS['003/q1']=true; const r=xapiItemResult('003'); return [r.success, +r.score.scaled.toFixed(3)] })()",
+  "expect": [true, 1],
+  "label": "F-6: 02 item 003 all right is a success"
+ },
+ {
+  "eval": "__dupes().length",
+  "expect": 0,
+  "label": "02: no duplicate statements"
+ },
+ {
+  "nav": "methodica-math-ratio-03-01/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ XAPI_Q_RESULTS['004/q1']=false; XAPI_Q_RESULTS['004/q2']=true; XAPI_Q_RESULTS['004/q3']=true; XAPI_Q_RESULTS['003/q1']=false; XAPI_Q_RESULTS['003/q2']=true; XAPI_Q_RESULTS['003/q3']=true; const a=xapiItemResult('004'), b=xapiItemResult('003'); return [a.success, b.success] })()",
+  "expect": [false, true],
+  "label": "F-6: 01 item 004 follows the AND rule, guided item 003 keeps the share rule"
+ },
+ {
+  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ XAPI_Q_RESULTS['005/q1']=true; XAPI_Q_RESULTS['005/q2']=true; XAPI_Q_RESULTS['005/q3']=false; XAPI_Q_RESULTS['001/q1']=true; XAPI_Q_RESULTS['001/q2']=false; return [xapiItemResult('005').success, xapiItemResult('001').success] })()",
+  "expect": [false, false],
+  "label": "F-6: 03 items 005 (2/3) and 001 (1/2) follow the AND rule"
+ },
+ {
+  "nav": "methodica-math-ratio-03-04/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(()=>{ XAPI_Q_RESULTS['003/q1']=true; XAPI_Q_RESULTS['003/q2']=true; XAPI_Q_RESULTS['003/q3']=false; const r=xapiItemResult('003'); return [r.success, +r.score.scaled.toFixed(3)] })()",
+  "expect": [false, 0.667],
+  "label": "F-6: 04 item 003 at 2 of 3 sections is not a success"
+ },
+ {
+  "nav": "methodica-math-ratio-03-05/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(async()=>{ const w=ms=>new Promise(r=>setTimeout(r,ms)); goTo(1); goTo(2); goTo(3); const v=document.getElementById('s3-video'); v.muted=true; await w(800); await v.play(); await w(900); v.pause(); await w(300); v.pause(); await w(200); await v.play(); await w(600); v.playbackRate=16; for(let i=0;i<40&&!v.ended;i++) await w(100); const s=__stmts().filter(s=>(s.verb==='played'||s.verb==='paused')&&s.opts.objectId.includes('-05-')); return [v.ended, s.map(x=>x.verb).join(','), s.every(x=>x.opts.objectId.endsWith('/methodica-math-ratio-03-05-001/')), s.every(x=>typeof x.opts.time==='number')] })()",
+  "expect": [true, "played,paused,played", true, true],
+  "label": "B-5: 05 s3 start/pause/duplicate pause/resume/end = played,paused,played on item 001, with time"
+ },
+ {
+  "eval": "(async()=>{ const w=ms=>new Promise(r=>setTimeout(r,ms)); const v=document.getElementById('s3-video'); v.playbackRate=1; v.load(); await w(800); await v.play(); await w(600); goTo(4); await w(300); const s=__stmts().filter(s=>(s.verb==='played'||s.verb==='paused')&&s.opts.objectId.includes('-05-')).map(x=>x.verb); return s.slice(-2).join(',') })()",
+  "expect": "played,paused",
+  "label": "B-5: leaving the screen mid-play closes the played with a paused"
+ },
+ {
+  "eval": "(()=>{ const s=__stmts().filter(s=>(s.verb==='played'||s.verb==='paused')&&s.opts.objectId.includes('-05-')); let open=false, orphan=0; s.forEach(x=>{ if(x.verb==='played') open=true; else { if(!open) orphan++; open=false; } }); return orphan })()",
+  "expect": 0,
+  "label": "B-5: no orphan paused"
+ },
+ {
+  "eval": "document.querySelectorAll('video[data-xapi-report]').length",
+  "expect": 1,
+  "label": "B-5: 05 opts in exactly its content video (character loops stay unwired)"
+ },
+ {
+  "nav": "methodica-math-ratio-03-06/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "(async()=>{ const w=ms=>new Promise(r=>setTimeout(r,ms)); for (let i=1;i<=6;i++) goTo(i); const v=document.getElementById('s6-video'); v.muted=true; await w(800); s6Play(); await w(500); v.playbackRate=16; for(let i=0;i<60&&!v.ended;i++) await w(100); const s=__stmts().filter(s=>(s.verb==='played'||s.verb==='paused')&&s.opts.objectId.includes('-06-')); return [v.ended, s.map(x=>x.verb).join(','), s.every(x=>x.opts.objectId.endsWith('/methodica-math-ratio-03-06-001/'))] })()",
+  "expect": [true, "played", true],
+  "label": "B-5: 06 s6 play to the end = one played on item 001"
+ },
+ {
+  "eval": "[...document.querySelectorAll('video[data-xapi-report]')].map(v=>v.id).join(',')",
+  "expect": "s6-video,s8-video",
+  "label": "B-5: 06 opts in s6 and s8 only"
+ },
+ {
+  "eval": "__dupes().length",
+  "expect": 0,
+  "label": "06: no duplicate statements"
+ }
+]
