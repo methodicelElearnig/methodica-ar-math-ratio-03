@@ -2636,7 +2636,7 @@ function s7viqCloseHintOnBackdrop(e) { if (e.target === e.currentTarget) s7viqCl
    at this path needs no code change. */
 const S8_IMAGE = {
   src: 'assets/img/פסטיבל אוכל.jpg',
-  alt: 'كشك خبز يحمل اسم "خبز سمر" في مهرجان طعام في الهواء الطلق؛ سمر تقدّم شريحة خبز لإحدى الزائرات، والناس من حولها يتذوقون ويتحدثون'
+  alt: 'كشك خبز يحمل اسم "خبزُ سمر" في مهرجان طعام في الهواء الطلق؛ سمر تقدّم شريحة خبز لإحدى الزائرات، والناس من حولها يتذوقون ويتحدثون'
 };
 function s8MountImage() {
   const img = document.getElementById('s8-img');

@@ -18,3 +18,13 @@
   try { initResumeFieldSaves(); } catch (e) { console.error('[boot] initResumeFieldSaves', e); }
   bootXAPI();
 })();
+
+/* Arabic build: the hint pill sits 16px after the Continue/Check button, whatever its label width. */
+(function hintFollowsPrimary() {
+  var place = function (b) {
+    var h = b.parentElement && b.parentElement.querySelector('.scq-hint:not(.recall-btn)');
+    if (h && b.offsetWidth) h.style.left = (b.offsetLeft + b.offsetWidth + 16) + 'px';
+  };
+  var ro = new ResizeObserver(function (es) { es.forEach(function (e) { place(e.target); }); });
+  document.querySelectorAll('.btn-continue').forEach(function (b) { ro.observe(b); place(b); });
+})();

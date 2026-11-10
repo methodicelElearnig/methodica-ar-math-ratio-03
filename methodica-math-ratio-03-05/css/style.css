@@ -628,7 +628,7 @@
 }
 .scq-hint-body p { margin: 0; }
 .scq-hint-close {
-  min-width: 196px; width: auto; padding: 16px 40px;  /* Arabic build: grows with the label */
+  min-width: 196px; width: fit-content; align-self: center; padding: 16px 40px;  /* Arabic build: grows with the label, never stretches */
   border: none; border-radius: 1000px; background: #fff;
   color: #303030;
   font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 400;
@@ -2012,3 +2012,6 @@
    against a dark stage instead of quietly clipping a row of picture. */
 #s3 .video-stage:fullscreen .fito-video { object-fit: contain; }
 #s3 .video-stage:-webkit-full-screen .fito-video { object-fit: contain; }
+
+/* Arabic build: the keyboard-guide label is longer than the Hebrew one; grow the pill with it. */
+#s2 .recall-btn { width: auto; min-width: 0; white-space: nowrap; padding: 0 24px; }

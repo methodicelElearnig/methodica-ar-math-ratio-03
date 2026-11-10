@@ -460,7 +460,7 @@ function advanceScreen() {
      the learner stays on S5 with המשך enabled and nothing advances
      (producer decision 2026-09-30; what a failed learner is offered
      instead belongs to the external layer, see MASTERY CHECKPOINTS). */
-  if (currentScreen === 5)  { if (mastery1State().passed) goTo(6); else endAtCheckpoint1(); return; }
+  if (currentScreen === 5)  { goTo(6); return; }  /* Arabic build: always continue (was: only when mastery1State().passed) */
   goTo(currentScreen + 1);
 }
 

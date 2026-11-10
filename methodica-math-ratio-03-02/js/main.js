@@ -671,7 +671,7 @@ let s1viqLastWrongSig = null;
 const S1VIQ_EXPLAIN = [
   'النسبة بين طول المستطيل وعرضه هي',
   '<bdi dir="ltr" class="viq-expr">2a : 3a</bdi>',
-  'وبعد الاختزال بـ a، الذب لا يساوي 0، نحصل على <span class="viq-expr">3 : 2</span>.'
+  'وبعد الاختزال بـ a، الذي لا يساوي 0، نحصل على <span class="viq-expr">3 : 2</span>.'
 ];
 const S1VIQ_POPUP = {
   /* No retry-specific pedagogical explanation is authored for this
@@ -930,7 +930,7 @@ const S2SC_EXPLAIN = [
   'طول المستطيل هو <span dir="ltr">2a</span>.',
   'لذلك نحسب مساحة المستطيل على النحو التالي:',
   '<span dir="ltr">3a &sdot; 2a = 3 &sdot; 2 &sdot; a &sdot; a = 6a<sup>2</sup></span>',
-  'أي إن مساحة المستطيل هي <span dir="ltr">2<sup>6a</sup></span>.'
+  'أي إن مساحة المستطيل هي <span dir="ltr">6a<sup>2</sup></span>.'
 ];
 const S2SC = { correctId: 'o1', maxAttempts: 2 };
 const S2SC_POPUP = {
