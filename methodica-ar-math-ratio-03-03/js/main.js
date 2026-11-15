@@ -2508,7 +2508,7 @@ function s7viqCheck() {
   const allRight = perSlot.every(s => s.ok);
   /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'עמית[.]70[,]עומר[.]40' (proposed to Kata, `other` there) */
   reportQ(['004', 'q1'], allRight, allRight || s7viqAttempts >= S7VIQ.maxAttempts,
-    { steps: { 'עמית': got.amit, 'עומר': got.omer } });
+    { steps: { 'حنان': got.amit, 'سامر': got.omer } });
 
   if (allRight) {
     S7VIQ.slots.forEach(k => s7viqMark(k, 'correct'));
@@ -3587,7 +3587,7 @@ function s10viqCheck() {
   const allOk = perSlot.every(s => s.ok);
   /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'מכונה 1[.]210[,]מכונה 2[.]90' (proposed to Kata, `other` there) */
   reportQ(['005', 'q3'], allOk, allOk || s10viqAttempts >= S10VIQ.maxAttempts,
-    { steps: { 'מכונה 1': got.m1, 'מכונה 2': got.m2 } });
+    { steps: { 'الآلة 1': got.m1, 'الآلة 2': got.m2 } });
 
   if (allOk) {
     S10VIQ.slots.forEach(k => s10viqMark(k, 'correct'));
@@ -3954,13 +3954,13 @@ const SCREEN_TO_SUBCONTENT = {
    ('מכונה 1[.]7x[,]מכונה 2[.]3x', 'המשוואה[.]3x + 120 = 7x'). They used to be one string,
    'מכונה 1: 7x, מכונה 2: 3x', which never matched. */
 function s8ddqAnswerSpec() {
-  const names = { 's8target-m1': 'מכונה 1', 's8target-m2': 'מכונה 2' };
+  const names = { 's8target-m1': 'الآلة 1', 's8target-m2': 'الآلة 2' };
   return { pairs: Object.keys(s8ddqPlacement).filter(d => names[s8ddqPlacement[d]])
     .map(d => ({ source: names[s8ddqPlacement[d]], target: S8DDQ_TEXTS[d] })) };
 }
 function s9ddqAnswerSpec() {
   return { pairs: Object.keys(s9ddqPlacement).filter(d => s9ddqPlacement[d] === 's9target')
-    .map(d => ({ source: 'המשוואה', target: S9DDQ_TEXTS[d] })) };
+    .map(d => ({ source: 'المعادلة', target: S9DDQ_TEXTS[d] })) };
 }
 
 /* Checkpoint 1 failed (fewer than 2 of 3 at S5): the component ENDS here, reported as a fail —

@@ -5,12 +5,12 @@ answered.last question 001/q2 true 1 «6a²»
 answered.last question 001/q3 true 1 «4 : 3»
 completed question 001 true 1
 initialized question 002
-answered.last question 002/q1 true 1 «במישור[.]15[,]בעלייה[.]6»
-answered.last question 002/q2 true 1 «x גדל פי 2, כי אורך המסלול הכולל גדל פי 2»
+answered.last question 002/q1 true 1 «في المنطقة المستوية[.]15[,]في الصعود[.]6»
+answered.last question 002/q2 true 1 «x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين»
 completed question 002 true 1
 initialized question 003
 answered.last question 003/q1 true 1 «6»
-answered.last question 003/q2 true 1 «בין[.]3/4[,]לבין[.]7/4»
+answered.last question 003/q2 true 1 «بين[.]3/4[,]وبين[.]7/4»
 answered.last question 003/q3 true 1 «6»
 completed question 003 true 1
 completed onlinelesson - true 1

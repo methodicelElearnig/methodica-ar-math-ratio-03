@@ -2,7 +2,7 @@
 window.__set = function(id, v){ var e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }; window.__rd = function(p){ var s = document.getElementById(p + '-popup-scroll'); if (s) s.scrollTop = s.scrollHeight; var f = window[p + 'CheckScrollGate']; if (typeof f === 'function') f(); };
 goTo(1); __set('s1viq-input-first','1'); __set('s1viq-input-second','2'); s1viqCheck(); goTo(2); __set('s2viq-input','36'); s2viqCheck()
 goTo(3); __set('s3viq-input-first','5'); __set('s3viq-input-second','7'); s3viqCheck()
-goTo(4); s4mcToggle('o3'); s4mcToggle('o1'); s4mcCheck(); goTo(5); s5dqSelect('גדול מ'); s5dqCheck()
+goTo(4); s4mcToggle('o3'); s4mcToggle('o1'); s4mcCheck(); goTo(5); s5dqSelect('أكبر من'); s5dqCheck()
 if (!(mastery1State().passed && mastery1State().correctCount === 3)) throw new Error('mastery1State().passed && mastery1State().correctCount === 3')
 document.getElementById('s5dq-check').click()
 await new Promise(r => setTimeout(r, 800))

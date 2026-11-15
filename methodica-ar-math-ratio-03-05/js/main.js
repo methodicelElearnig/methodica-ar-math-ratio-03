@@ -1393,7 +1393,7 @@ function s2viqCheck() {
   if (s2viqDone) { advanceScreen(); return; }
   s2viqAttempts++;
   const allOk = ['spelt', 'wheat'].every(k => s2viqFieldCorrect(k));
-  reportQ(['001', 'q1'], allOk, allOk || s2viqAttempts >= S2_MAX_ATTEMPTS, 'קמח כוסמין: ' + String(s2viqInput('spelt').value).trim() + ', קמח חיטה: ' + String(s2viqInput('wheat').value).trim());
+  reportQ(['001', 'q1'], allOk, allOk || s2viqAttempts >= S2_MAX_ATTEMPTS, 'طحين الحنطة: ' + String(s2viqInput('spelt').value).trim() + ', طحين القمح: ' + String(s2viqInput('wheat').value).trim());
 
   if (allOk) {
     s2viqResult = 'correct';
@@ -2514,7 +2514,7 @@ function s7viqCheck() {
   const allOk = ['spelt', 'wheat'].every(k => s7viqFieldCorrect(k));
   /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'קמח כוסמין[.]90[,]קמח חיטה[.]210' (proposed to Kata, `other` there) */
   reportQ(['001', 'q4'], allOk, allOk || s7viqAttempts >= S7_MAX_ATTEMPTS,
-    { steps: { 'קמח כוסמין': String(s7viqInput('spelt').value).trim(), 'קמח חיטה': String(s7viqInput('wheat').value).trim() } });
+    { steps: { 'طحين الحنطة': String(s7viqInput('spelt').value).trim(), 'طحين القمح': String(s7viqInput('wheat').value).trim() } });
 
   if (allOk) {
     s7viqResult = 'correct';
