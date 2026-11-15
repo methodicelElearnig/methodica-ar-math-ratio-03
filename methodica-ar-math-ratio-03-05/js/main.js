@@ -370,7 +370,13 @@ function s2MountImage() {
    rows 0..548 kept (measured across the whole clip: the strip never
    rises above row 554 in any frame), audio stream-copied, duration,
    frame rate and A/V sync unchanged, H.264 High / AAC so it plays
-   everywhere. */
+   everywhere.
+
+   ARABIC BUILD: the file under this name is the Arabic clip (a clean 16:9 phone frame with an Arabic app bar,
+   14.04 s, sound), NOT a 1280×548 crop; the box's object-fit: cover trims it on screen as before, fullscreen
+   shows the whole frame. Supplied 1920×1080 at 10 Mbps (18.2 MB); re-encoded 2026-11-15 to 1280×720, H.264 High
+   CRF 23 (maxrate 2 Mb/s), AAC 128k 48 kHz stereo, +faststart: 846,530 bytes, SSIM 0.993 against the source at
+   1280×720. The supplied file is in git history (cceb5dd). */
 const S3_VIDEO = {
   src: 'assets/video/Animate_smartphone_video_content_cropped_1280x548.mp4',
   label: 'فيديو لمؤثر في مجال الخَبز حول إثراء الخبز بالألياف'
