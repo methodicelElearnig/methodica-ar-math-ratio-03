@@ -1675,7 +1675,9 @@ function s5viqCheck() {
   S5VIQ.slots.forEach(k => { got[k] = s5viqInput(k).value.trim(); });
   const perSlot = S5VIQ.slots.map(k => ({ k, ok: s5viqNormalize(got[k]) === s5viqNormalize(S5VIQ.correct[k]) }));
   const allOk = perSlot.every(s => s.ok);
-  reportQ(['001', 'q3'], allOk, allOk || s5viqAttempts >= S5VIQ.maxAttempts, 'α: ' + got.alpha + ', β: ' + got.beta);
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'α[.]108[,]β[.]72' (proposed to Kata, `other` there) */
+  reportQ(['001', 'q3'], allOk, allOk || s5viqAttempts >= S5VIQ.maxAttempts,
+    { steps: { 'α': got.alpha, 'β': got.beta } });
 
   if (allOk) {
     S5VIQ.slots.forEach(k => s5viqMark(k, 'correct'));

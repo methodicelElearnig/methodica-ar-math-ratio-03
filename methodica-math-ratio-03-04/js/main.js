@@ -1312,7 +1312,9 @@ function s2dqCheck() {
 
   s2dqAttempts++;
   const correct = s2dqSelected === S2DQ.correctValue;
-  reportQ(['002', 'q1'], correct, correct || s2dqAttempts >= S2DQ.maxAttempts, String(s2dqSelected));
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — matching, the one sentence [.] the pick */
+  reportQ(['002', 'q1'], correct, correct || s2dqAttempts >= S2DQ.maxAttempts,
+    { pairs: [{ source: 0, target: s2dqSelected }] });
 
   if (correct) {
     s2dqResult = 'correct';

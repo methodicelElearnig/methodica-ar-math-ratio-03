@@ -2267,7 +2267,9 @@ function s5dqCheck() {
   if (st.selection === null) return;
   st.attempts++;
   s5dqCloseList();
-  reportQ(['003', 'q2'], st.selection === S5DQ.correct, st.selection === S5DQ.correct || st.attempts >= S5DQ.maxAttempts, String(st.selection));
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — matching, the one sentence [.] the pick */
+  reportQ(['003', 'q2'], st.selection === S5DQ.correct, st.selection === S5DQ.correct || st.attempts >= S5DQ.maxAttempts,
+    { pairs: [{ source: 0, target: st.selection }] });
 
   if (st.selection === S5DQ.correct) {
     s5dqLock();
@@ -2504,7 +2506,9 @@ function s7viqCheck() {
   S7VIQ.slots.forEach(k => { got[k] = s7viqInput(k).value.trim(); });
   const perSlot = S7VIQ.slots.map(k => ({ k, ok: got[k] === S7VIQ.correct[k] }));
   const allRight = perSlot.every(s => s.ok);
-  reportQ(['004', 'q1'], allRight, allRight || s7viqAttempts >= S7VIQ.maxAttempts, 'עמית: ' + got.amit + ', עומר: ' + got.omer);
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'עמית[.]70[,]עומר[.]40' (proposed to Kata, `other` there) */
+  reportQ(['004', 'q1'], allRight, allRight || s7viqAttempts >= S7VIQ.maxAttempts,
+    { steps: { 'עמית': got.amit, 'עומר': got.omer } });
 
   if (allRight) {
     S7VIQ.slots.forEach(k => s7viqMark(k, 'correct'));
@@ -2945,7 +2949,7 @@ function s8ddqCheck() {
 
   const allCorrect = Object.keys(S8DDQ.correctMap)
     .every(tId => s8ddqPlacement[S8DDQ.correctMap[tId]] === tId);
-  reportQ(['005', 'q1'], allCorrect, allCorrect || s8ddqAttempts >= S8DDQ.maxAttempts, s8ddqAnswerText());
+  reportQ(['005', 'q1'], allCorrect, allCorrect || s8ddqAttempts >= S8DDQ.maxAttempts, s8ddqAnswerSpec());
 
   if (allCorrect) {
     s8ddqChecked = true;
@@ -3304,7 +3308,7 @@ function s9ddqCheck() {
 
   const allCorrect = Object.keys(S9DDQ.correctMap)
     .every(tId => s9ddqPlacement[S9DDQ.correctMap[tId]] === tId);
-  reportQ(['005', 'q2'], allCorrect, allCorrect || s9ddqAttempts >= S9DDQ.maxAttempts, s9ddqAnswerText());
+  reportQ(['005', 'q2'], allCorrect, allCorrect || s9ddqAttempts >= S9DDQ.maxAttempts, s9ddqAnswerSpec());
 
   if (allCorrect) {
     s9ddqChecked = true;
@@ -3581,7 +3585,9 @@ function s10viqCheck() {
   S10VIQ.slots.forEach(k => { got[k] = s10viqInput(k).value.trim(); });
   const perSlot = S10VIQ.slots.map(k => ({ k, ok: got[k] === S10VIQ.correct[k] }));
   const allOk = perSlot.every(s => s.ok);
-  reportQ(['005', 'q3'], allOk, allOk || s10viqAttempts >= S10VIQ.maxAttempts, 'מכונה 1: ' + got.m1 + ', מכונה 2: ' + got.m2);
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'מכונה 1[.]210[,]מכונה 2[.]90' (proposed to Kata, `other` there) */
+  reportQ(['005', 'q3'], allOk, allOk || s10viqAttempts >= S10VIQ.maxAttempts,
+    { steps: { 'מכונה 1': got.m1, 'מכונה 2': got.m2 } });
 
   if (allOk) {
     S10VIQ.slots.forEach(k => s10viqMark(k, 'correct'));
@@ -3943,14 +3949,18 @@ const SCREEN_TO_SUBCONTENT = {
 
 /* Drag-board answer text for result.response: each target's card(s), named as the metadata
    names the targets. Read at check time, before any reveal rewrites the board. */
-function s8ddqAnswerText() {
+/* The two drag questions as matching pairs (2026-11-11): every card placed on a target is one
+   pair, target name [.] card text; the xAPI layer orders them as Kata's pattern
+   ('מכונה 1[.]7x[,]מכונה 2[.]3x', 'המשוואה[.]3x + 120 = 7x'). They used to be one string,
+   'מכונה 1: 7x, מכונה 2: 3x', which never matched. */
+function s8ddqAnswerSpec() {
   const names = { 's8target-m1': 'מכונה 1', 's8target-m2': 'מכונה 2' };
-  return Object.keys(names).map(t => names[t] + ': ' + (Object.keys(s8ddqPlacement)
-    .filter(d => s8ddqPlacement[d] === t).map(d => S8DDQ_TEXTS[d]).join(', ') || '—')).join(', ');
+  return { pairs: Object.keys(s8ddqPlacement).filter(d => names[s8ddqPlacement[d]])
+    .map(d => ({ source: names[s8ddqPlacement[d]], target: S8DDQ_TEXTS[d] })) };
 }
-function s9ddqAnswerText() {
-  return Object.keys(s9ddqPlacement).filter(d => s9ddqPlacement[d] === 's9target')
-    .map(d => S9DDQ_TEXTS[d]).join(', ') || '—';
+function s9ddqAnswerSpec() {
+  return { pairs: Object.keys(s9ddqPlacement).filter(d => s9ddqPlacement[d] === 's9target')
+    .map(d => ({ source: 'המשוואה', target: S9DDQ_TEXTS[d] })) };
 }
 
 /* Checkpoint 1 failed (fewer than 2 of 3 at S5): the component ENDS here, reported as a fail —

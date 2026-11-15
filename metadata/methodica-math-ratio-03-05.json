@@ -36,7 +36,12 @@
           "correctAnswers": [
             "קמח כוסמין: 3x, קמח חיטה: 7x",
             "קמח כוסמין: 3X, קמח חיטה: 7X"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "קמח כוסמין: 3x, קמח חיטה: 7x",
+            "קמח כוסמין: 3X, קמח חיטה: 7X"
+          ],
+          "xapiInteractionComponents": null
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-05/methodica-math-ratio-03-05-001/q2",
@@ -50,7 +55,30 @@
           ],
           "correctAnswers": [
             "גלי"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "גלי"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "המשפיען",
+                "description": "המשפיען"
+              },
+              {
+                "id": "גלי",
+                "description": "גלי"
+              },
+              {
+                "id": "שניהם טועים",
+                "description": "שניהם טועים"
+              },
+              {
+                "id": "אי אפשר לדעת",
+                "description": "אי אפשר לדעת"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-05/methodica-math-ratio-03-05-001/q3",
@@ -65,14 +93,61 @@
           "correctAnswers": [
             "הכפלת כמויות הקמחים פי k תשמור על היחס 3 : 7",
             "הוספת k גרם לכל סוג קמח תיצור יחס חדש, שהוא (3x + k) : (7x + k)"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "הכפלת כמויות הקמחים פי k תשמור על היחס 3 : 7[,]הוספת k גרם לכל סוג קמח תיצור יחס חדש, שהוא (3x + k) : (7x + k)"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "בשתי השיטות הטעם והמרקם יישמרו, כי הוספנו אותה כמות מכל קמח",
+                "description": "בשתי השיטות הטעם והמרקם יישמרו, כי הוספנו אותה כמות מכל קמח"
+              },
+              {
+                "id": "הכפלת כמויות הקמחים פי k תשמור על היחס 3 : 7",
+                "description": "הכפלת כמויות הקמחים פי k תשמור על היחס 3 : 7"
+              },
+              {
+                "id": "הוספת k גרם לכל סוג קמח תיצור יחס חדש, שהוא (3x + k) : (7x + k)",
+                "description": "הוספת k גרם לכל סוג קמח תיצור יחס חדש, שהוא (3x + k) : (7x + k)"
+              },
+              {
+                "id": "הוספת אותו מספר k לשני הגדלים שומרת על היחס",
+                "description": "הוספת אותו מספר k לשני הגדלים שומרת על היחס"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-05/methodica-math-ratio-03-05-001/q4",
-          "questionType": "other",
+          "questionType": "performance",
           "questionText": "במתכון המקורי של גלי, היחס בין כמות קמח הכוסמין לקמח החיטה הוא 3 : 7. בנוסף ללחם המוכר, היא רוצה להפתיע את המבקרים במתכון חדש המבוסס על כמויות שוות של קמח כוסמין וקמח חיטה. לשם כך, היא הוסיפה 100 גרם קמח כוסמין והורידה 20 גרם קמח חיטה. השלימו: הכמות המקורית של קמח הכוסמין היא __ גרם. הכמות המקורית של קמח החיטה היא __ גרם.",
-          "answers": "קמח כוסמין: 90, קמח חיטה: 210",
-          "correctAnswers": []
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "קמח כוסמין",
+              "response": "90"
+            },
+            {
+              "stepId": "קמח חיטה",
+              "response": "210"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "קמח כוסמין[.]90[,]קמח חיטה[.]210"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "קמח כוסמין",
+                "description": null
+              },
+              {
+                "id": "קמח חיטה",
+                "description": null
+              }
+            ]
+          }
         }
       ]
     }

@@ -1386,7 +1386,10 @@ function s11Pick(id) {
   if (s11Done) return;          // one action resolves the step; no retry
   s11Picked = id;
   s11Done = true;
-  reportQ(['003', 'q1'], id === S11.correctId, true, xapiOptLabel(document.querySelector('#s11 .gmp-opt[data-id="' + id + '"] .gmp-opt-text')) || id);
+  /* The guided item 003 ("נפתור יחד"), not a test (unit owner, 10.11.26): its steps report NO
+     answer — Kata declares no question on 003 — and 003 is not in XAPI_EVAL_ITEMS, so it never
+     enters a score. The pick is still committed — save it as reportQ used to. */
+  try { flushAfterCommit(); } catch (e) {}
   s11Apply();
 }
 
@@ -1480,7 +1483,7 @@ function s15Pick(id) {
   if (s15Done) return;          // one action resolves the step; no retry
   s15Picked = id;
   s15Done = true;
-  reportQ(['003', 'q2'], id === S15.correctId, true, xapiOptLabel(document.querySelector('#s15 .gmp-opt[data-id="' + id + '"] .gmp-opt-text')) || id);
+  try { flushAfterCommit(); } catch (e) {}   /* guided item 003: no answer (see s11Pick) */
   s15Apply();
 }
 
@@ -1545,7 +1548,7 @@ function s17Pick(id) {
   if (s17Done) return;          // one action resolves the step; no retry
   s17Picked = id;
   s17Done = true;
-  reportQ(['003', 'q3'], id === S17.correctId, true, xapiOptLabel(document.querySelector('#s17 .gmp-opt[data-id="' + id + '"] .gmp-opt-text')) || id);
+  try { flushAfterCommit(); } catch (e) {}   /* guided item 003: no answer (see s11Pick) */
   s17Apply();
 }
 
@@ -2438,9 +2441,9 @@ const XAPI_COMP_SLUG     = 'methodica-math-ratio-03-01';
 const XAPI_COMP_ID       = XAPI_ID_PREFIX + XAPI_COMP_SLUG + '/';
 const XAPI_METADATA_FILE = '../metadata/' + XAPI_COMP_SLUG + '.json';
 /* Items carrying a code-graded question (each declared question is reported by its screen). */
-const XAPI_EVAL_ITEMS    = { '002': 1, '003': 1, '004': 1 };
+const XAPI_EVAL_ITEMS    = { '002': 1, '004': 1 };   /* 003 is the guided item: no question, no score (10.11.26) */
 /* Items scored as ONE question: success only when every section is right (QA F-6, 22-scoring.js).
-   004 = QUESTION_SECTIONS [21, 22, 23]; the guided item 003 keeps the share rule. */
+   004 = QUESTION_SECTIONS [21, 22, 23]. */
 const XAPI_ITEM_ALL_CORRECT = { '004': 1 };
 /* screen → [item suffix, page within the item]; null = no catalogue item. Exactly TOTAL_SCREENS
    keys, 0-based (keep it a literal object — the static check reads it). */

@@ -40,9 +40,9 @@
   "after": 3500
  },
  {
-  "eval": "(()=>{ XAPI_Q_RESULTS['004/q1']=false; XAPI_Q_RESULTS['004/q2']=true; XAPI_Q_RESULTS['004/q3']=true; XAPI_Q_RESULTS['003/q1']=false; XAPI_Q_RESULTS['003/q2']=true; XAPI_Q_RESULTS['003/q3']=true; const a=xapiItemResult('004'), b=xapiItemResult('003'); return [a.success, b.success] })()",
-  "expect": [false, true],
-  "label": "F-6: 01 item 004 follows the AND rule, guided item 003 keeps the share rule"
+  "eval": "(()=>{ XAPI_Q_RESULTS['004/q1']=false; XAPI_Q_RESULTS['004/q2']=true; XAPI_Q_RESULTS['004/q3']=true; const a=xapiItemResult('004'), b=xapiItemResult('003'); return [a.success, b] })()",
+  "expect": [false, null],
+  "label": "F-6: 01 item 004 follows the AND rule; the guided item 003 has no result (not evaluated since 11.11.26)"
  },
  {
   "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",

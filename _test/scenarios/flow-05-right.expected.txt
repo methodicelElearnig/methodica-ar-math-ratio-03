@@ -1,0 +1,10 @@
+initialized onlinelesson -
+initialized question 001
+answered.last question 001/q1 true 1 «קמח כוסמין: 3x, קמח חיטה: 7x»
+played question 001
+answered.last question 001/q2 true 1 «גלי»
+paused question 001
+answered.last question 001/q3 true 1 «הכפלת כמויות הקמחים פי k תשמור על היחס 3 : 7[,]הוספת k גרם לכל סוג קמח תיצור יחס חדש, שהוא (3x + k) : (7x + k)»
+answered.last question 001/q4 true 1 «קמח כוסמין[.]90[,]קמח חיטה[.]210»
+completed question 001 true 1
+completed onlinelesson - true 1

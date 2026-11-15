@@ -47,7 +47,26 @@
           ],
           "correctAnswers": [
             "2x : 4x"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "2x : 4x"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "2x : (4+x)",
+                "description": "2x : (4+x)"
+              },
+              {
+                "id": "2x : 4x",
+                "description": "2x : 4x"
+              },
+              {
+                "id": "(2+x) : (4+x)",
+                "description": "(2+x) : (4+x)"
+              }
+            ]
+          }
         }
       ]
     },
@@ -78,7 +97,30 @@
           ],
           "correctAnswers": [
             "x : 6x"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "x : 6x"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "x : 6",
+                "description": "x : 6"
+              },
+              {
+                "id": "1 : 6x",
+                "description": "1 : 6x"
+              },
+              {
+                "id": "x : 6x",
+                "description": "x : 6x"
+              },
+              {
+                "id": "6 : x",
+                "description": "6 : x"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-01/methodica-math-ratio-03-01-004/q2",
@@ -87,7 +129,11 @@
           "answers": [],
           "correctAnswers": [
             7
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "7"
+          ],
+          "xapiInteractionComponents": null
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-01/methodica-math-ratio-03-01-004/q3",
@@ -96,7 +142,11 @@
           "answers": [],
           "correctAnswers": [
             8
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "8"
+          ],
+          "xapiInteractionComponents": null
         }
       ]
     }

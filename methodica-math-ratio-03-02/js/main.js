@@ -1543,7 +1543,9 @@ function s4viqCheck() {
 
   const vals = s4viqValues();
   s4viqAttempts++;
-  reportQ(['002', 'q1'], s4viqIsCorrect(vals), s4viqIsCorrect(vals) || s4viqAttempts >= S4VIQ.maxAttempts, 'במישור: ' + vals.plain + ', בעלייה: ' + vals.uphill);
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'במישור[.]15[,]בעלייה[.]6' (proposed to Kata, which has it as `other` with no pattern) */
+  reportQ(['002', 'q1'], s4viqIsCorrect(vals), s4viqIsCorrect(vals) || s4viqAttempts >= S4VIQ.maxAttempts,
+    { steps: { 'במישור': vals.plain, 'בעלייה': vals.uphill } });
 
   if (s4viqIsCorrect(vals)) {
     s4viqMark(s4viqFieldStates(vals));     // all true — every field green
@@ -2631,7 +2633,9 @@ function s7dqCheck() {
   s7dqCloseAll();
 
   const allRight = S7DQ.slots.every(n => st.selections[n] === S7DQ.correct[n]);
-  reportQ(['003', 'q2'], allRight, allRight || st.attempts >= S7DQ.maxAttempts, 'בין ' + st.selections[1] + ' לבין ' + st.selections[2]);
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — matching, 'בין[.]3/4[,]לבין[.]7/4' */
+  reportQ(['003', 'q2'], allRight, allRight || st.attempts >= S7DQ.maxAttempts,
+    { pairs: [{ source: 'בין', target: st.selections[1] }, { source: 'לבין', target: st.selections[2] }] });
   if (allRight) {
     s7dqLock();
     S7DQ.slots.forEach(n => s7dqMarkSlot(n, 'correct'));

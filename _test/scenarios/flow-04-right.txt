@@ -1,0 +1,17 @@
+# part 04 — every question answered right (multi-selects clicked in reverse order), to the part's end; from the live round QA/2026-11-10_moe-runbook-checks phase 3 (he-0304-C). Every right answer's response must equal Kata's pattern
+window.__set = function(id, v){ var e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }; window.__rd = function(p){ var s = document.getElementById(p + '-popup-scroll'); if (s) s.scrollTop = s.scrollHeight; var f = window[p + 'CheckScrollGate']; if (typeof f === 'function') f(); };
+goTo(1); s1scSelect('o1'); s1scCheck(); __rd('s1sc')
+goTo(2); s2dqSelect('הוא 1:1'); s2dqCheck(); __rd('s2dq')
+goTo(3); __set('s3viq-input-first','4'); __set('s3viq-input-second','1'); s3viqCheck(); __rd('s3viq')
+goTo(4); __set('s4viq-input-first','2'); __set('s4viq-input-second','1'); s4viqCheck(); __rd('s4viq')
+goTo(5); __set('s5viq-input','16'); s5viqCheck(); __rd('s5viq')
+goTo(6); s6mcToggle('o4'); s6mcToggle('o2'); s6mcToggle('o1'); s6mcCheck(); __rd('s6mc')
+goTo(8); s8scAnswer('o2')
+goTo(9); goTo(10); goTo(11)
+await new Promise(r => setTimeout(r, 800))
+if (!(!document.querySelector("#s11 .btn-continue").disabled)) throw new Error('!document.querySelector("#s11 .btn-continue").disabled')
+document.querySelector("#s11 .btn-continue").click()
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.querySelector("#s11 .btn-continue").disabled === true)) throw new Error('document.querySelector("#s11 .btn-continue").disabled === true')
+document.querySelector("#s11 .btn-continue").click()
+await new Promise(r => setTimeout(r, 1000))

@@ -1,0 +1,21 @@
+initialized onlinelesson -
+initialized question 001
+answered.last question 001/q1 true 1 «1 : 2»
+answered.last question 001/q2 true 1 «36»
+completed question 001 true 1
+initialized question 002
+answered.last question 002/q1 true 1 «5 : 7»
+completed question 002 true 1
+initialized question 003
+answered.last question 003/q1 true 1 «a : 3a[,]a/3a»
+answered.last question 003/q2 true 1 «אם נציב a = 3, מספר הקומות מעל הקרקע יהיה[.]גדול מ»
+completed question 003 true 1
+initialized question 004
+answered.last question 004/q1 true 1 «עמית[.]70[,]עומר[.]40»
+completed question 004 true 1
+initialized question 005
+answered.last question 005/q1 true 1 «מכונה 1[.]7x[,]מכונה 2[.]3x»
+answered.last question 005/q2 true 1 «המשוואה[.]3x + 120 = 7x»
+answered.last question 005/q3 true 1 «מכונה 1[.]210[,]מכונה 2[.]90»
+completed question 005 true 1
+completed onlinelesson - true 1

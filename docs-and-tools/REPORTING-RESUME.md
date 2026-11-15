@@ -48,7 +48,7 @@ docs-and-tools/ packaging (allowlist/build/verify), Kata send/retrieve, this rec
 
 | part | screens | items |
 |---|---|---|
-| 01 (24) | s0–3 → 001 · s4–8 → 002 · s9–19 → 003 · s20–23 → 004 | 001 ungraded (widget); 002/q1 s8; 003/q1–q3 the guided picks s11/s15/s17; 004/q1–q3 s21–s23 |
+| 01 (24) | s0–3 → 001 · s4–8 → 002 · s9–19 → 003 · s20–23 → 004 | 001 ungraded (widget); 002/q1 s8; 003 is the guided item (picks on s11/s15/s17): no question, no answer, no score since 11.11.26 (Kata declares none; unit owner 10.11.26); 004/q1–q3 s21–s23 |
 | 02 (9) | s0 null · s1–3 → 001 · s4–5 → 002 · s6–8 → 003 | one screen per question |
 | 03 (11) | s0 null · s1–2 → 001 · s3 → 002 · s4–5 → 003 · s6–7 → 004 · s8–10 → 005 | s6 (transition) opens 004, so a Back from s7 does not close it (O-1) |
 | 04 (12) | s0 null · s1 → 001 · s2 → 002 · s3–5 → 003 · s6 → 004 · s7–11 → 005 | 005/q1 is the one-shot riddle on s8 |
@@ -57,11 +57,15 @@ docs-and-tools/ packaging (allowlist/build/verify), Kata send/retrieve, this rec
 
 Every declared question has exactly one `reportQ` site, and the static check enforces it (D-9).
 
-**Answer texts:**
+**Answer texts (`result.response`, since 11.11.26):** MOE compares a right answer's response with Kata's
+`correctXapiResponsesPattern` character by character (runbook §3). Every site passes a spec, and `xapiResponse`
+(`unit-js/20-xapi.js`) builds the string from the metadata by `questionType`. `student_answer` keeps a readable copy.
 
-- **Choice questions** report the metadata's own `answers[]` string for each picked option, matched by position (`xapiChoiceAnswer`). The visible text would garble superscripts and stacked fractions.
-- **Value inputs** report what was typed. The value is read before any final-wrong reveal rewrites the field.
-- **Drag boards** report "target: card(s)".
+- **Choice questions** report the metadata's own `answers[]` string for each picked option, matched by position (`xapiChoiceAnswer`). The visible text would garble superscripts and stacked fractions. A multi-select is joined with `[,]` in `answers` order, whatever the click order.
+- **Value inputs** report what was typed (`fill-in` / `numeric`). The value is read before any final-wrong reveal rewrites the field.
+- **Dropdowns and drag boards** are matching questions: `source[.]target[,]…`, right pairs in `correctAnswers` order (02-003/q2, 03-003/q2, 03-005/q1–q2, 04-002).
+- **Two-field inputs** (02-002/q1, 03-004/q1, 03-005/q3, 05-001/q4, 06-001/q3) are `other` in Kata, with no pattern. The repo metadata proposes them as `performance` (`Tools/moe-qa/propose-performance.py`), e.g. `במישור[.]15[,]בעלייה[.]6`, and the page sends that form. They reach Kata only through the owner's send, item by item.
+- The metadata carries Kata's `correctXapiResponsesPattern` / `xapiInteractionComponents` (`Tools/moe-qa/add-kata-patterns.py`), and `_test/statement-flow.mjs` fails on a right answer that is not one of them.
 
 ## 4. Decisions (2026-10-01)
 

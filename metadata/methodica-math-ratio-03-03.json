@@ -38,7 +38,12 @@
           "correctAnswers": [
             "1 : 2",
             "1:2"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "1 : 2",
+            "1:2"
+          ],
+          "xapiInteractionComponents": null
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-001/q2",
@@ -47,7 +52,11 @@
           "answers": [],
           "correctAnswers": [
             36
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "36"
+          ],
+          "xapiInteractionComponents": null
         }
       ]
     },
@@ -66,7 +75,12 @@
           "correctAnswers": [
             "5 : 7",
             "5:7"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "5 : 7",
+            "5:7"
+          ],
+          "xapiInteractionComponents": null
         }
       ]
     },
@@ -89,7 +103,26 @@
           "correctAnswers": [
             "a : 3a",
             "a/3a"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "a : 3a[,]a/3a"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "a : 3a",
+                "description": "a : 3a"
+              },
+              {
+                "id": "a : 3",
+                "description": "a : 3"
+              },
+              {
+                "id": "a/3a",
+                "description": "a/3a"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-003/q2",
@@ -110,7 +143,32 @@
               "source": "אם נציב a = 3, מספר הקומות מעל הקרקע יהיה",
               "target": "גדול מ"
             }
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "אם נציב a = 3, מספר הקומות מעל הקרקע יהיה[.]גדול מ"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "אם נציב a = 3, מספר הקומות מעל הקרקע יהיה",
+                "description": "אם נציב a = 3, מספר הקומות מעל הקרקע יהיה"
+              }
+            ],
+            "target": [
+              {
+                "id": "גדול מ",
+                "description": "גדול מ"
+              },
+              {
+                "id": "קטן מ",
+                "description": "קטן מ"
+              },
+              {
+                "id": "שווה ל",
+                "description": "שווה ל"
+              }
+            ]
+          }
         }
       ]
     },
@@ -123,10 +181,34 @@
       "questions": [
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-004/q1",
-          "questionType": "other",
+          "questionType": "performance",
           "questionText": "עמית ועומר שיחקו בארקייד וצברו כרטיסי פרס. היחס בין מספר הכרטיסים של עמית למספר הכרטיסים של עומר הוא 7 : 4. לאחר שעמית נתנה לעומר 15 כרטיסים, מספר הכרטיסים של עומר היה שווה למספר הכרטיסים של עמית. השלימו: מספר הכרטיסים שהיו לעמית בהתחלה הוא: __ מספר הכרטיסים שהיו לעומר בהתחלה הוא: __",
-          "answers": "עמית: 70, עומר: 40",
-          "correctAnswers": []
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "עמית",
+              "response": "70"
+            },
+            {
+              "stepId": "עומר",
+              "response": "40"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "עמית[.]70[,]עומר[.]40"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "עמית",
+                "description": null
+              },
+              {
+                "id": "עומר",
+                "description": null
+              }
+            ]
+          }
         }
       ]
     },
@@ -162,7 +244,40 @@
               "source": "מכונה 2",
               "target": "3x"
             }
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "מכונה 1[.]7x[,]מכונה 2[.]3x"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "מכונה 1",
+                "description": "מכונה 1"
+              },
+              {
+                "id": "מכונה 2",
+                "description": "מכונה 2"
+              }
+            ],
+            "target": [
+              {
+                "id": "3x",
+                "description": "3x"
+              },
+              {
+                "id": "10x",
+                "description": "10x"
+              },
+              {
+                "id": "3+x",
+                "description": "3+x"
+              },
+              {
+                "id": "7x",
+                "description": "7x"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-005/q2",
@@ -183,14 +298,63 @@
               "source": "המשוואה",
               "target": "3x + 120 = 7x"
             }
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "המשוואה[.]3x + 120 = 7x"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "המשוואה",
+                "description": "המשוואה"
+              }
+            ],
+            "target": [
+              {
+                "id": "3x + 7x = 120",
+                "description": "3x + 7x = 120"
+              },
+              {
+                "id": "7x + 120 = 3x",
+                "description": "7x + 120 = 3x"
+              },
+              {
+                "id": "3x + 120 = 7x",
+                "description": "3x + 120 = 7x"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-005/q3",
-          "questionType": "other",
+          "questionType": "performance",
           "questionText": "ג. קיבלנו את המשוואה: 3x + 120 = 7x. עזרו לנועה למלא את המכונות בכמות המתאימה: פתרו את המשוואה ומצאו כמה ממתקים עליה להכניס לכל מכונה. למכונה 1: __ ממתקים. למכונה 2: __ ממתקים.",
-          "answers": "מכונה 1: 210, מכונה 2: 90",
-          "correctAnswers": []
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "מכונה 1",
+              "response": "210"
+            },
+            {
+              "stepId": "מכונה 2",
+              "response": "90"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "מכונה 1[.]210[,]מכונה 2[.]90"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "מכונה 1",
+                "description": null
+              },
+              {
+                "id": "מכונה 2",
+                "description": null
+              }
+            ]
+          }
         }
       ]
     }

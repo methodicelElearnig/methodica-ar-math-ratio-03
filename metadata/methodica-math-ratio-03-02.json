@@ -36,7 +36,12 @@
           "correctAnswers": [
             "2 : 3",
             "2:3"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "2 : 3",
+            "2:3"
+          ],
+          "xapiInteractionComponents": null
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-001/q2",
@@ -50,7 +55,30 @@
           ],
           "correctAnswers": [
             "6a²"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "6a²"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "6a²",
+                "description": "6a²"
+              },
+              {
+                "id": "3a²",
+                "description": "3a²"
+              },
+              {
+                "id": "a²",
+                "description": "a²"
+              },
+              {
+                "id": "36a",
+                "description": "36a"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-001/q3",
@@ -60,7 +88,12 @@
           "correctAnswers": [
             "4 : 3",
             "4:3"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "4 : 3",
+            "4:3"
+          ],
+          "xapiInteractionComponents": null
         }
       ]
     },
@@ -73,10 +106,34 @@
       "questions": [
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-002/q1",
-          "questionType": "other",
+          "questionType": "performance",
           "questionText": "א. קבוצת מטיילים מתכננת מסלול טיול שאורכו 21 ק\"מ, חלקו במישור חלקו בעלייה. היחס בין אורך הדרך במישור לבין אורך הדרך בעלייה הוא 5 : 2. השלימו: המרחק שילכו במישור הוא __ ק\"מ. המרחק שילכו בעלייה הוא __ ק\"מ.",
-          "answers": "במישור: 15, בעלייה: 6",
-          "correctAnswers": []
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "במישור",
+              "response": "15"
+            },
+            {
+              "stepId": "בעלייה",
+              "response": "6"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "במישור[.]15[,]בעלייה[.]6"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "במישור",
+                "description": null
+              },
+              {
+                "id": "בעלייה",
+                "description": null
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-002/q2",
@@ -90,7 +147,30 @@
           ],
           "correctAnswers": [
             "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "x נשאר ללא שינוי, כי היחס 5 : 2 נשמר",
+                "description": "x נשאר ללא שינוי, כי היחס 5 : 2 נשמר"
+              },
+              {
+                "id": "לא ניתן לדעת מה קרה ל-x ללא נתונים נוספים",
+                "description": "לא ניתן לדעת מה קרה ל-x ללא נתונים נוספים"
+              },
+              {
+                "id": "x קטן פי 2, כי החלוקה נעשית על מסלול ארוך יותר",
+                "description": "x קטן פי 2, כי החלוקה נעשית על מסלול ארוך יותר"
+              },
+              {
+                "id": "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2",
+                "description": "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+              }
+            ]
+          }
         }
       ]
     },
@@ -108,7 +188,11 @@
           "answers": [],
           "correctAnswers": [
             6
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-003/q2",
@@ -139,7 +223,56 @@
               "source": "לבין",
               "target": "7/4"
             }
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "בין[.]3/4[,]לבין[.]7/4"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "בין",
+                "description": "בין"
+              },
+              {
+                "id": "לבין",
+                "description": "לבין"
+              }
+            ],
+            "target": [
+              {
+                "id": "1/4",
+                "description": "1/4"
+              },
+              {
+                "id": "2/4",
+                "description": "2/4"
+              },
+              {
+                "id": "3/4",
+                "description": "3/4"
+              },
+              {
+                "id": "4/4",
+                "description": "4/4"
+              },
+              {
+                "id": "5/4",
+                "description": "5/4"
+              },
+              {
+                "id": "6/4",
+                "description": "6/4"
+              },
+              {
+                "id": "7/4",
+                "description": "7/4"
+              },
+              {
+                "id": "8/4",
+                "description": "8/4"
+              }
+            ]
+          }
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-003/q3",
@@ -148,7 +281,11 @@
           "answers": [],
           "correctAnswers": [
             6
-          ]
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
         }
       ]
     }

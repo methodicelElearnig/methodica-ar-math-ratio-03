@@ -1,0 +1,11 @@
+initialized onlinelesson -
+initialized question 001
+answered.last question 001/q1 true 1 «זיו טוענת: "הסכום של α ו-β הוא 2x + 3x".[,]שחר טוענת: "α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°".»
+answered.last question 001/q2 true 1 «זיו»
+answered.last question 001/q3 true 1 «α[.]108[,]β[.]72»
+answered.last question 001/q4 true 1 «לא»
+played question 001
+played question 001
+paused question 001
+completed question 001 true 1
+completed onlinelesson - true 1

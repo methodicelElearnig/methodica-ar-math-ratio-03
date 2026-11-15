@@ -2512,7 +2512,9 @@ function s7viqCheck() {
   if (!['spelt', 'wheat'].every(k => s7viqInput(k).value.trim() !== '')) return;
   s7viqAttempts++;
   const allOk = ['spelt', 'wheat'].every(k => s7viqFieldCorrect(k));
-  reportQ(['001', 'q4'], allOk, allOk || s7viqAttempts >= S7_MAX_ATTEMPTS, 'קמח כוסמין: ' + String(s7viqInput('spelt').value).trim() + ', קמח חיטה: ' + String(s7viqInput('wheat').value).trim());
+  /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'קמח כוסמין[.]90[,]קמח חיטה[.]210' (proposed to Kata, `other` there) */
+  reportQ(['001', 'q4'], allOk, allOk || s7viqAttempts >= S7_MAX_ATTEMPTS,
+    { steps: { 'קמח כוסמין': String(s7viqInput('spelt').value).trim(), 'קמח חיטה': String(s7viqInput('wheat').value).trim() } });
 
   if (allOk) {
     s7viqResult = 'correct';

@@ -1,0 +1,14 @@
+initialized onlinelesson -
+initialized question 001
+completed question 001
+initialized question 002
+answered.last question 002/q1 true 1 «2x : 4x»
+completed question 002 true 1
+initialized question 003
+completed question 003
+initialized question 004
+answered.last question 004/q1 true 1 «x : 6x»
+answered.last question 004/q2 true 1 «7»
+answered.last question 004/q3 true 1 «8»
+completed question 004 true 1
+completed onlinelesson - true 1
