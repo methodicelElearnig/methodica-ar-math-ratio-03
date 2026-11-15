@@ -1,3 +1,21 @@
+> **methodica-ar-math-ratio-03 — Arabic twin (2026-11-15), read this first.**
+> - Ids under `https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/`, components
+>   `methodica-ar-math-ratio-03-0N`; content base `…/720/ar/math/ratio/03` (to be confirmed with the
+>   owner against this unit's DEPLOY.md before the first send).
+> - **Parent-unit mode is the default** (`$ParentUnitKey = 'methodica-math-ratio-03'`, ported from
+>   methodica-ar-math-percent-08): the 6 Arabic components are created INSIDE the Hebrew unit, which
+>   is only read (KATA-API.md, unit owner 2026-11-02). `metadata/methodica-ar-math-ratio-03_unit.json`
+>   is never sent. `-Preflight` checks the parent exists and counts only the components.
+> - Titles go under the `ar` key (KATA-API.md: a `Hebrew` / `Arabic` key is stored hidden).
+> - Components arrive as **draft. Do not publish them** before MOE approves in writing — publishing in
+>   the approved Hebrew unit approves them automatically. Record the approval here.
+> - Reading back: the Arabic components are read through the Hebrew unit key
+>   (`retrieve-metadata.ps1 -UnitKey methodica-math-ratio-03 -OutDir <scratch dir>`); never retrieve
+>   into `metadata/`, which would bring the Hebrew unit and components with it.
+> - Order of work: dry run → owner's OK → live send → `-Status` → retrieve and diff.
+>
+> Everything below is the Hebrew unit's history.
+
 > **methodica-math-ratio-03 (2026-10-01):** ported from methodica-math-ratio-05 with the ids retargeted
 > (`720active/math/ratio/03`, content `720/math/ratio/03`). The content base URL follows the family
 > convention and was confirmed by the owner on 2026-10-01.

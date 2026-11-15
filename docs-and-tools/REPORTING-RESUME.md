@@ -1,5 +1,22 @@
 # methodica-math-ratio-03 — reporting & resume: the unit record
 
+> **This repo is the Arabic twin, `methodica-ar-math-ratio-03` (2026-11-15).** The code is the Hebrew
+> unit's at `8ddfc35` (14.11.26: 03 scoring 2187cb6, response format ff88372, resume hardening + leave
+> save d9296c2, all "same change as the Hebrew twin"), with Arabic text. What differs from Hebrew:
+> - Identity: `XAPI_ID_PREFIX = …/720/ar/math/ratio/03/`, `XAPI_UNIT_ID = 'methodica-ar-math-ratio-03'`,
+>   folders `methodica-ar-math-ratio-03-0N`, browser keys `methodica_ar_math_ratio_03_*`.
+> - Metadata in Arabic; every string the page sends (choice options, matching sources / targets, step
+>   names) is the Arabic screen's own, and `_test/statement-flow.mjs` checks each right answer against
+>   its pattern.
+> - Shared files differ from Hebrew only in: `15-engine.js` (Arabic retry titles), `90-boot.js` (hint
+>   pill follows the primary button), `10-base.css` (Arabic font stack), `25-report.js/.css` (Arabic
+>   dialog; the Google Form values stay Hebrew on purpose).
+> - Part 03 S5: Continue always goes on to S6 (Arabic QA, cceb5dd, 10.11.26). Hebrew holds the learner
+>   on S5 below 2 of 3 and ends the component there. Open with the unit owner.
+> - Kata: components go into the Hebrew unit (parent-unit mode), see SEND-METADATA.md.
+>
+> Everything below is the Hebrew unit's record.
+
 Branch `vadimr/feat/reporting-resume`. This file records what was built, what was decided, and
 what is still open. The general method is in
 `Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md` (below: "the guide").

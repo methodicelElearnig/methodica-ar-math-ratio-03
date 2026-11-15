@@ -56,6 +56,9 @@ param(
     [string] $ApiKey,
     [string] $BaseUrl,
     [string] $MetadataDir,
+    # Arabic twin (KATA-API.md "Arabic twin", unit owner 2026-11-02): the components go INSIDE the
+    # Hebrew unit, which stays read-only. Default below; -ParentUnitKey '' upserts this repo's own unit.
+    [string] $ParentUnitKey,
     # Populate item hostedContentRef and NOTHING else — 26 single-field PATCHes.
     # ⚠️ ONE-WAY. Probed 2026-09-11: PATCHing hostedContentRef back to null returns
     # HTTP 200 and is silently ignored, and '' is a 422. There is no supported clear.
@@ -114,7 +117,16 @@ if ($Status -or $Publish) { $LogFile = Join-Path $PSScriptRoot 'publish-metadata
 $ContentBaseUrl = 'https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03'   # methodica-ar-math-ratio-03 — ratio-01/05 convention, confirmed by the owner 2026-10-01; the package must be uploaded here
 # Title language key: wraps a string title into the API object, e.g.
 #   "מדידת מסה" -> { "Hebrew": "מדידת מסה" }. Change only for non-Hebrew content.
-$TitleLangKey = 'Hebrew'
+# Arabic twin: 'ar' — the key Kata's UI shows (KATA-API.md "Send `he` for Hebrew and `ar` for
+# Arabic"; a 'Hebrew' / 'Arabic' key is stored hidden and never updates the visible title).
+$TitleLangKey = 'ar'
+
+# Parent unit (Arabic twin, ported from methodica-ar-math-percent-08 2026-11-15). When set, the unit
+# is READ-ONLY: one GET confirms it exists, *_unit.json is not sent, and no POST/PATCH ever goes to
+# the unit — a PATCH would overwrite the Hebrew unit's title, sectors and audience. Components are
+# created under this key and arrive as draft. Do NOT publish them before MOE approves in writing
+# (KATA-API.md §"Arabic twin": publishing in the approved Hebrew unit approves them automatically).
+if (-not $PSBoundParameters.ContainsKey('ParentUnitKey')) { $ParentUnitKey = 'methodica-math-ratio-03' }
 # ⚠️ NO LONGER SENT (2026-09-09). v2.5 §2.6 renamed the v2.4 component field
 # `manufacture` to the unit field `manufacturer` and retyped it as the ministry's
 # supplier number. It is moot either way, because KATA derives the value itself
@@ -641,7 +653,15 @@ if ($Preflight) {
     $pUnitFile = Get-ChildItem -Path $MetadataDir -Filter '*_unit.json' | Select-Object -First 1
     if (-not $pUnitFile) { Write-Log "No *_unit.json found in $MetadataDir" 'ERROR'; exit 1 }
     $pUnit = Get-Content -Raw -Path $pUnitFile.FullName -Encoding UTF8 | ConvertFrom-Json
-    $checks = @(@{ Label = 'unit ' + (Get-Slug $pUnit.id); Path = '/api/v1/content-units/' + (Get-Slug $pUnit.id) })
+    $checks = @()
+    if ($ParentUnitKey) {
+        # The parent must EXIST; it is checked on its own and not counted in exists / absent.
+        $pc = Get-ExistsCode ('/api/v1/content-units/' + $ParentUnitKey)
+        Write-Log ("PARENT  unit {0} (HTTP {1}) — read-only" -f $ParentUnitKey, $pc)
+        if ($pc -ne '200') { Write-Log "Parent unit not readable — nothing can be created under it." 'ERROR'; exit 1 }
+    } else {
+        $checks += @{ Label = 'unit ' + (Get-Slug $pUnit.id); Path = '/api/v1/content-units/' + (Get-Slug $pUnit.id) }
+    }
     $pComps = Get-ChildItem -Path $MetadataDir -Filter '*.json' | Where-Object { $_.Name -notlike '*_unit.json' } |
         ForEach-Object { Get-Content -Raw -Path $_.FullName -Encoding UTF8 | ConvertFrom-Json } | Sort-Object { [int] $_.order }
     foreach ($c in $pComps) { $checks += @{ Label = 'component ' + (Get-Slug $c.id); Path = '/api/v1/component?componentKey=' + (Enc $c.id) } }
@@ -712,7 +732,16 @@ $unitKey = Get-Slug $unit.id
 # In -ItemHostedRefOnly the unit is not touched at all — the whole point of that mode
 # is that exactly one field on 26 items changes and nothing else in the catalogue moves.
 $unitOk = $true
-if (-not $ItemHostedRefOnly) {
+if ($ParentUnitKey) {
+    # Arabic twin: the Hebrew parent unit is read, never written.
+    $unitKey = $ParentUnitKey
+    Write-Log ("Parent unit  : {0} (read-only, not modified)" -f $unitKey)
+    $r = Invoke-Kata 'GET' "/api/v1/content-units/$unitKey" $null
+    $unitOk = $DryRun -or ($r.Code -eq '200')
+    if (-not $unitOk) {
+        Write-Log ("Parent unit {0} not found or not readable (HTTP {1}) — nothing sent." -f $unitKey, $r.Code) 'ERROR'
+    }
+} elseif (-not $ItemHostedRefOnly) {
     $unitBody  = New-UnitBody $unit
     $unitPatch = Remove-Key $unitBody 'uniqueKey'
     $unitOk = Send-Entity -Label "unit $unitKey" `
