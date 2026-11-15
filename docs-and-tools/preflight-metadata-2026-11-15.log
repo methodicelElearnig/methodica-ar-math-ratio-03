@@ -1,0 +1,12 @@
+=== send-metadata PREFLIGHT (read-only GETs) ===
+[INFO] Base URL     : https://kata.cet.ac.il
+[INFO] Metadata dir : C:\Users\Vadim\OneDrive - methodic.co.il\Projects_ACTIVE\MOE\720\2026\methodica-ar-math-ratio-03\git-repo\methodica-ar-math-ratio-03\metadata
+[INFO] Mode         : PREFLIGHT (read-only GETs)
+[INFO] PARENT  unit methodica-math-ratio-03 (HTTP 200) — read-only
+[INFO] ABSENT  component methodica-ar-math-ratio-03-01 (HTTP 404)
+[INFO] ABSENT  component methodica-ar-math-ratio-03-02 (HTTP 404)
+[INFO] ABSENT  component methodica-ar-math-ratio-03-03 (HTTP 404)
+[INFO] ABSENT  component methodica-ar-math-ratio-03-04 (HTTP 404)
+[INFO] ABSENT  component methodica-ar-math-ratio-03-05 (HTTP 404)
+[INFO] ABSENT  component methodica-ar-math-ratio-03-06 (HTTP 404)
+[INFO] Preflight done. absent=6 exists=0 other=0 — nothing was written.

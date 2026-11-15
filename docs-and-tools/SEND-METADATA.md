@@ -14,6 +14,18 @@
 >   into `metadata/`, which would bring the Hebrew unit and components with it.
 > - Order of work: dry run → owner's OK → live send → `-Status` → retrieve and diff.
 >
+> **Sent 15.11.26 (owner's OK), from `main` at `f7f06dc`, after the CDN upload was verified (130/130 MD5):**
+> - `-Preflight`: parent `methodica-math-ratio-03` HTTP 200; the 6 Arabic components absent (404).
+> - Live send (parent-unit mode): created=25 (6 components + 19 items) updated=1 (03 → 02
+>   recommendedAfterFail) failed=0. The Hebrew unit was only read.
+> - `-Status`: draft=6 published=0. **Not published — waits for MOE's written approval.**
+> - Read back through the Hebrew unit key: every Arabic component equals `metadata/` except
+>   `learningUnitId` (the parent's key, expected), Kata's timestamps, and 03's `recommendedAfterFail`,
+>   which `retrieve-metadata.ps1` rebuilds with the FIRST component's prefix: in a mixed unit that is a
+>   Hebrew one (`720active/`). The raw Kata value is the right `…/720/ar/…/methodica-ar-math-ratio-03-02/`.
+> - Logs: `preflight-metadata-2026-11-15.log`, `send-metadata-2026-11-15-live.log`, `status-metadata-2026-11-15.log`.
+> - MOE approval: _pending_ (record date and reference here before any `-Publish`).
+>
 > Everything below is the Hebrew unit's history.
 
 > **methodica-math-ratio-03 (2026-10-01):** ported from methodica-math-ratio-05 with the ids retargeted

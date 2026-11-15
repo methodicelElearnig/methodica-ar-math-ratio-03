@@ -1,0 +1,32 @@
+=== send-metadata LIVE ===
+[INFO] Base URL     : https://kata.cet.ac.il
+[INFO] Metadata dir : C:\Users\Vadim\OneDrive - methodic.co.il\Projects_ACTIVE\MOE\720\2026\methodica-ar-math-ratio-03\git-repo\methodica-ar-math-ratio-03\metadata
+[INFO] Mode         : LIVE
+[INFO] Parent unit  : methodica-math-ratio-03 (read-only, not modified)
+[INFO] CREATED component methodica-ar-math-ratio-03-01 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-01-001 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-01-002 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-01-003 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-01-004 (HTTP 201)
+[INFO] CREATED component methodica-ar-math-ratio-03-02 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-02-001 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-02-002 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-02-003 (HTTP 201)
+[INFO] CREATED component methodica-ar-math-ratio-03-03 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-03-001 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-03-002 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-03-003 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-03-004 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-03-005 (HTTP 201)
+[INFO] CREATED component methodica-ar-math-ratio-03-04 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-04-001 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-04-002 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-04-003 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-04-004 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-04-005 (HTTP 201)
+[INFO] CREATED component methodica-ar-math-ratio-03-05 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-05-001 (HTTP 201)
+[INFO] CREATED component methodica-ar-math-ratio-03-06 (HTTP 201)
+[INFO] CREATED item methodica-ar-math-ratio-03-06-001 (HTTP 201)
+[INFO] LINKED  component methodica-ar-math-ratio-03-03 recommendedAfterFail -> [methodica-ar-math-ratio-03-02] (HTTP 200)
+[INFO] Done. created=25 updated=1 failed=0
