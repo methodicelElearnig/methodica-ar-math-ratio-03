@@ -6,15 +6,21 @@
   <title>النسبة والتعابير الجبرية — الجزء 05</title>
   <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
        unit-assets/fonts/). Linked before the part's own stylesheet. -->
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=6">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=6">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=6">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=6">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -27,10 +33,13 @@
        read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
        #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
        50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
-       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. -->
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
   <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
   <script>
   (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
     var t0 = Date.now();
     function tick() {
       var c = document.getElementById('boot-cover');
@@ -458,7 +467,7 @@
            are off, nothing here is interactive except the nav chrome. -->
       <!-- animation-system · background scene → fade-in, group 1. -->
       <div class="fito-img" data-reveal="1" data-reveal-fade>
-        <img id="s1-img" alt="">
+        <img id="s1-img" alt="" loading="lazy">
       </div>
 
       <!-- Floating white card. Width HUGS its longest line
@@ -696,7 +705,7 @@
            the translateX(-50%) lives on the CHILD .viq-fields, which is
            not the animated element, so nothing is overridden. -->
       <div class="viq-figure" data-reveal="2">
-        <img class="viq-figure-img" id="s2-img" alt="">
+        <img class="viq-figure-img" id="s2-img" alt="" loading="lazy">
         <!-- TWO INDEPENDENT answer fields (Variant C / Case A): the
              sub-part is ONE scored unit — correct only if both fields
              are correct — but each field shows its OWN verdict, so a
@@ -851,7 +860,7 @@
                    labels track the image at any size. Latin top-left, Hebrew
                    bottom-right, as on a Hebrew-English keyboard. -->
               <div class="kb-board">
-                <img class="kb-step-img" src="assets/img/keyboard-step1-alt-shift.jpg" width="960" height="355" alt="لوحة مفاتيح يظهر فيها المفتاحان ‎ Alt و-Shift  باللون الأخضر">
+                <img class="kb-step-img" src="assets/img/keyboard-step1-alt-shift.jpg" width="960" height="355" alt="لوحة مفاتيح يظهر فيها المفتاحان ‎ Alt و-Shift  باللون الأخضر" loading="lazy">
                 <div class="kb-keys" aria-hidden="true">
                 <span class="kb-k" style="left:4.03%;top:7.73%;width:5.48%;height:14.02%"><span class="kb-k-c">Esc</span></span>
                 <span class="kb-k" style="left:10.00%;top:7.73%;width:5.58%;height:14.02%"><span class="kb-k-top">!</span><span class="kb-k-main">1</span></span>
@@ -929,7 +938,7 @@
                    labels track the image at any size. Latin top-left, Hebrew
                    bottom-right, as on a Hebrew-English keyboard. -->
               <div class="kb-board">
-                <img class="kb-step-img" src="assets/img/keyboard-step2-x.jpg" width="960" height="323" alt="لوحة مفاتيح يظهر فيها المفتاح‎ X ‎باللون الأخضر">
+                <img class="kb-step-img" src="assets/img/keyboard-step2-x.jpg" width="960" height="323" alt="لوحة مفاتيح يظهر فيها المفتاح‎ X ‎باللون الأخضر" loading="lazy">
                 <div class="kb-keys" aria-hidden="true">
                 <span class="kb-k" style="left:5.55%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-c">Esc</span></span>
                 <span class="kb-k" style="left:11.51%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-top">!</span><span class="kb-k-main">1</span></span>
@@ -1561,7 +1570,7 @@
            does not drive transform, so the crop geometry is untouched. -->
       <div class="fito-img fito-img--framed" data-reveal="1" data-reveal-fade>
         <div class="fito-img-frame">
-          <img class="fito-photo" id="s5-img" alt="">
+          <img class="fito-photo" id="s5-img" alt="" loading="lazy">
         </div>
       </div>
 
@@ -2049,7 +2058,7 @@
            order). Not zoom-measured (no zoom affordance). No static
            transform on .viq-figure--left (left/top positioned). -->
       <div class="viq-figure viq-figure--left" data-reveal="2">
-        <img class="viq-figure-img" id="s7-img" alt="">
+        <img class="viq-figure-img" id="s7-img" alt="" loading="lazy">
       </div>
 
       <!-- animation-system · question text + the two INLINE answer fields
@@ -2256,7 +2265,7 @@
            translateX(-50%) crop transform and must never be animated). -->
       <div class="fito-img fito-img--framed" data-reveal="1" data-reveal-fade>
         <div class="fito-img-frame">
-          <img class="fito-photo" id="s8-img" alt="">
+          <img class="fito-photo" id="s8-img" alt="" loading="lazy">
         </div>
       </div>
 
@@ -2279,18 +2288,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=6"></script>
-  <script src="../unit-js/08-partnav.js?v=6"></script>
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=6"></script>
-  <script src="../unit-js/15-engine.js?v=6"></script>
-  <script src="../unit-js/20-xapi.js?v=6"></script>
-  <script src="../unit-js/22-scoring.js?v=6"></script>
-  <script src="../unit-js/25-report.js?v=6"></script>
-  <script src="../unit-js/40-resume.js?v=6"></script>
-  <script src="../unit-js/45-painters.js?v=6"></script>
-  <script src="../unit-js/50-loader.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="../unit-js/90-boot.js?v=6"></script>
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
 </body>
 </html>

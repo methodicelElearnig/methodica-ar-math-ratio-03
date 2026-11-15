@@ -6,15 +6,21 @@
   <title>النسبة والتعابير الجبرية — الجزء 03</title>
   <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
        unit-assets/fonts/). Linked before the part's own stylesheet. -->
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=6">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=6">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=6">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=6">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -44,10 +50,13 @@
        read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
        #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
        50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
-       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. -->
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
   <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
   <script>
   (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
     var t0 = Date.now();
     function tick() {
       var c = document.getElementById('boot-cover');
@@ -901,7 +910,7 @@
              question (RTL order). No zoom trigger, no JS measurement, no
              static transform → plain float-in. -->
         <div class="viq-img-frame" data-reveal="2">
-          <img class="viq-img" src="assets/img/ספרים.jpg" alt="كومة كتب لها أغلفة صلبة بألوان مختلفة، موضوعة فوق بعضها">
+          <img class="viq-img" src="assets/img/ספרים.jpg" alt="كومة كتب لها أغلفة صلبة بألوان مختلفة، موضوعة فوق بعضها" loading="lazy">
         </div>
 
         <!-- Reveal group 1 — RIGHT side first: question text + ratio fields
@@ -1167,7 +1176,7 @@
         <!-- Reveal group 2 — LEFT-side image after the right-side question
              block (RTL order); not measured → float-in. -->
         <div class="viq-img-frame" data-reveal="2">
-          <img class="viq-img" src="assets/img/מיינקראפט.jpg" alt="شابّان وشابة يجلسون أمام شاشة حاسوب ويخططون لمبنى متعدد الطوابق في لعبة بناء">
+          <img class="viq-img" src="assets/img/מיינקראפט.jpg" alt="شابّان وشابة يجلسون أمام شاشة حاسوب ويخططون لمبنى متعدد الطوابق في لعبة بناء" loading="lazy">
         </div>
 
         <!-- Reveal group 1 — question text + the three answer options as
@@ -1450,7 +1459,7 @@
              share one visual role (the story scene) → SAME group number on
              both, both float-in, after the right-side question block. -->
         <div class="viq-img-frame" data-reveal="2">
-          <img class="viq-img" src="assets/img/מיינקראפט.jpg" alt="شابّان وشابة يجلسون أمام شاشة حاسوب ويخططون لمبنى متعدد الطوابق في لعبة بناء">
+          <img class="viq-img" src="assets/img/מיינקראפט.jpg" alt="شابّان وشابة يجلسون أمام شاشة حاسوب ويخططون لمبنى متعدد الطوابق في لعبة بناء" loading="lazy">
         </div>
 
         <!-- Character speech bubble (id=15), story dialogue over the
@@ -1503,7 +1512,7 @@
               <button class="dq-btn" id="s5dq-btn" type="button" data-empty="true"
                       aria-haspopup="listbox" aria-expanded="false" aria-controls="s5dq-list"
                       aria-label="المقارنة: اختاروا إجابة" onclick="s5dqToggle()">
-                <img class="dq-chevron" src="assets/icons/dropdown-chevron.svg" alt="" aria-hidden="true">
+                <img class="dq-chevron" src="assets/icons/dropdown-chevron.svg" alt="" aria-hidden="true" loading="lazy">
                 <span class="dq-selected" id="s5dq-selected">اختاروا إجابة</span>
               </button>
               <!-- Excluded from the entrance reveal and from popup motion:
@@ -1767,7 +1776,7 @@
         <!-- Reveal group 2 — LEFT-side image after the right-side question
              block (RTL order); not measured → float-in. -->
         <div class="viq-img-frame" data-reveal="2">
-          <img class="viq-img" src="assets/img/ארקייד.jpg" alt="ولدان في صالة ألعاب أركيد يحملان شرائط من بطاقات الجوائز">
+          <img class="viq-img" src="assets/img/ארקייד.jpg" alt="ولدان في صالة ألعاب أركيد يحملان شرائط من بطاقات الجوائز" loading="lazy">
         </div>
 
         <!-- Reveal group 1 — question text + the two-row answer grid as ONE
@@ -1916,13 +1925,13 @@
              the slide. -->
         <div class="s8ddq-machine s8ddq-machine--m1">
           <div class="s8ddq-machine-img">
-            <img src="assets/img/ממתקים2.jpg" alt="آلة حلوى كبيرة، مليئة بقطع حلوى ملوّنة">
+            <img src="assets/img/ממתקים2.jpg" alt="آلة حلوى كبيرة، مليئة بقطع حلوى ملوّنة" loading="lazy">
           </div>
           <p class="s8ddq-machine-label">الآلة 1</p>
         </div>
         <div class="s8ddq-machine s8ddq-machine--m2">
           <div class="s8ddq-machine-img">
-            <img src="assets/img/ממתקים1.jpg" alt="آلة حلوى أصغر، مليئة بقطع حلوى ملوّنة">
+            <img src="assets/img/ממתקים1.jpg" alt="آلة حلوى أصغر، مليئة بقطع حلوى ملوّنة" loading="lazy">
           </div>
           <p class="s8ddq-machine-label">الآلة 2</p>
         </div>
@@ -2023,13 +2032,13 @@
              identity by pixel comparison, as on screen 8. -->
         <div class="s9ddq-machine s9ddq-machine--m1">
           <div class="s9ddq-machine-img">
-            <img src="assets/img/ממתקים2.jpg" alt="آلة حلوى كبيرة، مليئة بقطع حلوى ملوّنة">
+            <img src="assets/img/ממתקים2.jpg" alt="آلة حلوى كبيرة، مليئة بقطع حلوى ملوّنة" loading="lazy">
           </div>
           <p class="s9ddq-machine-label">الآلة 1<bdi dir="ltr">7x</bdi></p>
         </div>
         <div class="s9ddq-machine s9ddq-machine--m2">
           <div class="s9ddq-machine-img">
-            <img src="assets/img/ממתקים1.jpg" alt="آلة حلوى أصغر، مليئة بقطع حلوى ملوّنة">
+            <img src="assets/img/ממתקים1.jpg" alt="آلة حلوى أصغر، مليئة بقطع حلوى ملوّنة" loading="lazy">
           </div>
           <p class="s9ddq-machine-label">الآلة 2<bdi dir="ltr">3x</bdi></p>
         </div>
@@ -2089,7 +2098,7 @@
            block (RTL order). No zoom, no measurement, no static transform →
            float-in. -->
       <div class="s10viq-img-frame" data-reveal="2">
-        <img src="assets/img/מכונות ממתקים.jpg" alt="فتاة تملأ آلتين للحلوى بقطع حلوى ملوّنة">
+        <img src="assets/img/מכונות ממתקים.jpg" alt="فتاة تملأ آلتين للحلوى بقطع حلوى ملوّنة" loading="lazy">
         <div class="s10viq-chip s10viq-chip--m1">الآلة 1<bdi dir="ltr">7x</bdi></div>
         <div class="s10viq-chip s10viq-chip--m2">الآلة 2<bdi dir="ltr">3x</bdi></div>
       </div>
@@ -2327,18 +2336,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=6"></script>
-  <script src="../unit-js/08-partnav.js?v=6"></script>
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=6"></script>
-  <script src="../unit-js/15-engine.js?v=6"></script>
-  <script src="../unit-js/20-xapi.js?v=6"></script>
-  <script src="../unit-js/22-scoring.js?v=6"></script>
-  <script src="../unit-js/25-report.js?v=6"></script>
-  <script src="../unit-js/40-resume.js?v=6"></script>
-  <script src="../unit-js/45-painters.js?v=6"></script>
-  <script src="../unit-js/50-loader.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="../unit-js/90-boot.js?v=6"></script>
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
 </body>
 </html>

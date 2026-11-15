@@ -6,15 +6,21 @@
   <title>النسبة والتعابير الجبرية — الجزء 02</title>
   <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
        unit-assets/fonts/). Linked before the part's own stylesheet. -->
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=6">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=6">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=6">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=6">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -26,10 +32,13 @@
        read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
        #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
        50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
-       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. -->
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
   <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
   <script>
   (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
     var t0 = Date.now();
     function tick() {
       var c = document.getElementById('boot-cover');
@@ -1008,7 +1017,7 @@
             <svg class="img-zoom-btn__icon" width="20" height="20" viewBox="0 0 21 21" fill="none" aria-hidden="true"><path d="M8 1C11.8661 1 15 4.13371 15 7.99902C15 11.8643 11.8661 14.998 8 14.998C4.1339 14.998 1.00002 11.8643 1 7.99902C1 4.13371 4.13389 1 8 1Z" stroke="currentColor" stroke-width="2"/><path d="M12.6221 14.188L14.2657 12.6141L19.928 18.5274C20.3626 18.9813 20.347 19.7016 19.8931 20.1362C19.4392 20.5708 18.7189 20.5552 18.2843 20.1013L12.6221 14.188Z" fill="currentColor"/></svg>
           </button>
           <img class="viq-img" id="s4viq-img" src="assets/img/trail-21.png"
-               alt="لافتة خشبية على جانب الطريق، عليها سهم وعبارة: طول المسار 21 كم">
+               alt="لافتة خشبية على جانب الطريق، عليها سهم وعبارة: طول المسار 21 كم" loading="lazy">
         </div>
 
         <!-- animation-system: question block (stem + the two inline
@@ -1275,7 +1284,7 @@
             <svg class="img-zoom-btn__icon" width="20" height="20" viewBox="0 0 21 21" fill="none" aria-hidden="true"><path d="M8 1C11.8661 1 15 4.13371 15 7.99902C15 11.8643 11.8661 14.998 8 14.998C4.1339 14.998 1.00002 11.8643 1 7.99902C1 4.13371 4.13389 1 8 1Z" stroke="currentColor" stroke-width="2"/><path d="M12.6221 14.188L14.2657 12.6141L19.928 18.5274C20.3626 18.9813 20.347 19.7016 19.8931 20.1362C19.4392 20.5708 18.7189 20.5552 18.2843 20.1013L12.6221 14.188Z" fill="currentColor"/></svg>
           </button>
           <img class="scq-img" id="s5sc-img" src="assets/img/trail-42.png"
-               alt="لافتة خشبية على جانب الطريق، عليها سهم وعبارة: طول المسار 42 كم">
+               alt="لافتة خشبية على جانب الطريق، عليها سهم وعبارة: طول المسار 42 كم" loading="lazy">
         </div>
 
         <!-- animation-system: stem + question + the four answer pills =
@@ -2420,7 +2429,7 @@
             <button class="dq-btn" id="s7dq-btn-1" type="button" data-empty="true"
                     aria-haspopup="listbox" aria-expanded="false" aria-controls="s7dq-list-1"
                     aria-label="القيمة الأصغر: اختاروا كسرًا" onclick="s7dqToggle(1)">
-              <img class="dq-chevron" src="assets/img/dq-chevron.svg" width="16" height="8" alt="" aria-hidden="true">
+              <img class="dq-chevron" src="assets/img/dq-chevron.svg" width="16" height="8" alt="" aria-hidden="true" loading="lazy">
               <span class="dq-selected" id="s7dq-selected-1"></span>
             </button>
             <ul class="dq-list hidden" id="s7dq-list-1" role="listbox" aria-label="القيمة الأصغر: اختاروا كسرًا">
@@ -2446,7 +2455,7 @@
             <button class="dq-btn" id="s7dq-btn-2" type="button" data-empty="true"
                     aria-haspopup="listbox" aria-expanded="false" aria-controls="s7dq-list-2"
                     aria-label="القيمة الأكبر: اختاروا كسرًا" onclick="s7dqToggle(2)">
-              <img class="dq-chevron" src="assets/img/dq-chevron.svg" width="16" height="8" alt="" aria-hidden="true">
+              <img class="dq-chevron" src="assets/img/dq-chevron.svg" width="16" height="8" alt="" aria-hidden="true" loading="lazy">
               <span class="dq-selected" id="s7dq-selected-2"></span>
             </button>
             <ul class="dq-list hidden" id="s7dq-list-2" role="listbox" aria-label="القيمة الأكبر: اختاروا كسرًا">
@@ -2792,18 +2801,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=6"></script>
-  <script src="../unit-js/08-partnav.js?v=6"></script>
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=6"></script>
-  <script src="../unit-js/15-engine.js?v=6"></script>
-  <script src="../unit-js/20-xapi.js?v=6"></script>
-  <script src="../unit-js/22-scoring.js?v=6"></script>
-  <script src="../unit-js/25-report.js?v=6"></script>
-  <script src="../unit-js/40-resume.js?v=6"></script>
-  <script src="../unit-js/45-painters.js?v=6"></script>
-  <script src="../unit-js/50-loader.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="../unit-js/90-boot.js?v=6"></script>
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
 </body>
 </html>

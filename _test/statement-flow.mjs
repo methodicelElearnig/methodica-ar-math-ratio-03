@@ -86,7 +86,7 @@ for (const name of names) {
   const lines = (await readFile(join(SCN, name + '.txt'), 'utf8')).split(/\r?\n/);
   const [, part, query = ''] = lines[0].match(/^# part (\d\d)(?:\s+query=(\S+))?/) || [];
   const steps = lines.slice(1).filter(l => l.trim() && !l.startsWith('#'));
-  const base = `http://127.0.0.1:${HP}/sub/methodica-math-ratio-03-${part}/index.html?xapiLib=../_test/xapi-720-k.js${query}`;
+  const base = `http://127.0.0.1:${HP}/sub/methodica-math-ratio-03-${part}/index.html?xapiLib=../_test/xapi-720-${process.env.XAPI_STUB || 'l'}.js${query}`;   /* -l = production (2026-11-14); XAPI_STUB=k runs the rollback library */
   /* Reset from a same-origin page that is NOT the lomda: with resume on, a lomda page writes its
      restored document back on pagehide, which undid a reset taken on the lomda itself and leaked
      one scenario's state and ledger into the next (README → Notes). */

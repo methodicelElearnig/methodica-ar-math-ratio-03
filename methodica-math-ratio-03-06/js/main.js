@@ -649,6 +649,12 @@ function goTo(n) {
      shows everything instantly. This is the only call site — scaleApp()
      never calls it, so a resize cannot replay a reveal. */
   if (window.Motion) Motion.reveal(next);
+  /* Hidden clips get their source on screen entry (mountLateAssets, C4), BEFORE resetScreenState:
+     an enter hook may call load() or seek. */
+  document.querySelectorAll('.screen.active [data-src], .screen.active [data-poster]').forEach(function (el) {
+    if (el.hasAttribute('data-poster')) { el.setAttribute('poster', el.getAttribute('data-poster')); el.removeAttribute('data-poster'); }
+    if (el.hasAttribute('data-src'))    { el.setAttribute('src', el.getAttribute('data-src'));       el.removeAttribute('data-src'); }
+  });
   resetScreenState(n);
   /* Resume: rebuild a screen restored from the state document, once (45-painters.js). */
   repaintScreen(n);
@@ -2414,12 +2420,17 @@ function mountLateAssets() {
     el.setAttribute('src', a.src);
     if (a.alt !== undefined) el.setAttribute('alt', a.alt);
   });
+  /* The clips (and their posters) go in as data-src / data-poster, NOT src: both <video> carry
+     preload="auto", so a src set here, at parse time, fetched ~1.9 MB of hidden video during the
+     boot window, ahead of the restore (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C4, 2026-11-14).
+     goTo() moves them to src / poster when S6 or S8 becomes the active screen, before its
+     resetScreenState — the enter hook and the resume painter (resumeHoldClipEnd) then find a src. */
   Object.keys(LATE_CLIPS).forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     const c = LATE_CLIPS[id];
-    el.setAttribute('src', c.src);
-    if (c.poster) el.setAttribute('poster', c.poster);
+    el.setAttribute('data-src', c.src);
+    if (c.poster) el.setAttribute('data-poster', c.poster);
   });
 }
 mountLateAssets();

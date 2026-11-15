@@ -6,15 +6,21 @@
   <title>النسبة والتعابير الجبرية - الجزء 04</title>
   <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
        unit-assets/fonts/). Linked before the part's own stylesheet. -->
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=6">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=6">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=6">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=6">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -48,10 +54,13 @@
        read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
        #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
        50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
-       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. -->
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
   <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
   <script>
   (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
     var t0 = Date.now();
     function tick() {
       var c = document.getElementById('boot-cover');
@@ -2011,7 +2020,7 @@
             <svg class="img-zoom-btn__icon" width="20" height="20" viewBox="0 0 21 21" fill="none" aria-hidden="true"><path d="M8 1C11.8661 1 15 4.13371 15 7.99902C15 11.8643 11.8661 14.998 8 14.998C4.1339 14.998 1.00002 11.8643 1 7.99902C1 4.13371 4.13389 1 8 1Z" stroke="currentColor" stroke-width="2"/><path d="M12.6221 14.188L14.2657 12.6141L19.928 18.5274C20.3626 18.9813 20.347 19.7016 19.8931 20.1362C19.4392 20.5708 18.7189 20.5552 18.2843 20.1013L12.6221 14.188Z" fill="currentColor"/></svg>
           </button>
           <img class="viq-img" id="s6mc-img" src="assets/img/טיול.jpg"
-               alt="ثلاثة طلاب يجلسون حول طاولة في الصف ويخططون لمسار رحلة على خريطة في حاسوب نقال؛ وعلى اللوح خلفهم مكتوب &quot;تخطيط الرحلة&quot;">
+               alt="ثلاثة طلاب يجلسون حول طاولة في الصف ويخططون لمسار رحلة على خريطة في حاسوب نقال؛ وعلى اللوح خلفهم مكتوب &quot;تخطيط الرحلة&quot;" loading="lazy">
         </div>
 
         <!-- animation-system: stem + instruction + the four checkbox
@@ -2271,7 +2280,7 @@
       <div class="s8-images" data-reveal="1">
         <div class="s8-img s8-img--corbusier">
           <img class="viq-img" src="assets/img/המוזיאון-הלאומי-לאמנות-מערבית-טוקיו.jpg"
-               alt="المتحف الوطني للفن الغربي في طوكيو، الذي صممه المعماري لو كوربوزييه - مبنى من باطون مستطيل قائم على أعمدة، وأمامه ساحة مبلطة">
+               alt="المتحف الوطني للفن الغربي في طوكيو، الذي صممه المعماري لو كوربوزييه - مبنى من باطون مستطيل قائم على أعمدة، وأمامه ساحة مبلطة" loading="lazy">
         </div>
         <!-- Credit for the Tokyo photograph. CC BY-SA 4.0 REQUIRES
              attribution, so this control is not optional decoration —
@@ -2293,11 +2302,11 @@
         </span>
         <div class="s8-img s8-img--mona">
           <img class="viq-img" src="assets/img/מונה ליזה.jpg"
-               alt="لوحة الموناليزا لليوناردو دا فينشي - بورتريه لامرأة جالسة، يداها متشابكتان وعلى وجهها ابتسامة خفيفة، وخلفها منظر طبيعي">
+               alt="لوحة الموناليزا لليوناردو دا فينشي - بورتريه لامرأة جالسة، يداها متشابكتان وعلى وجهها ابتسامة خفيفة، وخلفها منظر طبيعي" loading="lazy">
         </div>
         <div class="s8-img s8-img--galaxy">
           <img class="viq-img" src="assets/img/גלקסיה.jpeg"
-               alt="مجرة حلزونية في الفضاء - أذرع من النجوم والغبار تلتف حول نواة مضيئة، على خلفية سوداء مرصعة بالنجوم">
+               alt="مجرة حلزونية في الفضاء - أذرع من النجوم والغبار تلتف حول نواة مضيئة، على خلفية سوداء مرصعة بالنجوم" loading="lazy">
         </div>
       </div>
 
@@ -2584,7 +2593,7 @@
              picture and overlay together as one unit. -->
         <div class="s10-img s10-img--corbusier">
           <img class="viq-img" src="assets/img/המוזיאון-הלאומי-לאמנות-מערבית-טוקיו.jpg"
-               alt="المتحف الوطني للفن الغربي في طوكيو، الذي صممه لو كوربوزييه - مبنى باطون مستطيل قائم على أعمدة، ويستند نظام قياساته إلى المودولور‎">
+               alt="المتحف الوطني للفن الغربي في طوكيو، الذي صممه لو كوربوزييه - مبنى باطون مستطيل قائم على أعمدة، ويستند نظام قياساته إلى المودولور‎" loading="lazy">
         </div>
         <!-- Credit for the Tokyo photograph. CC BY-SA 4.0 REQUIRES
              attribution, so this control is not optional decoration —
@@ -2606,7 +2615,7 @@
         </span>
         <div class="s10-img s10-img--mona">
           <img class="viq-img" src="assets/img/מונה ליזה.jpg"
-               alt="لوحة الموناليزا وعليها تحديد لمستطيل النسبة الذهبية وتقسيمه إلى مربعات حول وجه الشخصية">
+               alt="لوحة الموناليزا وعليها تحديد لمستطيل النسبة الذهبية وتقسيمه إلى مربعات حول وجه الشخصية" loading="lazy">
           <svg class="s10-phi s10-phi--mona" viewBox="0 0 1 1.61803"
                aria-hidden="true" focusable="false">
             <path class="s10-phi-spiral" d="M 0 0 A 1 1 0 0 1 1 1 A 0.61803 0.61803 0 0 1 0.38197 1.61803 A 0.38197 0.38197 0 0 1 0 1.23607 A 0.23607 0.23607 0 0 1 0.23607 1 A 0.1459 0.1459 0 0 1 0.38197 1.1459 A 0.09017 0.09017 0 0 1 0.2918 1.23607 A 0.05573 0.05573 0 0 1 0.23607 1.18034 A 0.03444 0.03444 0 0 1 0.27051 1.1459 A 0.02129 0.02129 0 0 1 0.2918 1.16718"/>
@@ -2614,7 +2623,7 @@
         </div>
         <div class="s10-img s10-img--galaxy">
           <img class="viq-img" src="assets/img/גלקסיה.jpeg"
-               alt="مجرة الدوامة وعليها تحديد للولب الذهبي، حيث يتبع انحناؤه أذرع المجرة">
+               alt="مجرة الدوامة وعليها تحديد للولب الذهبي، حيث يتبع انحناؤه أذرع المجرة" loading="lazy">
           <svg class="s10-phi s10-phi--galaxy" viewBox="0 0 1.61803 1"
                aria-hidden="true" focusable="false">
             <path class="s10-phi-spiral" d="M 0 1 A 1 1 0 0 1 1 0 A 0.61803 0.61803 0 0 1 1.61803 0.61803 A 0.38197 0.38197 0 0 1 1.23607 1 A 0.23607 0.23607 0 0 1 1 0.76393 A 0.1459 0.1459 0 0 1 1.1459 0.61803 A 0.09017 0.09017 0 0 1 1.23607 0.7082 A 0.05573 0.05573 0 0 1 1.18034 0.76393 A 0.03444 0.03444 0 0 1 1.1459 0.72949 A 0.02129 0.02129 0 0 1 1.16718 0.7082"/>
@@ -2875,18 +2884,18 @@
   </div>
 
   <!-- Before main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=6"></script>
-  <script src="../unit-js/08-partnav.js?v=6"></script>
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=6"></script>
-  <script src="../unit-js/15-engine.js?v=6"></script>
-  <script src="../unit-js/20-xapi.js?v=6"></script>
-  <script src="../unit-js/22-scoring.js?v=6"></script>
-  <script src="../unit-js/25-report.js?v=6"></script>
-  <script src="../unit-js/40-resume.js?v=6"></script>
-  <script src="../unit-js/45-painters.js?v=6"></script>
-  <script src="../unit-js/50-loader.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="../unit-js/90-boot.js?v=6"></script>
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
 </body>
 </html>

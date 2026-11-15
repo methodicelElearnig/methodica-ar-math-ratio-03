@@ -6,15 +6,21 @@
   <title>النسبة والتعابير الجبرية — الجزء 01</title>
   <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
        unit-assets/fonts/). Linked before the part's own stylesheet. -->
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=6">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=6">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=6">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=6">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -57,10 +63,13 @@
        read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
        #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
        50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
-       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. -->
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
   <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
   <script>
   (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
     var t0 = Date.now();
     function tick() {
       var c = document.getElementById('boot-cover');
@@ -348,7 +357,7 @@
           <svg class="s1-bubble-shape" viewBox="0 0 216 89" preserveAspectRatio="none" aria-hidden="true"><use href="#bubble-tail-down"/></svg>
           <span class="s1-bubble-text">ششش... لا تكشفوا الوصفة السرية‎!</span>
         </div>
-        <img class="s1-char-img" id="s1-char-img" alt="">
+        <img class="s1-char-img" id="s1-char-img" alt="" loading="lazy">
       </div>
 
       <!-- Continue is ungated on a TransitionScreen — it is the screen's
@@ -582,7 +591,7 @@
       <div class="s1-media-wrap" data-reveal="3">
         <div class="s1-media-clip">
           <img class="s1-media-img" src="assets/img/אביה וגיל.jpg"
-               alt="ربى وجميل خلف محل الحمص، محاطان بأوعية حبوب الحمص والخضار المفرومة. جميل يسند رأسه إلى يده ويبدو منهكًا، وربى ترفع إصبعها وتبتسم بعد أن خطرت لها فكرة‎.">
+               alt="ربى وجميل خلف محل الحمص، محاطان بأوعية حبوب الحمص والخضار المفرومة. جميل يسند رأسه إلى يده ويبدو منهكًا، وربى ترفع إصبعها وتبتسم بعد أن خطرت لها فكرة‎." loading="lazy">
         </div>
         <div class="s1-bubble s1-bubble--side">
           <svg class="s1-bubble-shape" viewBox="0 0 188 89" preserveAspectRatio="none" aria-hidden="true"><use href="#bubble-tail-right"/></svg>
@@ -647,7 +656,7 @@
              set over אביה's head on the right, pointing down at her. -->
         <div class="cmc-unit" id="cmc-1" data-cmc-stage="1">
           <img class="cmc-img" src="assets/img/comic-1-exhausted.jpg"
-               alt="ربى وجميل يسندان رأسيهما إلى أيديهما فوق أوعية حبوب الحمص والخضار، وهما منهكان في نهاية يوم العمل‎.">
+               alt="ربى وجميل يسندان رأسيهما إلى أيديهما فوق أوعية حبوب الحمص والخضار، وهما منهكان في نهاية يوم العمل‎." loading="lazy">
           <div class="cmc-bubble cmc-bubble--1">
             <svg class="cmc-bubble-shape" viewBox="0 0 308.74 79" aria-hidden="true"><path d="M11.029 1.5 H297.711 A9.529 3.787 0 0 1 307.24 5.287 V66.798 A9.529 3.787 0 0 1 297.711 70.585 H253.356 L237.5 77.5 L221.644 70.585 H11.029 A9.529 3.787 0 0 1 1.5 66.798 V5.287 A9.529 3.787 0 0 1 11.029 1.5 Z" fill="#fff" style="stroke: var(--subject-500)" stroke-width="3" stroke-linejoin="round"/></svg>
             <span class="cmc-bubble-text">هيّا نبني ماكنة تحسب الكميات بدلًا منا‎!</span>
@@ -680,7 +689,7 @@
              pointing up at him. -->
         <div class="cmc-unit" id="cmc-3" data-cmc-stage="3">
           <img class="cmc-img cmc-img--flip" src="assets/img/comic-3-building.jpg"
-               alt="ربى وجميل يركّبان معًا النموذج الأولي لآلة الحمص، مع حاويتين شفافيتين فوق وعاء‎.">
+               alt="ربى وجميل يركّبان معًا النموذج الأولي لآلة الحمص، مع حاويتين شفافيتين فوق وعاء‎." loading="lazy">
           <div class="cmc-bubble cmc-bubble--3">
             <svg class="cmc-bubble-shape" viewBox="0 0 246.08 106" aria-hidden="true"><path d="M11.029 8.415 H159.644 L175.5 1.5 L191.356 8.415 H235.051 A9.529 3.787 0 0 1 244.58 12.202 V100.713 A9.529 3.787 0 0 1 235.051 104.5 H11.029 A9.529 3.787 0 0 1 1.5 100.713 V12.202 A9.529 3.787 0 0 1 11.029 8.415 Z" fill="#fff" style="stroke: var(--subject-500)" stroke-width="3" stroke-linejoin="round"/></svg>
             <span class="cmc-bubble-text">لكننا لا نعرف مسبقًا كم مرة سنحتاج إلى تكبير كل كمية، فماذا نفعل؟</span>
@@ -691,7 +700,7 @@
              אביה, who is on the left of this frame. -->
         <div class="cmc-unit" id="cmc-4" data-cmc-stage="4">
           <img class="cmc-img" src="assets/img/comic-4-insight.jpg"
-               alt="ربى ترفع إصبعها بجانب الآلة وهي تعمل، وجميل يصغي إليها‎.">
+               alt="ربى ترفع إصبعها بجانب الآلة وهي تعمل، وجميل يصغي إليها‎." loading="lazy">
           <div class="cmc-bubble cmc-bubble--4">
             <svg class="cmc-bubble-shape" viewBox="0 0 246.09 79.915" aria-hidden="true"><path d="M11.029 8.415 H36.645 L52.5 1.5 L68.356 8.415 H235.061 A9.529 3.787 0 0 1 244.59 12.202 V74.628 A9.529 3.787 0 0 1 235.061 78.415 H11.029 A9.529 3.787 0 0 1 1.5 74.628 V12.202 A9.529 3.787 0 0 1 11.029 8.415 Z" fill="#fff" style="stroke: var(--subject-500)" stroke-width="3" stroke-linejoin="round"/></svg>
             <span class="cmc-bubble-text">نرمز بـ x إلى عدد المرات التي يجب تكبير الكميات فيها‎.</span>
@@ -706,7 +715,7 @@
              bidi resolution matches PowerPoint's. -->
         <div class="cmc-unit" id="cmc-5" data-cmc-stage="5">
           <img class="cmc-img cmc-img--flip" src="assets/img/comic-5-sketch.jpg"
-               alt="ربى تشرح بحماس وجميل يصغي إليها من الجهة الأخرى لطاولة العمل‎.">
+               alt="ربى تشرح بحماس وجميل يصغي إليها من الجهة الأخرى لطاولة العمل‎." loading="lazy">
           <div class="cmc-bubble cmc-bubble--5">
             <svg class="cmc-bubble-shape" viewBox="0 0 279.745 307" aria-hidden="true"><path d="M11.029 1.5 H255.971 A9.529 3.787 0 0 1 265.5 5.287 V149.246 L278.245 155 L265.5 160.754 V301.713 A9.529 3.787 0 0 1 255.971 305.5 H11.029 A9.529 3.787 0 0 1 1.5 301.713 V5.287 A9.529 3.787 0 0 1 11.029 1.5 Z" fill="#fff" style="stroke: var(--subject-500)" stroke-width="3" stroke-linejoin="round"/></svg>
             <span class="cmc-bubble-text cmc-bubble-text--block">
@@ -726,7 +735,7 @@
              into the picture. -->
         <div class="cmc-unit" id="cmc-6" data-cmc-stage="6">
           <img class="cmc-img" src="assets/img/comic-6-machine-panel.jpg"
-               alt="شاشة آلة الحمص: حاوية حبوب حمص وحاوية خضار مفرومة تُفرغان في وعاء مشترك‎.">
+               alt="شاشة آلة الحمص: حاوية حبوب حمص وحاوية خضار مفرومة تُفرغان في وعاء مشترك‎." loading="lazy">
           <span class="cmc-machine-ratio" dir="ltr">2x : 3x</span>
         </div>
 
@@ -980,7 +989,7 @@
                     onclick="frcFlip(this)">
               <div class="frc-card-inner">
                 <div class="frc-card-front">
-                  <img src="assets/img/flip-card-3-triangle-trapezoid.jpg" alt="المثلث‎ ABC = 50 ‎سم مربع. 1:4">
+                  <img src="assets/img/flip-card-3-triangle-trapezoid.jpg" alt="المثلث‎ ABC = 50 ‎سم مربع. 1:4" loading="lazy">
                   <!-- Client correction (2026-09-29): the artwork's baked badge
                        reads "ABC = 50 סמ"ר"; the client wants "משולש ABC". A
                        live-text patch covers the baked badge (css/style.css →
@@ -1011,7 +1020,7 @@
                     onclick="frcFlip(this)">
               <div class="frc-card-inner">
                 <div class="frc-card-front">
-                  <img src="assets/img/flip-card-2-turquoise.jpg" alt="3:2">
+                  <img src="assets/img/flip-card-2-turquoise.jpg" alt="3:2" loading="lazy">
                 </div>
                 <div class="frc-card-back" aria-hidden="true">
                   <div class="frc-card-back-content">
@@ -1036,16 +1045,16 @@
                     onclick="frcFlip(this)">
               <div class="frc-card-inner">
                 <div class="frc-card-front">
-                  <img src="assets/img/flip-card-1-bora-bora.jpg" alt="3:5">
+                  <img src="assets/img/flip-card-1-bora-bora.jpg" alt="3:5" loading="lazy">
                 </div>
                 <div class="frc-card-back" aria-hidden="true">
                   <div class="frc-card-back-content">
                     <p class="is-bold">النسبة الثابتة‎:</p>
-                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt=""></span><span class="frc-txt">مانجو: 3 ملاعق</span></p>
-                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt=""></span><span class="frc-txt">توت: 5 ملاعق</span></p>
+                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">مانجو: 3 ملاعق</span></p>
+                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">توت: 5 ملاعق</span></p>
                     <p class="is-bold frc-group">عندما نريد تكبير الكميات بـ <span class="frc-nobreak">x مرات:</span></p>
-                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt=""></span><span class="frc-txt">مانغو: 3x ملاعق</span></p>
-                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt=""></span><span class="frc-txt">توت: 5x ملاعق</span></p>
+                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">مانغو: 3x ملاعق</span></p>
+                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">توت: 5x ملاعق</span></p>
                     <p class="is-bold frc-group">ولذلك ستكون الكميات بنسبة <bdi dir="ltr" class="frc-expr">3x : 5x</bdi></p>
                   </div>
                 </div>
@@ -1195,7 +1204,7 @@
 كوب صغير
 ملعقتان موز مهروس
 4 ملاعق شوكولاتة
-المجموع 6 ملاعق">
+المجموع 6 ملاعق" loading="lazy">
           </div>
         </div>
 
@@ -1590,7 +1599,7 @@
           <svg class="s1-bubble-shape" viewBox="0 0 216 89" preserveAspectRatio="none" aria-hidden="true"><use href="#bubble-tail-down"/></svg>
           <span class="s1-bubble-text">لم أربح مرة أخرى!<br>حسنًا، أنا أصلًا لا أحب هذه اللعبة‎.</span>
         </div>
-        <img class="s1-char-img" id="s10-char-img" alt="">
+        <img class="s1-char-img" id="s10-char-img" alt="" loading="lazy">
       </div>
 
       <!-- Continue is GATED on the authored condition — the exercise
@@ -2716,28 +2725,28 @@
       <div class="hsq-img-wrap" data-reveal="2" data-reveal-fade>
         <button class="hsq-hotspot" type="button" data-id="c1" aria-label="x : 6" onclick="s21hsSelect('c1')">
           <span class="hsq-slot">
-            <img src="assets/img/פופקורן-1.png" alt="">
+            <img src="assets/img/פופקורן-1.png" alt="" loading="lazy">
             <span class="hsq-label"><bdi dir="ltr">x : 6</bdi></span>
           </span>
           <span class="hsq-badge" aria-hidden="true"></span>
         </button>
         <button class="hsq-hotspot" type="button" data-id="c2" aria-label="1 : 6x" onclick="s21hsSelect('c2')">
           <span class="hsq-slot">
-            <img src="assets/img/פופקורן-1.png" alt="">
+            <img src="assets/img/פופקורן-1.png" alt="" loading="lazy">
             <span class="hsq-label"><bdi dir="ltr">1 : 6x</bdi></span>
           </span>
           <span class="hsq-badge" aria-hidden="true"></span>
         </button>
         <button class="hsq-hotspot" type="button" data-id="c3" aria-label="x : 6x" onclick="s21hsSelect('c3')">
           <span class="hsq-slot">
-            <img src="assets/img/פופקורן-1.png" alt="">
+            <img src="assets/img/פופקורן-1.png" alt="" loading="lazy">
             <span class="hsq-label"><bdi dir="ltr">x : 6x</bdi></span>
           </span>
           <span class="hsq-badge" aria-hidden="true"></span>
         </button>
         <button class="hsq-hotspot" type="button" data-id="c4" aria-label="6 : x" onclick="s21hsSelect('c4')">
           <span class="hsq-slot">
-            <img src="assets/img/פופקורן-1.png" alt="">
+            <img src="assets/img/פופקורן-1.png" alt="" loading="lazy">
             <span class="hsq-label"><bdi dir="ltr">6 : x</bdi></span>
           </span>
           <span class="hsq-badge" aria-hidden="true"></span>
@@ -3113,7 +3122,7 @@
              frame so the annotations and the control never share a stacking
              context. -->
         <div class="s23-img-frame">
-          <img src="assets/img/הכנת פופקורן.jpg" alt="إبريق زجاجي يحتوي على زيت، وآلة بوبكورن فيها بوبكورن جاهز، ووعاء زجاجي مليء بحبوب الذرة، تقف جميعها جنبًا إلى جنب">
+          <img src="assets/img/הכנת פופקורן.jpg" alt="إبريق زجاجي يحتوي على زيت، وآلة بوبكورن فيها بوبكورن جاهز، ووعاء زجاجي مليء بحبوب الذرة، تقف جميعها جنبًا إلى جنب" loading="lazy">
           <span class="s23-label s23-label--oil">أكواب زيت</span>
           <span class="s23-label s23-label--corn">48 ‎كوبًا من الحبوب</span>
         </div>
@@ -3181,18 +3190,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=6"></script>
-  <script src="../unit-js/08-partnav.js?v=6"></script>
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=6"></script>
-  <script src="../unit-js/15-engine.js?v=6"></script>
-  <script src="../unit-js/20-xapi.js?v=6"></script>
-  <script src="../unit-js/22-scoring.js?v=6"></script>
-  <script src="../unit-js/25-report.js?v=6"></script>
-  <script src="../unit-js/40-resume.js?v=6"></script>
-  <script src="../unit-js/45-painters.js?v=6"></script>
-  <script src="../unit-js/50-loader.js?v=6"></script>
-  <script src="js/main.js?v=6"></script>
-  <script src="../unit-js/90-boot.js?v=6"></script>
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
 </body>
 </html>
