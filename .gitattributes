@@ -17,5 +17,5 @@
 
 # Production delivery bundles (git archive / export) leave out development-only assets.
 # The files stay in the repository; only the exported bundle omits them.
-methodica-math-ratio-03-*/tests/ export-ignore
-methodica-math-ratio-03-*/docs/ export-ignore
+methodica-ar-math-ratio-03-*/tests/ export-ignore
+methodica-ar-math-ratio-03-*/docs/ export-ignore

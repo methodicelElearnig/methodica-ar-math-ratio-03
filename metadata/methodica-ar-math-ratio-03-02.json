@@ -1,0 +1,293 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/",
+  "title": "وقت التدريب",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": false,
+  "recommendedAfterFail": [],
+  "isRequired": true,
+  "relativeDifficulty": 3,
+  "masteryLevel": null,
+  "order": 2,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "process-thinking"
+  ],
+  "languages": [
+    "Arabic"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 16,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-11-15T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/",
+      "title": "مستطيل طوله 2a وعرضه 3a",
+      "informationToBot": "מטרת הפריט: תרגול צמצום יחס עם ביטויים אלגבריים וחישוב שטח בעזרת משתנה. מה התלמיד אמור להבין/לתרגל: היחס 2a : 3a מצטמצם ב-a (שאינו 0) ל-2 : 3; שטח המלבן הוא 2a · 3a = 6a²; הכפלת האורך פי 2 נותנת 4a : 3a ולאחר צמצום 4 : 3. כיווני חשיבה ואסטרטגיות: לרשום את היחס ולצמצם בגורם המשותף; להכפיל מקדמים וחזקות בנפרד; בסעיף ג' לבדוק אילו מימדים השתנו. טעויות נפוצות: בחירה ב-3a² או ב-36a בחישוב שטח (בלבול בין a · a לבין 2a); הכפלה של שני המימדים בסעיף ג'. מידע נוסף: שלושה סעיפים; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q1",
+          "questionType": "fill-in",
+          "questionText": "معطى مستطيل طوله 2a سم وعرضه 3a سم. أ. ما هي النسبة المختزلة بين طول المستطيل وعرضه؟ __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "2 : 3",
+            "2:3"
+          ],
+          "correctXapiResponsesPattern": [
+            "2 : 3",
+            "2:3"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q2",
+          "questionType": "choice",
+          "questionText": "معطى مستطيل طوله 2a سم وعرضه 3a سم. ب. أي إمكانية تعبّر عن مساحة المستطيل بدلالة a؟",
+          "answers": [
+            "6a²",
+            "3a²",
+            "a²",
+            "36a"
+          ],
+          "correctAnswers": [
+            "6a²"
+          ],
+          "correctXapiResponsesPattern": [
+            "6a²"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "6a²",
+                "description": "6a²"
+              },
+              {
+                "id": "3a²",
+                "description": "3a²"
+              },
+              {
+                "id": "a²",
+                "description": "a²"
+              },
+              {
+                "id": "36a",
+                "description": "36a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q3",
+          "questionType": "fill-in",
+          "questionText": "معطى مستطيل طوله 2a سم وعرضه 3a سم. ت. ضاعفنا طول المستطيل بمرتين، وحصلنا على مستطيل جديد. ما هي النسبة المختزلة الجديدة بين طول المستطيل وعرضه؟ __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "4 : 3",
+            "4:3"
+          ],
+          "correctXapiResponsesPattern": [
+            "4 : 3",
+            "4:3"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/",
+      "title": "مسار رحلة طوله 21 كم",
+      "informationToBot": "מטרת הפריט: תרגול הרחבת יחס נתון ופתרון משוואה לפי אורך כולל, והבנת השפעת שינוי הכמות הכוללת על גורם ההרחבה. מה התלמיד אמור להבין/לתרגל: ביחס 5 : 2 המרחקים הם 5x ו-2x, ומהמשוואה 5x + 2x = 21 מקבלים x = 3, כלומר 15 ק\"מ במישור ו-6 ק\"מ בעלייה; במסלול של 42 ק\"מ היחס נשמר אבל x גדל פי 2 (x = 6). כיווני חשיבה ואסטרטגיות: להגדיר את שני המרחקים באמצעות x, לבנות משוואת סכום ולפתור; בסעיף ב' לחשב מחדש את x. טעויות נפוצות: סברה ש-x נשאר קבוע כי היחס נשמר; חלוקה שגויה של 21 ק\"מ. מידע נוסף: שני סעיפים עם תמונת תמרור (הגדלה בלחיצה); לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/q1",
+          "questionType": "performance",
+          "questionText": "أ. تخطط مجموعة من المتنزهين لمسار رحلة طوله 21 كم، جزء منه على أرض مستوية وجزء في صعود. النسبة بين طول الطريق في المنطقة المستوية وطول الطريق في الصعود هي 5:2. أكملوا: المسافة التي سيمشونها في المنطقة المستوية هي __ كم. المسافة التي سيمشونها في الصعود هي __ كم.",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "في المنطقة المستوية",
+              "response": "15"
+            },
+            {
+              "stepId": "في الصعود",
+              "response": "6"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "في المنطقة المستوية[.]15[,]في الصعود[.]6"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "في المنطقة المستوية",
+                "description": null
+              },
+              {
+                "id": "في الصعود",
+                "description": null
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/q2",
+          "questionType": "choice",
+          "questionText": "ب. مجموعة المتنزهين مستعدة للتحدي التالي! في المسار السابق، الذي طوله 21 كم، وجدنا أن عامل التوسيع هو X = 3. هذه المرة تنطلق المجموعة في مسار طوله 42 كم، وسيستمر عدة أيام. النسبة بين المنطقة المستوية والصعود تبقى 5:2. ماذا حدث لعامل التوسيع x؟",
+          "answers": [
+            "بقيَ x دون تغيير، لأن النسبة 5 : 2 حُفِظت",
+            "لا يمكن معرفة ما حدث لـ x بدون معطيات إضافية",
+            "x صغرَ بمرتين، لأن التقسيم يتم على مسار أطول",
+            "x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين"
+          ],
+          "correctAnswers": [
+            "x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين"
+          ],
+          "correctXapiResponsesPattern": [
+            "x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "بقيَ x دون تغيير، لأن النسبة 5 : 2 حُفِظت",
+                "description": "بقيَ x دون تغيير، لأن النسبة 5 : 2 حُفِظت"
+              },
+              {
+                "id": "لا يمكن معرفة ما حدث لـ x بدون معطيات إضافية",
+                "description": "لا يمكن معرفة ما حدث لـ x بدون معطيات إضافية"
+              },
+              {
+                "id": "x صغرَ بمرتين، لأن التقسيم يتم على مسار أطول",
+                "description": "x صغرَ بمرتين، لأن التقسيم يتم على مسار أطول"
+              },
+              {
+                "id": "x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين",
+                "description": "x كبرَ بمرتين، لأن طول المسار الإجمالي كبرَ بمرتين"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/",
+      "title": "رسم بياني لمحيط المربع بحسب طول الضلع",
+      "informationToBot": "מטרת הפריט: תרגול קריאת גרף והבעת הקשר בין צלע להיקף באמצעות ביטוי אלגברי (P = 4x) ומשוואה. מה התלמיד אמור להבין/לתרגל: היקף ריבוע גדול פי 4 מאורך הצלע; בצלע 1.5 ס\"מ ההיקף 6 ס\"מ; היקף בין 3 ל-7 ס\"מ מתאים לצלע בין 3/4 ל-7/4 ס\"מ; ואם סכום הצלע וההיקף הוא 30 ס\"מ אז x + 4x = 30 ולכן x = 6. כיווני חשיבה ואסטרטגיות: להיעזר בגרף (נקודת אמצע בין x = 1 ל-x = 2), לחלק את ערכי ההיקף ב-4 כדי למצוא צלע, ולבנות משוואה מהנתון. טעויות נפוצות: בלבול בין היקף לצלע; חישוב הגבולות בלי חלוקה ב-4. מידע נוסף: יישומון גרף אינטראקטיבי (עם הגדלה); שלושה סעיפים; הסעיף השני הוא שתי רשימות נפתחות להשלמה מהמספר הקטן לגדול; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q1",
+          "questionType": "numeric",
+          "questionText": "أمامكم رسم بياني يصف العلاقة بين طول ضلع المربع ومحيطه، بالسنتيمترات. استعينوا بالرسم البياني وأكملوا: عندما يكون طول الضلع 1.5 سم، يكون المحيط __ سم.",
+          "answers": [],
+          "correctAnswers": [
+            6
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q2",
+          "questionType": "matching",
+          "questionText": "أمامكم رسم بياني يصف العلاقة بين طول ضلع المربع ومحيطه، بالسنتيمترات. استعينوا بالرسم البياني وأكملوا من العدد الأصغر إلى الأكبر: إذا كان معلومًا أن محيط المربع هو بين 3 و-7 سم، فإن طول ضلع المربع هو بين __ وبين __ سم.",
+          "answers": {
+            "source": [
+              "بين",
+              "وبين"
+            ],
+            "target": [
+              "1/4",
+              "2/4",
+              "3/4",
+              "4/4",
+              "5/4",
+              "6/4",
+              "7/4",
+              "8/4"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "بين",
+              "target": "3/4"
+            },
+            {
+              "source": "وبين",
+              "target": "7/4"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "بين[.]3/4[,]وبين[.]7/4"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "بين",
+                "description": "بين"
+              },
+              {
+                "id": "وبين",
+                "description": "وبين"
+              }
+            ],
+            "target": [
+              {
+                "id": "1/4",
+                "description": "1/4"
+              },
+              {
+                "id": "2/4",
+                "description": "2/4"
+              },
+              {
+                "id": "3/4",
+                "description": "3/4"
+              },
+              {
+                "id": "4/4",
+                "description": "4/4"
+              },
+              {
+                "id": "5/4",
+                "description": "5/4"
+              },
+              {
+                "id": "6/4",
+                "description": "6/4"
+              },
+              {
+                "id": "7/4",
+                "description": "7/4"
+              },
+              {
+                "id": "8/4",
+                "description": "8/4"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q3",
+          "questionType": "numeric",
+          "questionText": "أمامكم رسم بياني يصف العلاقة بين طول ضلع المربع ومحيطه، بالسنتيمترات. استعينوا بالرسم البياني وأكملوا: إذا كان مجموع طول الضلع ومحيط المربع هو 30 سم، فإن طول ضلع المربع هو __ سم.",
+          "answers": [],
+          "correctAnswers": [
+            6
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# part 06 — every question answered right (multi-selects clicked in reverse order), to the part's end; from the live round QA/2026-11-10_moe-runbook-checks phase 3 (he-0306-C). Every right answer's response must equal Kata's pattern
+window.__set = function(id, v){ var e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }; window.__rd = function(p){ var s = document.getElementById(p + '-popup-scroll'); if (s) s.scrollTop = s.scrollHeight; var f = window[p + 'CheckScrollGate']; if (typeof f === 'function') f(); };
+goTo(3); s3mcToggle('shachar'); s3mcToggle('ziv'); s3mcCheck(); __rd('s3mc')
+goTo(4); s4scSelect('ziv'); s4scCheck(); __rd('s4sc')
+goTo(5); __set('s5viq-input-alpha','108'); __set('s5viq-input-beta','72'); s5viqCheck(); __rd('s5viq')
+goTo(7); s7scSelect('no'); s7scCheck(); __rd('s7sc')
+goTo(6)
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.getElementById('s6-check').disabled === true)) throw new Error("document.getElementById('s6-check').disabled === true")
+var v = document.querySelector('#s6-video'); v.muted = true; try { await v.play(); } catch (e) {} await new Promise(r => setTimeout(r, 1500)); if (isFinite(v.duration) && v.duration > 1) v.currentTime = v.duration - 0.4;
+await new Promise(r => setTimeout(r, 4000))
+if (!s6Done) s6Ended()
+if (!(s6Done && document.getElementById('s6-check').disabled === false)) throw new Error("s6Done && document.getElementById('s6-check').disabled === false")
+goTo(8)
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.getElementById('s8-check').disabled === true)) throw new Error("document.getElementById('s8-check').disabled === true")
+var v = document.querySelector('#s8-video'); v.muted = true; try { await v.play(); } catch (e) {} await new Promise(r => setTimeout(r, 1500)); if (isFinite(v.duration) && v.duration > 1) v.currentTime = v.duration - 0.4;
+await new Promise(r => setTimeout(r, 4000))
+if (!s8Done) s8Ended()
+if (!(s8Done && document.getElementById('s8-check').disabled === false)) throw new Error("s8Done && document.getElementById('s8-check').disabled === false")
+goTo(9)
+await new Promise(r => setTimeout(r, 800))
+if (!(!document.querySelector("#s9-check").disabled)) throw new Error('!document.querySelector("#s9-check").disabled')
+document.querySelector("#s9-check").click()
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.querySelector("#s9-check").disabled === true)) throw new Error('document.querySelector("#s9-check").disabled === true')
+document.querySelector("#s9-check").click()
+await new Promise(r => setTimeout(r, 1000))

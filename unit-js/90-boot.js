@@ -1,5 +1,5 @@
 'use strict';
-/* ═══════════════════ Boot — methodica-math-ratio-03 (all parts) ═══════════════════
+/* ═══════════════════ Boot — methodica-ar-math-ratio-03 (all parts) ═══════════════════
    Loaded LAST, after the part's js/main.js, so every shared and per-part declaration exists
    (guide §3.2: definitions live in the earlier files; this is the one that runs them).
 

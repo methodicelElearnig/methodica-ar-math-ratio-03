@@ -1,5 +1,22 @@
 # methodica-math-ratio-03 — reporting & resume: the unit record
 
+> **This repo is the Arabic twin, `methodica-ar-math-ratio-03` (2026-11-15).** The code is the Hebrew
+> unit's at `8ddfc35` (14.11.26: 03 scoring 2187cb6, response format ff88372, resume hardening + leave
+> save d9296c2, all "same change as the Hebrew twin"), with Arabic text. What differs from Hebrew:
+> - Identity: `XAPI_ID_PREFIX = …/720/ar/math/ratio/03/`, `XAPI_UNIT_ID = 'methodica-ar-math-ratio-03'`,
+>   folders `methodica-ar-math-ratio-03-0N`, browser keys `methodica_ar_math_ratio_03_*`.
+> - Metadata in Arabic; every string the page sends (choice options, matching sources / targets, step
+>   names) is the Arabic screen's own, and `_test/statement-flow.mjs` checks each right answer against
+>   its pattern.
+> - Shared files differ from Hebrew only in: `15-engine.js` (Arabic retry titles), `90-boot.js` (hint
+>   pill follows the primary button), `10-base.css` (Arabic font stack), `25-report.js/.css` (Arabic
+>   dialog; the Google Form values stay Hebrew on purpose).
+> - Part 03 S5: as Hebrew again (owner, 15.11.26) — below 2 of 3 the learner stays on S5 and the component
+>   ends there. The Arabic QA change of 10.11.26 (cceb5dd: Continue always to S6) is reverted.
+> - Kata: components go into the Hebrew unit (parent-unit mode), see SEND-METADATA.md.
+>
+> Everything below is the Hebrew unit's record.
+
 Branch `vadimr/feat/reporting-resume`. This file records what was built, what was decided, and
 what is still open. The general method is in
 `Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md` (below: "the guide").
@@ -48,7 +65,7 @@ docs-and-tools/ packaging (allowlist/build/verify), Kata send/retrieve, this rec
 
 | part | screens | items |
 |---|---|---|
-| 01 (24) | s0–3 → 001 · s4–8 → 002 · s9–19 → 003 · s20–23 → 004 | 001 ungraded (widget); 002/q1 s8; 003/q1–q3 the guided picks s11/s15/s17; 004/q1–q3 s21–s23 |
+| 01 (24) | s0–3 → 001 · s4–8 → 002 · s9–19 → 003 · s20–23 → 004 | 001 ungraded (widget); 002/q1 s8; 003 is the guided item (picks on s11/s15/s17): no question, no answer, no score since 11.11.26 (Kata declares none; unit owner 10.11.26); 004/q1–q3 s21–s23 |
 | 02 (9) | s0 null · s1–3 → 001 · s4–5 → 002 · s6–8 → 003 | one screen per question |
 | 03 (11) | s0 null · s1–2 → 001 · s3 → 002 · s4–5 → 003 · s6–7 → 004 · s8–10 → 005 | s6 (transition) opens 004, so a Back from s7 does not close it (O-1) |
 | 04 (12) | s0 null · s1 → 001 · s2 → 002 · s3–5 → 003 · s6 → 004 · s7–11 → 005 | 005/q1 is the one-shot riddle on s8 |
@@ -57,11 +74,15 @@ docs-and-tools/ packaging (allowlist/build/verify), Kata send/retrieve, this rec
 
 Every declared question has exactly one `reportQ` site, and the static check enforces it (D-9).
 
-**Answer texts:**
+**Answer texts (`result.response`, since 11.11.26):** MOE compares a right answer's response with Kata's
+`correctXapiResponsesPattern` character by character (runbook §3). Every site passes a spec, and `xapiResponse`
+(`unit-js/20-xapi.js`) builds the string from the metadata by `questionType`. `student_answer` keeps a readable copy.
 
-- **Choice questions** report the metadata's own `answers[]` string for each picked option, matched by position (`xapiChoiceAnswer`). The visible text would garble superscripts and stacked fractions.
-- **Value inputs** report what was typed. The value is read before any final-wrong reveal rewrites the field.
-- **Drag boards** report "target: card(s)".
+- **Choice questions** report the metadata's own `answers[]` string for each picked option, matched by position (`xapiChoiceAnswer`). The visible text would garble superscripts and stacked fractions. A multi-select is joined with `[,]` in `answers` order, whatever the click order.
+- **Value inputs** report what was typed (`fill-in` / `numeric`). The value is read before any final-wrong reveal rewrites the field.
+- **Dropdowns and drag boards** are matching questions: `source[.]target[,]…`, right pairs in `correctAnswers` order (02-003/q2, 03-003/q2, 03-005/q1–q2, 04-002).
+- **Two-field inputs** (02-002/q1, 03-004/q1, 03-005/q3, 05-001/q4, 06-001/q3) are `other` in Kata, with no pattern. The repo metadata proposes them as `performance` (`Tools/moe-qa/propose-performance.py`), e.g. `במישור[.]15[,]בעלייה[.]6`, and the page sends that form. They reach Kata only through the owner's send, item by item.
+- The metadata carries Kata's `correctXapiResponsesPattern` / `xapiInteractionComponents` (`Tools/moe-qa/add-kata-patterns.py`), and `_test/statement-flow.mjs` fails on a right answer that is not one of them.
 
 ## 4. Decisions (2026-10-01)
 
@@ -166,6 +187,20 @@ Every declared question has exactly one `reportQ` site, and the static check enf
   screen: no gate, the learner always continues, nothing is shown.
 - `?v=3` → `?v=4` on all 102 references.
 - Test: `_test/scenarios/challenge-60.json` (0, 2, 4 of 7 fail; 5, 7 of 7 pass, each with the real score).
+
+## 6d. 03 reports what S0 promises (MOE sheet 08.11.26, fixes 1, 2, 4, 6, branch `vadimr/fix/score-success-2026-11`)
+
+- **03 — `partGateResult`.** S0 promises "3 שאלות … ענו נכון על 2 שאלות ומעלה כדי להתקדם". `success` and
+  `score.scaled` now come from one count: checkpoint 1's three questions (`mastery1State().correctCount`, each
+  correct only when all its sub-parts are, the count the S5 gate reads). `success = correct >= 2`,
+  `scaled = correct / 3`. Until now `success` also needed both harder questions (S7–S10) right, although S6
+  promises no threshold (fix 4), and the score was the share of all 9 catalogued sub-questions, the harder
+  ones included (fixes 1, 6). So 3/3 + harder wrong gave `success:false, 0.44` (fix 2). The harder questions keep
+  their own `answered`. The S5 gate and the S10 end are unchanged. 04 keeps the MOE 08.10 60% rule (6c).
+- `?v=4` → `?v=5` on all 102 references.
+- Test: `_test/scenarios/score-contract.json` (every count 0–3 with the harder questions all wrong / all right,
+  success ⇔ scaled ≥ 2/3 = the gate's verdict, a question with one sub-part wrong counts 0, the gate at 1/3 and
+  2/3). 4 of its 6 expectations FAIL on the pre-fix code (mutation check).
 
 ## 7. Open items
 

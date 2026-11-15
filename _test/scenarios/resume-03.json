@@ -70,28 +70,28 @@
   "name": "s5-selected",
   "screen": 5,
   "away": 4,
-  "setup": "goTo(5); s5dqSelect('קטן מ')"
+  "setup": "goTo(5); s5dqSelect('أصغر من')"
  },
  {
   "part": "03",
   "name": "s5-wrong1",
   "screen": 5,
   "away": 4,
-  "setup": "goTo(5); s5dqSelect('קטן מ'); s5dqCheck()"
+  "setup": "goTo(5); s5dqSelect('أصغر من'); s5dqCheck()"
  },
  {
   "part": "03",
   "name": "s5-correct",
   "screen": 5,
   "away": 4,
-  "setup": "goTo(5); s5dqSelect('גדול מ'); s5dqCheck()"
+  "setup": "goTo(5); s5dqSelect('أكبر من'); s5dqCheck()"
  },
  {
   "part": "03",
   "name": "s5-wrong2",
   "screen": 5,
   "away": 4,
-  "setup": "goTo(5); s5dqSelect('קטן מ'); s5dqCheck(); s5dqSelect('שווה ל'); s5dqCheck()"
+  "setup": "goTo(5); s5dqSelect('أصغر من'); s5dqCheck(); s5dqSelect('يساوي'); s5dqCheck()"
  },
  {
   "part": "03",
@@ -155,7 +155,7 @@
   "name": "cp1-fail-ended-s5",
   "screen": 5,
   "away": 4,
-  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); set('s1viq-input-second','3'); s1viqCheck(); goTo(2); set('s2viq-input','36'); s2viqCheck(); goTo(3); set('s3viq-input-first','1'); set('s3viq-input-second','1'); s3viqCheck(); set('s3viq-input-first','2'); s3viqCheck(); goTo(4); s4mcToggle('o1'); s4mcToggle('o3'); s4mcCheck(); goTo(5); s5dqSelect('קטן מ'); s5dqCheck(); s5dqSelect('שווה ל'); s5dqCheck(); s5dqCheck()",
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; goTo(1); set('s1viq-input-first','2'); set('s1viq-input-second','1'); s1viqCheck(); set('s1viq-input-second','3'); s1viqCheck(); goTo(2); set('s2viq-input','36'); s2viqCheck(); goTo(3); set('s3viq-input-first','1'); set('s3viq-input-second','1'); s3viqCheck(); set('s3viq-input-first','2'); s3viqCheck(); goTo(4); s4mcToggle('o1'); s4mcToggle('o3'); s4mcCheck(); goTo(5); s5dqSelect('أصغر من'); s5dqCheck(); s5dqSelect('يساوي'); s5dqCheck(); s5dqCheck()",
   "after": "[document.getElementById('s5dq-check').disabled, currentScreen]"
  },
  {

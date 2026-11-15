@@ -225,16 +225,16 @@
         .forEach(function (k) { sessionStorage.removeItem(k); });
       sessionStorage.removeItem(LOG_KEY);
       sessionStorage.removeItem(FAIL_KEY);
-      sessionStorage.removeItem('methodica_math_ratio_03_navTrail');
-      sessionStorage.removeItem('methodica_math_ratio_03_navReturn');
+      sessionStorage.removeItem('methodica_ar_math_ratio_03_navTrail');
+      sessionStorage.removeItem('methodica_ar_math_ratio_03_navReturn');
     } catch (e) {}
     /* v4: הדמות ותוצאות המועד עברו למסמך ה-state, ו-localStorage הוא קאש
        בלבד. מנקים גם אותו — אחרת __reset() משאיר את הדמות ואת שערי המועד
        מהריצה הקודמת בחיים בחלון שלפני קריאת המסמך, וזה בדיוק סוג המצב
        שהעוזר הזה קיים כדי לחסל. אותו ניקוי כמו ב-initResumeResetHatch. */
     try {
-      localStorage.removeItem('methodica_math_ratio_03_selectedCharacter');
-      ['01', '02', '03', '04', '05', '06'].forEach(function (n) { localStorage.removeItem('methodica_math_ratio_03_' + n + '_result'); });
+      localStorage.removeItem('methodica_ar_math_ratio_03_selectedCharacter');
+      ['01', '02', '03', '04', '05', '06'].forEach(function (n) { localStorage.removeItem('methodica_ar_math_ratio_03_' + n + '_result'); });
     } catch (e) {}
     return 'cleared';
   };

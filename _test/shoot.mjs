@@ -59,7 +59,7 @@ const FREEZE = `(async()=>{
 
 const report = {};
 for (const part of PARTS) {
-  const url = `http://127.0.0.1:${HP}/sub/methodica-math-ratio-03-${part}/index.html`;
+  const url = `http://127.0.0.1:${HP}/sub/methodica-ar-math-ratio-03-${part}/index.html`;
   evs = []; const nf0 = notFound.length;
   await send('Page.navigate', { url }); await sleep(2500);
   const total = await ev(`document.querySelectorAll('.screen').length`);

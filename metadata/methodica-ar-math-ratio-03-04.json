@@ -1,0 +1,262 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/",
+  "title": "لنتحدَّ أنفسنا",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": false,
+  "recommendedAfterFail": [],
+  "isRequired": false,
+  "relativeDifficulty": 5,
+  "masteryLevel": null,
+  "order": 4,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "interpretation-and-reasoning"
+  ],
+  "languages": [
+    "Arabic"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 14,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-11-15T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-001/",
+      "title": "نسبة مساحات مثلثات لها ارتفاع مشترك",
+      "informationToBot": "מטרת הפריט: הבנה שיחס בין בסיסים של משולשים בעלי גובה משותף שווה ליחס בין שטחיהם. מה התלמיד אמור להבין/לתרגל: אם BD = x ו-CD = 3x ולשני המשולשים אותו גובה AE, אז שטח ADB הוא 2.5x ושטח ACD הוא 7.5x, ולכן יחס השטחים הוא 1 : 3. כיווני חשיבה ואסטרטגיות: לזהות את הגובה המשותף, לסמן את הבסיסים באמצעות x ו-3x ולחשב את שני השטחים. טעויות נפוצות: סברה שאי אפשר לדעת בלי מידע נוסף; התעלמות מכך שהגובה של המשולש הקהה נופל על המשך הצלע. מידע נוסף: סעיף יחיד עם תרשים; שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-001/q1",
+          "questionType": "choice",
+          "questionText": "النقطة D تقع على الضلع BC في المثلث ABC. معطى: النسبة بين طول القطعة BD وطول القطعة CD هي 1:3. ارتفاع المثلث AE هو 5 سم. نرمز: BD = x. هل النسبة بين مساحة المثلث ADB ومساحة المثلث ACD هي أيضًا 1:3؟",
+          "answers": [
+            "نعم",
+            "لا",
+            "لا يمكن المعرفة"
+          ],
+          "correctAnswers": [
+            "نعم"
+          ],
+          "correctXapiResponsesPattern": [
+            "نعم"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "نعم",
+                "description": "نعم"
+              },
+              {
+                "id": "لا",
+                "description": "لا"
+              },
+              {
+                "id": "لا يمكن المعرفة",
+                "description": "لا يمكن المعرفة"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-002/",
+      "title": "نسبة المساحات في مثلث منفرج الزاوية",
+      "informationToBot": "מטרת הפריט: הכללת הרעיון של גובה משותף — כאשר הבסיסים שווים גם השטחים שווים. מה התלמיד אמור להבין/לתרגל: אם BD = DC = x ול-AE גובה משותף למשולשים ADB ו-ADC, אז שני השטחים שווים ויחסם 1 : 1. כיווני חשיבה ואסטרטגיות: לבטא כל שטח כ-(x · h)/2 ולהשוות. טעויות נפוצות: בחירה ב\"גדול מ-1\" או ב\"חיובי וקטן מ-1\" עקב אי זיהוי שהבסיסים שווים; בלבול לגבי מיקום הגובה במשולש קהה זווית. מידע נוסף: רשימה נפתחת אחת להשלמת משפט; שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-002/q1",
+          "questionType": "matching",
+          "questionText": "في الرسم معطى المثلث ABC. AE هو ارتفاع على الضلع BC. AD يخرج من الرأس A للمثلث ويلتقي بالضلع BC. النسبة بين القطعة BD والقطعة DC هي 1:1. أكملوا الجملة بحيث تكون صحيحة: النسبة بين مساحة المثلث ADC ومساحة المثلث ADB __. (اختاروا إجابة من القائمة)",
+          "answers": {
+            "source": [
+              "النسبة بين مساحة المثلث ADC ومساحة المثلث ADB"
+            ],
+            "target": [
+              "أكبر من 1",
+              "هي 1:1",
+              "موجبة وأصغر من 1"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "النسبة بين مساحة المثلث ADC ومساحة المثلث ADB",
+              "target": "هي 1:1"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "النسبة بين مساحة المثلث ADC ومساحة المثلث ADB[.]هي 1:1"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "النسبة بين مساحة المثلث ADC ومساحة المثلث ADB",
+                "description": "النسبة بين مساحة المثلث ADC ومساحة المثلث ADB"
+              }
+            ],
+            "target": [
+              {
+                "id": "أكبر من 1",
+                "description": "أكبر من 1"
+              },
+              {
+                "id": "هي 1:1",
+                "description": "هي 1:1"
+              },
+              {
+                "id": "موجبة وأصغر من 1",
+                "description": "موجبة وأصغر من 1"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-003/",
+      "title": "الدعوة والصورة المربعة",
+      "informationToBot": "מטרת הפריט: חקירה באמצעות יישומון של הקשר בין יחס צלעות ליחס היקפים ויחס שטחים, ושימוש ביחס לפתרון משוואה. מה התלמיד אמור להבין/לתרגל: אם יחס הצלעות הוא 2 : 1 אז יחס השטחים 4 : 1 (x² : 4x²), יחס ההיקפים 2 : 1 (8x : 4x), ואם סכום ההיקפים 48 ס\"מ אז 2x + x = 48, היקף הריבוע הקטן 16 ס\"מ, צלעו 4 ס\"מ ושטחו 16 סמ\"ר. כיווני חשיבה ואסטרטגיות: לסמן ב-x את צלע הריבוע הקטן; לחשב היקף ושטח של כל ריבוע ולצמצם; להשתמש ביחס ההיקפים כדי לבנות משוואה. טעויות נפוצות: קביעת יחס שטחים 2 : 1 כמו יחס הצלעות; בלבול בין היקף לשטח בסעיף ג'. מידע נוסף: שלושה סעיפים עם יישומון לשינוי גודל התמונה; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-003/q1",
+          "questionType": "fill-in",
+          "questionText": "تنظّم عبير حفلة مفاجأة لأختها. تريد أن تضع في مركز الدعوة صورة مربعة، بحيث تكون النسبة بين طول ضلع الدعوة وطول ضلع الصورة 2:1. أ. ساعدوا عبير في تصميم الدعوة. غيّروا حجم الصورة في التطبيق وافحصوا كيف يؤثر ذلك على الدعوة. استعينوا بما اكتشفتموه وأكملوا: النسبة المختزلة بين مساحة المربع الكبير ومساحة المربع الصغير هي: __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "4 : 1",
+            "4:1"
+          ],
+          "correctXapiResponsesPattern": [
+            "4 : 1",
+            "4:1"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-003/q2",
+          "questionType": "fill-in",
+          "questionText": "تنظّم عبير حفلة مفاجأة لأختها. تريد أن تضع في مركز الدعوة صورة مربعة، بحيث تكون النسبة بين طول ضلع الدعوة وطول ضلع الصورة 2:1. ب. ساعدوا عبير في تصميم الدعوة. غيّروا حجم الصورة في التطبيق وافحصوا كيف يؤثر ذلك على الدعوة. استعينوا بما اكتشفتموه وأكملوا: النسبة المختزلة بين محيط المربع الكبير ومحيط المربع الصغير هي: __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "2 : 1",
+            "2:1"
+          ],
+          "correctXapiResponsesPattern": [
+            "2 : 1",
+            "2:1"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-003/q3",
+          "questionType": "numeric",
+          "questionText": "تنظّم عبير حفلة مفاجأة لأختها. تريد أن تضع في مركز الدعوة صورة مربعة، بحيث تكون النسبة بين طول ضلع الدعوة وطول ضلع الصورة 2:1. نذكّر بأن النسبة بين محيط المربع الكبير ومحيط المربع الصغير هي أيضًا 2:1. ت. ساعدوا عبير في تصميم الدعوة. غيّروا حجم الصورة في التطبيق وافحصوا كيف يؤثر ذلك على الدعوة. استعينوا بما اكتشفتموه وأكملوا: إذا كان مجموع محيطَيّ المربع الكبير والمربع الصغير هو 48 سم، فإن مساحة المربع الصغير هي __ سم مربع.",
+          "answers": [],
+          "correctAnswers": [
+            16
+          ],
+          "correctXapiResponsesPattern": [
+            "16"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-004/",
+      "title": "أزمنة المشي في الرحلة السنوية",
+      "informationToBot": "מטרת הפריט: בדיקת הבנה של ייצוג יחס כשבר, חלק מן השלם, הרחבה ותוספת קבועה. מה התלמיד אמור להבין/לתרגל: ביחס a : b, השבר a/b הוא היחס בין הזמנים, השבר a/(a+b) הוא חלקו של זמן ההליכה במישור מתוך הכול, הגדלה פי x נותנת ax + bx, והוספת מספר קבוע לכל חלק אינה שומרת על היחס. כיווני חשיבה ואסטרטגיות: להציב ערכים מספריים במקום a ו-b ולבדוק כל טענה בנפרד. טעויות נפוצות: סימון \"הוספת 10 דקות שומרת על היחס\"; בלבול בין a/b לבין a/(a+b). מידע נוסף: בחירה מרובה (הטענות הנכונות: הראשונה, השנייה והרביעית); שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-004/q1",
+          "questionType": "choice",
+          "questionText": "هذا العام يشارك طلاب الصف الثامن في تخطيط الرحلة السنوية! يخططون لمسار بحيث تكون فيه النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي a:b. اختاروا كل الادّعاءات الصحيحة.",
+          "answers": [
+            "a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي.",
+            "a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي.",
+            "إضافة 10 دقائق لكل جزء من المسار ستحافظ على النسبة بين أزمنة المشي.",
+            "تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx."
+          ],
+          "correctAnswers": [
+            "a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي.",
+            "a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي.",
+            "تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx."
+          ],
+          "correctXapiResponsesPattern": [
+            "a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي.[,]a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي.[,]تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx."
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي.",
+                "description": "a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي."
+              },
+              {
+                "id": "a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي.",
+                "description": "a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي."
+              },
+              {
+                "id": "إضافة 10 دقائق لكل جزء من المسار ستحافظ على النسبة بين أزمنة المشي.",
+                "description": "إضافة 10 دقائق لكل جزء من المسار ستحافظ على النسبة بين أزمنة المشي."
+              },
+              {
+                "id": "تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx.",
+                "description": "تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-005/",
+      "title": "النسبة الذهبية في الفن والعمارة",
+      "informationToBot": "מטרת הפריט: העשרה — היכרות עם יחס הזהב כדוגמה ליחס מיוחד המתואר באמצעות משתנים a ו-b. מה התלמיד אמור להבין/לתרגל: חלוקת קטע לשני חלקים כך שהיחס בין הארוך לקצר שווה ליחס בין הקטע כולו לארוך (a/b = (a+b)/a ≈ 1.618); דוגמאות מהחיים — גלקסיה, מונה ליזה ומוזיאון בטוקיו שתכנן לה קורבוזיה — ושיחס הזהב שימש במכוון רק באחרון. כיווני חשיבה ואסטרטגיות: לחפש מה משותף לשלוש התמונות לפני קריאת ההסבר. טעויות נפוצות: הנחה שכל צורה שנראית הרמונית תוכננה לפי יחס הזהב. מידע נוסף: חידת פתיחה עם ניסיון אחד בלי רמז (מסומנת התשובה הנכונה), ואחריה מסכי הסבר ודוגמאות; מסך הפתיחה כולל דמות מלווה. צילום מסך: לא צורף.",
+      "contentType": "motivational",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-04/methodica-ar-math-ratio-03-04-005/q1",
+          "questionType": "choice",
+          "questionText": "لغز: ما المشترك بين هذه الصور؟",
+          "answers": [
+            "في جميعها يوجد تماثُل كامل",
+            "يمكن توضيح نسبة رياضية خاصة بواسطتها",
+            "جميعها صُمّمت بحسب قواعد التصميم نفسها"
+          ],
+          "correctAnswers": [
+            "يمكن توضيح نسبة رياضية خاصة بواسطتها"
+          ],
+          "correctXapiResponsesPattern": [
+            "يمكن توضيح نسبة رياضية خاصة بواسطتها"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "في جميعها يوجد تماثُل كامل",
+                "description": "في جميعها يوجد تماثُل كامل"
+              },
+              {
+                "id": "يمكن توضيح نسبة رياضية خاصة بواسطتها",
+                "description": "يمكن توضيح نسبة رياضية خاصة بواسطتها"
+              },
+              {
+                "id": "جميعها صُمّمت بحسب قواعد التصميم نفسها",
+                "description": "جميعها صُمّمت بحسب قواعد التصميم نفسها"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

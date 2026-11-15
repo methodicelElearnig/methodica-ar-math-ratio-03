@@ -33,21 +33,21 @@
   "part": "04",
   "name": "s2-wrong1",
   "screen": 2,
-  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('גדול מ-1'); s2dqCheck()",
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('أكبر من 1'); s2dqCheck()",
   "away": 1
  },
  {
   "part": "04",
   "name": "s2-correct-read",
   "screen": 2,
-  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('הוא 1:1'); s2dqCheck(); rd('s2dq')",
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect('هي 1:1'); s2dqCheck(); rd('s2dq')",
   "away": 1
  },
  {
   "part": "04",
   "name": "s2-wrong2-answerview",
   "screen": 2,
-  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect(\"גדול מ-1\"); s2dqCheck(); s2dqSelect(\"חיובי וקטן מ-1\"); s2dqCheck(); rd('s2dq'); s2dqToggleView()",
+  "setup": "const set=(id,v)=>{const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}; const rd=(p)=>{const s=document.getElementById(p+'-popup-scroll'); s.scrollTop=s.scrollHeight; window[p+'CheckScrollGate']();}; goTo(2); s2dqSelect(\"أكبر من 1\"); s2dqCheck(); s2dqSelect(\"موجبة وأصغر من 1\"); s2dqCheck(); rd('s2dq'); s2dqToggleView()",
   "away": 1,
   "after": "({view:s2dqView, gateOk:s2dqGateOk, disabled:document.getElementById('s2dq-check').disabled})"
  },

@@ -1,0 +1,21 @@
+# part 05 — every question answered right (multi-selects clicked in reverse order), to the part's end; from the live round QA/2026-11-10_moe-runbook-checks phase 3 (he-0305-C). Every right answer's response must equal Kata's pattern
+window.__set = function(id, v){ var e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }; window.__rd = function(p){ var s = document.getElementById(p + '-popup-scroll'); if (s) s.scrollTop = s.scrollHeight; var f = window[p + 'CheckScrollGate']; if (typeof f === 'function') f(); };
+goTo(2); __set('s2viq-input-spelt','3x'); __set('s2viq-input-wheat','7x'); s2viqCheck()
+goTo(3)
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.getElementById('s3-continue').disabled === true)) throw new Error("document.getElementById('s3-continue').disabled === true")
+var v = document.querySelector('#s3-video'); v.muted = true; try { await v.play(); } catch (e) {} await new Promise(r => setTimeout(r, 1500)); if (isFinite(v.duration) && v.duration > 1) v.currentTime = v.duration - 0.4;
+await new Promise(r => setTimeout(r, 4000))
+if (!s3vidDone) s3VideoOnEnded()
+if (!(s3vidDone && document.getElementById('s3-continue').disabled === false)) throw new Error("s3vidDone && document.getElementById('s3-continue').disabled === false")
+goTo(4); s4scSelect('o2'); s4scCheck(); __rd('s4sc')
+goTo(6); s6mcToggle('o3'); s6mcToggle('o2'); s6mcCheck(); __rd('s6mc')
+goTo(7); __set('s7viq-input-spelt','90'); __set('s7viq-input-wheat','210'); s7viqCheck(); __rd('s7viq')
+goTo(8)
+await new Promise(r => setTimeout(r, 800))
+if (!(!document.querySelector("#s8 .btn-continue").disabled)) throw new Error('!document.querySelector("#s8 .btn-continue").disabled')
+document.querySelector("#s8 .btn-continue").click()
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.querySelector("#s8 .btn-continue").disabled === true)) throw new Error('document.querySelector("#s8 .btn-continue").disabled === true')
+document.querySelector("#s8 .btn-continue").click()
+await new Promise(r => setTimeout(r, 1000))

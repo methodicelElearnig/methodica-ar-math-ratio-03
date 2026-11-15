@@ -1,7 +1,7 @@
 [
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-01/index.html"
+    "nav": "methodica-ar-math-ratio-03-01/index.html"
   },
   {
     "expect": [
@@ -12,14 +12,14 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "01 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "01 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-02/index.html"
+    "nav": "methodica-ar-math-ratio-03-02/index.html"
   },
   {
     "expect": [
@@ -30,14 +30,14 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "02 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "02 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-03/index.html"
+    "nav": "methodica-ar-math-ratio-03-03/index.html"
   },
   {
     "expect": [
@@ -48,14 +48,14 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "03 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "03 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-04/index.html"
+    "nav": "methodica-ar-math-ratio-03-04/index.html"
   },
   {
     "expect": [
@@ -66,14 +66,14 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "04 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "04 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-05/index.html"
+    "nav": "methodica-ar-math-ratio-03-05/index.html"
   },
   {
     "expect": [
@@ -84,14 +84,14 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "05 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "05 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-06/index.html"
+    "nav": "methodica-ar-math-ratio-03-06/index.html"
   },
   {
     "expect": [
@@ -102,9 +102,9 @@
       true,
       false,
       true,
-      "k"
+      "l"
     ],
-    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-k]') ? 'k' : 'none']",
-    "label": "06 package boot: lib k, ids match, cover gone, dialog hidden, no dev nav"
+    "eval": "[typeof sendStatement720, !!window.XAPI_USING_G, !!(window.METADATA && METADATA.id === XAPI_COMP_ID), !document.getElementById('boot-cover'), document.getElementById('report-modal').hidden, DEV_NAV, RESUME_ENABLED, document.querySelector('script[src*=xapi-720-l]') ? 'l' : 'none']",
+    "label": "06 package boot: lib l, ids match, cover gone, dialog hidden, no dev nav"
   }
 ]

@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>النسبة والتعابير الجبرية — الجزء 05</title>
+  <!-- Assistant: one shared @font-face set (unit-css/00-fonts.css, TTFs in
+       unit-assets/fonts/). Linked before the part's own stylesheet. -->
+  <!-- The library is queued by the preload scanner before any <img> (BOOT-AND-RESUME-HARDENING-2026-11-03.md
+       §2.3 C2). The hrefs are byte-equal to what unit-js/50-loader.js builds (no ?v=, no crossorigin), or
+       the browser fetches them twice; the letter changes together with LIB720. -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=7">
+  <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
+       after the part stylesheet so its tokens and .m-animate rules win.
+       Screens opt in with data-reveal; popups with .m-popup. -->
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
+  <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
+</head>
+<!-- data-subject-theme activates the Math token override block in
+     css/style.css. :root holds the Science defaults; this one attribute
+     is the entire theme switch (figma-lomda-builder → subject-theming.md).
+     Matches methodica-ar-math-ratio-03-01 / -02 / -03 / -04 so all parts
+     render identically. -->
+<body data-subject-theme="math">
+
+  <!-- Resume boot cover (guide §8.11): hides the first paint while the saved state document is
+       read, so a resumed learner never sees screen 0 flash before their own screen. A sibling of
+       #app (not scaled). unit-js/40-resume.js dropBootCover() removes it on every exit path of
+       50-loader.js; this inline net removes it after 800 ms, or — while a restore is in flight
+       (window.__resumeInFlight) — after at most 11 s, so no failure can leave it up. Since 2026-11-14 the net
+       raises the flag itself on a launch with ?registration (BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.3 C1):
+       90-boot.js runs after every script tag, too late on a cold cache. -->
+  <div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#ffffff"></div>
+  <script>
+  (function () {
+    if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
+    var t0 = Date.now();
+    function tick() {
+      var c = document.getElementById('boot-cover');
+      if (!c || !c.parentNode) return;
+      if (window.__resumeInFlight && Date.now() - t0 < 11000) { setTimeout(tick, 100); return; }
+      c.parentNode.removeChild(c);
+    }
+    setTimeout(tick, 800);
+  })();
+  </script>
+  <div id="app">
+
+    <!-- Report / Issue button — global chrome, outside all .screen divs
+         (720-templates → _global-components.md → "Report / Issue button").
+         Glyph is live inline SVG on currentColor so it follows the Subject
+         token on hover. Static control: no handler is wired, matching the
+         four approved siblings. Slide 64 mocks this control as a flattened
+         image (id=2 → image1.png, top-left); the live component is used. -->
+    <button class="flag-btn" type="button" aria-label="هل وجدتم مشكلة؟">
+      <span class="flag-btn-icon">
+        <span class="flag-btn-glyph" aria-hidden="true">
+          <svg class="flag-btn-glyph-pole" viewBox="0 0 0.794329 17.0005" preserveAspectRatio="none" fill="none"><path d="M0.397164 17C0.177722 17 0 16.8239 0 16.6065V0.393501C0 0.176082 0.177722 0 0.397164 0C0.616607 0 0.794329 0.176082 0.794329 0.393501V16.607C0.794329 16.8245 0.616607 17.0005 0.397164 17.0005V17Z" fill="currentColor"/></svg>
+          <svg class="flag-btn-glyph-banner" viewBox="0 0 12 9.31542" preserveAspectRatio="none" fill="none"><path d="M2.76227 9.31542C1.91972 9.31542 1.06958 9.15545 0.213483 8.71363C0.0823588 8.64599 0 8.51124 0 8.36469V0.950975C0 0.814619 0.0715221 0.687925 0.188558 0.615989C0.305594 0.54459 0.45189 0.537611 0.574886 0.598811C0.577053 0.599884 0.578679 0.600958 0.580846 0.602032C2.31309 1.49586 4.05563 1.046 5.90003 0.569821C7.80946 0.0770055 9.78336 -0.431915 11.7865 0.601495C11.9176 0.669136 12 0.803882 12 0.950438V8.36415C12 8.4946 11.9344 8.617 11.8255 8.69001C11.7166 8.76302 11.5774 8.77805 11.4555 8.72974C11.443 8.7249 11.4311 8.71954 11.4197 8.71363C9.68745 7.8198 7.94491 8.26967 6.10051 8.7453C5.00709 9.02714 3.89199 9.31489 2.76281 9.31489L2.76227 9.31542ZM0.793787 8.11935C2.45559 8.87307 4.13094 8.44038 5.90003 7.98407C7.62469 7.53903 9.40191 7.08057 11.2062 7.75806V1.19631C9.54441 0.442591 7.86906 0.875281 6.09997 1.33159C4.37531 1.77663 2.59755 2.23509 0.793787 1.5576V8.11935Z" fill="currentColor"/></svg>
+        </span>
+      </span>
+      <span class="flag-btn-label">هل وجدتم مشكلة؟</span>
+    </button>
+
+    <!-- Issue-report dialogs (unit-js/25-report.js, unit-css/25-report.css) -->
+    <div id="report-modal"
+           class="report-modal-overlay"
+           hidden
+           role="dialog"
+           aria-modal="true"
+           aria-labelledby="report-modal-title">
+        <div class="report-modal-box">
+          <button class="report-close-btn" onclick="tryCloseReportModal()" aria-label="إغلاق">&#10005;</button>
+          <h2 class="report-modal-title" id="report-modal-title">الإبلاغ عن مشكلة</h2>
+          <p class="report-modal-body">هل هناك شيء غير واضح أو لا يعمل كما ينبغي؟<br>أخبرونا بما حدث لنتمكّن من معالجته.</p>
+
+          <div class="report-field">
+            <label class="report-label" for="report-type"><span class="required-star">*</span> ما نوع المشكلة</label>
+                      <div class="report-custom-select" id="report-type-wrapper">
+              <button class="report-select-btn is-placeholder" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span class="report-select-value">اختاروا نوع المشكلة</span>
+              </button>
+              <ul class="report-select-list" role="listbox" hidden>
+                <li class="report-select-option" data-value="technical" role="option">عطل تقني أو شيء لا يعمل</li>
+                <li class="report-select-option" data-value="unclear" role="option">شيء غير واضح لي</li>
+                <li class="report-select-option" data-value="other" role="option">أخرى</li>
+              </ul>
+              <input type="hidden" id="report-type" value="">
+            </div>
+            <span class="report-field-error" id="report-type-error" hidden>اختاروا نوع المشكلة</span>
+          </div>
+
+          <div class="report-field">
+            <label class="report-label" for="report-text"><span class="required-star">*</span> ماذا حدث؟</label>
+            <textarea class="report-textarea" id="report-text" maxlength="250" rows="4" placeholder="اشرحوا ما حدث لنتمكّن من فهم المشكلة" onblur="reportTextBlur()"></textarea>
+            <span class="report-field-error" id="report-text-error" hidden>اكتبوا ما حدث</span>
+            <span class="report-char-count" id="report-char-count">0 / 250</span>
+          </div>
+
+          <div class="report-actions">
+            <button class="report-cancel-btn" onclick="tryCloseReportModal()">إلغاء</button>
+            <button class="report-submit-btn" onclick="submitReport()" disabled>إرسال البلاغ</button>
+          </div>
+        </div>
+      </div>
+    <div id="report-confirm-modal"
+           class="report-modal-overlay"
+           hidden
+           role="dialog"
+           aria-modal="true"
+           aria-labelledby="confirm-modal-title">
+        <div class="report-modal-box report-confirm-box">
+          <h2 class="report-modal-title" id="confirm-modal-title">هل أنتم متأكدون من إغلاق النافذة؟</h2>
+          <p class="report-modal-body">عند الإغلاق لن يتم إرسال البلاغ</p>
+          <div class="report-actions">
+            <button class="report-cancel-btn" onclick="forceCloseReportModal()">إغلاق النافذة</button>
+            <button class="report-submit-btn" onclick="backToReportForm()">أريد الإبلاغ</button>
+          </div>
+        </div>
+      </div>
+    <div id="report-thanks-modal"
+           class="report-modal-overlay"
+           hidden
+           role="dialog"
+           aria-modal="true"
+           aria-labelledby="thanks-modal-title">
+        <div class="report-modal-box report-confirm-box">
+          <h2 class="report-modal-title" id="thanks-modal-title">تم إرسال البلاغ، شكرًا!</h2>
+          <p class="report-modal-body">استلمنا بلاغكم وسنعالجه في أقرب وقت.</p>
+          <div class="report-actions">
+            <button class="report-submit-btn" onclick="closeReportThanks()">إغلاق</button>
+          </div>
+        </div>
+      </div>
+    <!-- Polite live region for announce() (unit-js/15-engine.js) — the report dialog's
+         "sent" message. Visually hidden inline, so it depends on no stylesheet. -->
+    <div id="a11y-announcer" aria-live="polite" aria-atomic="true"
+         style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;"></div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 00 (S0) — TransitionScreen · Peak Question A launch
+
+         SOURCE IDENTIFICATION
+         Component divider: presentation order 63 → ppt/slides/slide63.xml
+         ("רכיב 5" / "שאלת שיא א" / "methodica-ar-math-ratio-03-05"). It is
+         a production divider, not a learner-facing screen, and is NOT
+         built.
+         This screen: presentation order 64 → ppt/slides/slide64.xml.
+         Both resolved through presentation.xml's <p:sldIdLst> r:id →
+         ppt/_rels/presentation.xml.rels. The mapping is 1:1 with no
+         offset across all 83 slides in this deck, but that was DERIVED
+         from a fresh extraction this session (the .pptx has changed
+         between sessions before — its mtime is 2026-09-14), not
+         assumed — pptx-script-extraction.
+
+         PART BOUNDARY — established from the deck's own divider slides,
+         which is the reliable way to bound a component
+         (pptx-script-extraction → "Component divider slides carry the
+         component's own structural definition"). Divider 63 opens this
+         part; the NEXT divider is presentation order 73 ("רכיב 6" /
+         "שאלת שיא ב" / "methodica-ar-math-ratio-03-06"). Part 05 is
+         therefore slides 64-72 — nine production slides, of which this
+         is the first. Producer numbering on the divider matches this
+         folder's own number; no mismatch to note.
+
+         PRESENTER NOTE — resolved through slide64's OWN .rels
+         (rId3 → ppt/notesSlides/notesSlide58.xml; part-name numbering
+         is NOT slide numbering, and 64 ≠ 58). The note's own cached
+         slide-number field reads "64", corroborating the
+         identification:
+             הנחיות הפקה:
+             מסך הזנקה שאלת שיא
+             שם המסך בפיגמה: TransitionScreen
+             הדמות נראית בתחילת מרוץ
+         The note is classed CURRENT/RELEVANT, not stale residue: its
+         screen-name, its "launch screen" description and its
+         start-of-a-race character direction all agree with this slide's
+         own content and with the two Running clips supplied for it.
+
+         TEMPLATE — 720-templates → references/TransitionScreen.md, the
+         exact component the note names. Composition/CSS/JS ported from
+         the same-lomda sibling methodica-ar-math-ratio-03-04's own S0 (the
+         identical screen role: a component kickoff transition, slide 51
+         in the same deck), which took it from -03, which took it from
+         -02. Nothing new was invented for this screen.
+
+         SHAPE INVENTORY — slide 64, by unique XML id (not shape name),
+         in document order, reconciled against a fresh PowerPoint render
+         of the slide:
+           id=1  grpSp  the empty spTree root (0×0)
+           id=4  pic    "תמונה 3", rId4 → image18.png — the stock blue
+                        "متابعة" Continue pill, bottom-left
+           id=5  cxnSp  "מחבר ישר 4" — the full-bleed bottom rule
+           id=2  pic    "תמונה 1", rId5 → image1.png — the stock flag
+                        graphic, top-left
+           id=3  sp     "מלבן: פינות מעוגלות 2" — live roundRect, text
+                        "عودة", #019DE5 stroke — the Back pill
+           id=11 sp     "TextBox 10" — 5 paragraphs, the authored copy
+           id=9  pic    "Picture 8", rId6 → image4.png, cropped — the
+                        character placeholder still
+         That is the WHOLE slide. No off-canvas shapes, no hidden
+         shapes, no tables, no OMML equation objects.
+
+         CHROME — unlike slide 51 (part 04's own kickoff transition,
+         which authors no chrome at all), slide 64 MOCKS the full stock
+         set: Continue pill, bottom rule, flag graphic and Back pill.
+         All four are global components on every learner-facing 720
+         screen (720-templates → _global-components.md), so the deck's
+         mock corroborates them rather than changing anything. Canonical
+         component geometry is used throughout, as in every sibling
+         part; the flattened mock boxes are not traced.
+
+         CONTINUE LABEL — "متابعة", from DIRECT source evidence. The pill
+         is a picture (image18.png), and the decoded 140×39 image reads
+         "متابعة". Slides 29 and 39 each author an explicit
+         "אפשר להתחיל!" text overlay for their own kickoff transitions;
+         slide 64 authors no such override, so the stock label the image
+         itself carries is what ships. Deliberately NOT inherited from
+         those siblings.
+
+         TEXT ROLES (TransitionScreen.md → "Text roles"), from id=11's
+         own runs and paragraph structure. Five authored paragraphs,
+         every one algn="ctr", every run in "Assistant":
+           p1  20pt regular       → .s1-subtitle.s1-subtitle--regular
+           p2  20pt regular       → .s1-subtitle.s1-subtitle--regular
+           p3  20pt regular       → .s1-subtitle.s1-subtitle--regular
+           p4  40pt b="1"         → .s1-title            (headline)
+           p5  20pt b="1"         → .s1-subtitle         (closing line)
+         Three lead-in lines — the most of any transition screen in this
+         lomda, and an explicitly permitted shape of the component (the
+         count is not fixed). Each is its own authored <a:p>, so the
+         three breaks are STRUCTURAL, not rendered wrapping, and are
+         preserved as three separate elements.
+         Copy is preserved verbatim; only trailing spaces that carry no
+         learner-facing meaning are dropped (p2, p3 and p5 each end in
+         one, and p5 is followed by a whitespace-only en-US run that is
+         likewise not content).
+
+         RENDERED ORDER — verified against the fresh render, not
+         inferred from XML or DOM order. The headline and all three
+         lead-in lines are pure Hebrew with no bidi ambiguity. The
+         closing line mixes Hebrew with two LTR numerals; in the render
+         the "4" sits inside the Hebrew phrase and the "3" follows the
+         authored "ב - " prefix, which is exactly what standard Unicode
+         bidi produces from the logical source string in an RTL
+         paragraph. The source order is therefore kept verbatim and NO
+         dir isolation is used — there is no ratio, fraction or unit
+         phrase anywhere on this slide. Re-verified in-browser (see the
+         verification record).
+
+         FIGMA — NOT INSPECTED. The note names a screen name
+         ("TransitionScreen") but carries no Figma link or node id, and
+         TransitionScreen.md's own status line states the template is
+         produced from existing 720 code with "no dedicated Figma canvas
+         required by this file." The Figma MCP connector is also
+         unauthenticated in this session (it cannot be authorised from a
+         non-interactive session). Geometry therefore comes from the
+         approved sibling implementation plus this slide's own rendered
+         evidence, which is what that template file sanctions.
+
+         ANIMATION — animation-system entrance reveal (this lomda adopted
+         the skill across all parts; engine in css/motion.css +
+         js/motion.js, hooks in goTo()). Classified by ROLE per
+         references/DECISIONS.md: the header block (.s1-text: title +
+         lead-in + closing line) is ONE float-in group; the companion
+         video zone (.s1-video-wrap) is ONE fade-in group, no float, no
+         stagger against the text — both carry group 1 so the character
+         "starts together with the rest of the screen entrance" (Video
+         zones rule). Nav chrome (Continue, Back, flag) is excluded.
+         Playback logic is untouched: autoplay simply plays under the
+         fade. Reveal plays once per session; the first screen's reveal
+         is held until window.load by the engine.
+
+         SCORING — RULED BY THE PRODUCER 2026-09-14, and NOT IMPLEMENTED
+         ON THIS SCREEN. The closing line states this part's mastery rule
+         in the learner's own words, and it is the rule that governs:
+
+             FOUR scored sub-items; the peak question is CORRECT when at
+             least 3 of the 4 are correct.
+               3 or 4 correct -> peak question correct
+               0, 1 or 2      -> peak question incorrect
+
+         The peak-question convention is "most of the sub-items", not a
+         fixed count — the familiar "2 of 3" is one instance of it, and
+         must NOT be forced onto this part, which has four sub-items.
+
+         The aggregate stays UNRESOLVED until all four scored sub-items
+         have resolved, then resolves once. Individual sub-item results
+         may be kept diagnostically, but the peak question contributes
+         exactly ONE scored result (consistent with this project's
+         standing rule that a progress dot is one whole question, never
+         one per section).
+
+         EXPECTED SUB-ITEM MAPPING — a WORKING HYPOTHESIS, not settled.
+         From this session's structural pass, slides 66, 68, 70 and 71
+         look like the four scored sub-items and 65, 67, 69 and 72 like
+         supporting/transition screens. Per the producer's instruction
+         this must be CONFIRMED from each slide's own freshly extracted
+         Presenter Note and screen content before any scoring is built —
+         it is not yet evidence, and nothing here depends on it.
+
+         No gate, counter or threshold is built on this screen.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen active" data-screen="0" id="s0">
+      <div class="s1-content">
+        <!-- animation-system · header block → float-in, group 1. Marked on
+             the text CONTAINER, never per line. No static transform on
+             .s1-text (flex child, centred by the parent's align-items). -->
+        <div class="s1-text" data-reveal="1">
+          <p class="s1-subtitle s1-subtitle--regular">كل الاحترام!</p>
+          <p class="s1-subtitle s1-subtitle--regular">إذا لم تنجحوا في الإجابة عن بعض الأسئلة بشكل صحيح،</p>
+          <p class="s1-subtitle s1-subtitle--regular">فمن المهم أن تفهموا ما الذي لا يزال غير واضح، وأن تتوجهوا إلى الدردشة أو إلى المعلّم للحصول على شرح إضافي.</p>
+          <h1 class="s1-title">والآن يأتي السؤال الأكبر</h1>
+          <p class="s1-subtitle">يحتوي السؤال على 4 بنود. عليكم الإجابة عن 3 منها على الأقل بشكل صحيح.</p>
+        </div>
+        <!-- Companion-character video — resolved from
+             window.lomdaState.selectedCharacter on every entry
+             (js/main.js → s0ApplyCharacter()), keyed by the SAME
+             logical IDs and the SAME namespaced storage key Part 01
+             writes. Decorative media, not instructional video: autoplay
+             once, muted, no loop, no controls, out of the accessibility
+             tree (720-templates → _global-components.md → "Decorative
+             character video"). No play affordance, and it gates
+             nothing.
+             `.s1-video-clip` is the mandated clipping layer even though
+             this instance has no fit shim and no speech bubble
+             (TransitionScreen.md → "B"). -->
+        <!-- animation-system · video zone → fade-in ONLY, group 1 (same
+             number as the header: video and text enter together, no
+             stagger). Fade, not float, because the <video> child owns a
+             functional transform (--char-scale / --char-shift-y fit shim)
+             and media geometry must never move (Rule precedence #1-2). The
+             wrapper itself has no static transform. -->
+        <div class="s1-video-wrap" data-reveal="1" data-reveal-fade>
+          <div class="s1-video-clip">
+            <video class="s1-char-media" id="s0-char-video" autoplay muted playsinline
+                   disablepictureinpicture
+                   controlsList="nodownload nofullscreen noplaybackrate"
+                   aria-hidden="true"></video>
+          </div>
+        </div>
+      </div>
+      <!-- Continue is UNGATED — the TransitionScreen contract (the
+           screen carries no interaction to resolve), and slide 64 mocks
+           the button in its enabled blue state with no disabled variant
+           authored. No `disabled` attribute to clear, and
+           advanceScreen() carries no gate for screen 0. In particular it
+           does NOT wait for the character clip to finish.
+           Back starts hidden and is mounted by PartNav.mountBack() from
+           resetScreenState(0): this is the part's first screen, so it
+           has no in-part predecessor and appears only when the session
+           trail records a real cross-part crossing into this part to
+           return to. Slide 64 mocks a Back pill, which is consistent
+           with the learner arriving here from Part 04 — but the mock is
+           a static picture of the screen, not a claim that Back is
+           unconditional, so the standard actual-predecessor contract
+           still governs and no destination is hardcoded. -->
+      <button class="btn-continue" onclick="advanceScreen()">
+        <span class="nav-label" data-label="متابعة"><span>متابعة</span></span>
+      </button>
+      <button class="scq-back hidden" id="s0-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 01 (S1) — FullImageWithTextOverlay · bakery set-up
+
+         SOURCE IDENTIFICATION
+         Presentation order 65 → ppt/slides/slide65.xml, resolved through
+         presentation.xml's <p:sldIdLst> r:id →
+         ppt/_rels/presentation.xml.rels. Re-derived from a FRESH
+         extraction this session, not carried over from the S0 pass: the
+         .pptx changed between the two (7,732,625 → 7,717,974 bytes,
+         mtime 08:31 → 10:14). Diffing the two extractions shows the
+         producer edited slides 58-62 and their notes — all Part 04's
+         unbuilt tail — plus notesSlide67 (slide 74, Part 06's launch
+         screen). NOTHING in Part 05's range changed: slides 64-72 are
+         byte-identical, so S0 and this slide are unaffected. The
+         component dividers were also re-derived by content and are
+         unchanged (63 opens Part 05, 73 opens Part 06), so the part is
+         still slides 64-72.
+
+         PRESENTER NOTE — resolved through slide65's OWN .rels
+         (rId2 → ppt/notesSlides/notesSlide59.xml; part-name numbering is
+         NOT slide numbering, and 65 ≠ 59). Its cached
+         <a:fld type="slidenum"> reads "65", corroborating:
+             שם המסך בפגימה:
+             FullImageWithTextOverlay
+             שם התמונה:<מאפייה>
+         ("בפגימה" is the producer's own typo for "בפיגמה".) The note is
+         classed CURRENT/RELEVANT: the screen name matches this slide's
+         own shape structure (full-bleed photo + floating white card,
+         no question, no options), and the image name it gives matches
+         an asset actually supplied in this part.
+
+         TEMPLATE — 720-templates → references/FullImageWithTextOverlay.md,
+         the exact component the note names. NOT inferred from sequence:
+         the note names it outright and the slide's own shapes agree.
+
+         SCORING ROLE — NONE. This screen carries no question, no answer
+         options, no input and no feedback, so it is not one of the peak
+         question's four scored sub-items. It is a narrative set-up
+         screen. That is this slide's OWN evidence; it does not settle
+         anything about slides 66-72, and in particular the 70/71
+         question stays open until each is freshly extracted.
+
+         SHAPE INVENTORY — slide 65, by unique XML id, in document order,
+         reconciled against a fresh PowerPoint render:
+           id=1  grpSp  the empty spTree root (0×0)
+           id=2  pic    rId3 → image18.png — the stock "متابعة" pill
+           id=3  cxnSp  the full-bleed bottom rule (y=6079252)
+           id=4  sp     roundRect "عودة" — the Back pill
+           id=6  pic    rId4 → image70.jpeg, srcRect t=12383 b=12383 —
+                        the full-bleed photo band
+           id=8  sp     roundRect, solid bg1 fill, no line — the floating
+                        text card, 2 authored paragraphs
+         That is the whole slide. No off-canvas shapes, no hidden shapes,
+         no OMML, no tables. NOTE: unlike slide 64, this slide mocks NO
+         flag button — see the band-geometry note in css/style.css.
+
+         AUTHORED COPY — id=8's two runs, each its own <a:p>, so the
+         break between them is STRUCTURAL and is reproduced as two <p>
+         elements. Both runs: Assistant, 18pt, not bold, tx1, paragraph
+         alignment RIGHT (RTL reading start). No trailing-space or
+         symbol runs to drop. 18pt on this deck's 13.333in width maps to
+         24px on the 1280px canvas — the same Body/B-3 role this lomda
+         already uses for the TransitionScreen lead-in line.
+         Neither paragraph wraps in the deck's own box, and the card
+         hugs its content here, so NO <br> is introduced anywhere: every
+         break on this card is an authored source break.
+
+         IMAGE — the note names "מאפייה", and assets/img/מאפייה.jpg is
+         supplied in this part (1536×1024 PNG). Verified against the
+         deck's own embedded copy (image70.jpeg, 1282×855): same
+         photograph, same 3:2 framing, no watermark on either, and the
+         supplied file is the higher-resolution one. The supplied asset
+         is used; the deck's copy is the producer's reference, not the
+         runtime file. src/alt are mounted from S1_IMAGE in js/main.js,
+         never written into this markup (template contract).
+
+         FIGMA — NOT INSPECTED. The note names the screen but carries no
+         link or node id, and the Figma MCP connector is unauthenticated
+         in this session (it cannot be authorised from a non-interactive
+         session). Geometry therefore comes from this slide's own
+         rendered/EMU evidence plus the approved sibling
+         methodica-ar-math-ratio-03-01's own .fito-media band, which is what
+         that template file sanctions for an under-specified value.
+
+         ANIMATION — animation-system entrance reveal, the same treatment
+         every FullImageWithTextOverlay in this part gets (S1, S5, S8;
+         S3 is the video variant, see its own note): the full-bleed band
+         (.fito-img) is a background scene → fade-in, group 1; the
+         floating text card (.fito-text) is content → float-in, group 2.
+         The card has no static transform (anchored by right/bottom), so
+         float-in cannot fight its positioning. Nav chrome excluded.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="1" id="s1">
+      <!-- Full-bleed photo band. Decorative/contextual: pointer-events
+           are off, nothing here is interactive except the nav chrome. -->
+      <!-- animation-system · background scene → fade-in, group 1. -->
+      <div class="fito-img" data-reveal="1" data-reveal-fade>
+        <img id="s1-img" alt="" loading="lazy">
+      </div>
+
+      <!-- Floating white card. Width HUGS its longest line
+           (FullImageWithTextOverlay.md → "B"): the deck's own box is a
+           fixed 855px slab whose short first line leaves a 560px gap on
+           the physical left against a 15px gap on the right — exactly
+           the unequal-padding failure the template documents. fit-content
+           makes both gaps equal. -->
+      <!-- animation-system · text card → float-in, group 2 (content after
+           the scene it sits on). -->
+      <div class="fito-text" data-reveal="2">
+        <p>افتتحت سمر الخبازة مخبزًا جديدًا‎.</p>
+        <p>سر الرغيف المثالي هو الدمج بين نوعين من الطحين: طحين الحنطة وطحين القمح.</p>
+      </div>
+
+      <!-- Continue is the standard UNGATED control for a non-question
+           screen. Label "متابعة" — direct source evidence again: slide 65
+           mocks the same image18.png pill that slide 64 does, and the
+           decoded image reads "متابعة".
+           Back is the standard actual-predecessor control: this screen
+           HAS an in-part predecessor (S0), so unlike S0's it is always
+           visible and is never mounted through PartNav. -->
+      <button class="btn-continue" onclick="advanceScreen()">
+        <span class="nav-label" data-label="متابعة"><span>متابعة</span></span>
+      </button>
+      <button class="scq-back" id="s1-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 02 (S2) — ValueInputQuestion, Variant C (two fields)
+         Peak question A, SUB-PART 1 of 4
+
+         SOURCE — presentation order 66 → ppt/slides/slide66.xml.
+         The .pptx was re-checked before this screen was extracted and
+         is byte-identical to the S1 pass (same md5), so the extraction
+         is current; slide identity was still re-derived from content
+         rather than carried over.
+
+         PRESENTER NOTE — resolved through slide66's OWN .rels
+         (rId → ppt/notesSlides/notesSlide60.xml; 66 ≠ 60), cached
+         slidenum field reads "66":
+             הנחיות הפקה:
+             שם המסך בפיגמה: ValueInputQuestion
+             שאלה 1 מתוך 4
+             שם התמונה:< קמח>
+             אלט טקסט לתמונה: מימין: קמח חיטה  משמאל: קמח כוסמין
+             התשובות:
+               קמח חיטה  7x  (לשים לב שגם X גדול ייחשב כתשובה נכונה)
+               קמח כוסמין 3x  (לשים לב שגם X גדול ייחשב כתשובה נכונה)
+
+         TEMPLATE + SCORING ROLE — both authored, neither inferred:
+         "ValueInputQuestion" names the template, and "שאלה 1 מתוך 4"
+         confirms this IS the first of the peak question's four scored
+         sub-items. That is the producer's requested confirmation.
+
+         ANSWER KEY — authored, and corroborated three independent ways
+         on this slide: (a) the note's own התשובות block, (b) the
+         pre-filled indicator boxes id=25 "3x" (physically LEFT,
+         x 982.7) and id=5 "7x" (physically RIGHT, x 1103), and (c) the
+         feedback body, which spells out "3x קמח כוסמין" and
+         "7x קמח חיטה". All three agree:
+             LEFT  field = קמח כוסמין (spelt) = 3x
+             RIGHT field = קמח חיטה  (wheat) = 7x
+         and the image itself shows the spelt sack on the left and the
+         wheat sack on the right, matching the note's alt text. Upper-
+         case X is accepted, per the note's explicit instruction.
+
+         THE RATIO'S RENDERED ORDER — resolved, not assumed. The stem's
+         authored run is the logical string "7 : 3", but that numeral
+         group is an LTR run inside an RTL paragraph, so its PHYSICAL
+         order is what the learner reads. Verified glyph by glyph on a
+         fresh 1280×720 PowerPoint export at 3× zoom: physically, left
+         to right, the line ends ". 3 : 7" — i.e. the group displays as
+         "3 : 7", read left-to-right as a unit, which is exactly the
+         answer key (spelt 3, wheat 7). There is NO content error here.
+         A browser's own bidi would render the same logical source the
+         other way round, so the DISPLAYED order is written out inside
+         an LTR isolate rather than left to bidi — the identical
+         treatment, and identical reason, as the approved sibling
+         methodica-ar-math-ratio-03-04's own S4 ratio
+         (pptx-script-extraction → "A rendered expression's pixel order
+         is not its bidi reading order").
+
+         PROGRESS BAR — FOUR items. Slide 66 does carry the bar's raster
+         mock (image22.png, id=8), but that PNG is stock furniture, not
+         this screen's state: the identical file appears on 29 slides
+         across parts 02-06, and it depicts a SIX-question bar with
+         question 4 current and questions 1-3 already resolved — which
+         is impossible on a screen that IS question 1. The authored
+         count comes from the notes ("שאלה N מתוך 4"), exactly as the
+         approved sibling 03-04 resolved the same conflict. Within
+         Part 05 the mock appears only on slides 66, 68, 70 and 71.
+
+         PEAK PROGRESS SEMANTICS — this part is the peak/climax stage,
+         so each dot is ONE LETTERED SUB-PART and resolves IMMEDIATELY
+         when its own screen is answered (720-templates →
+         _global-components.md → "What one progress item represents",
+         Peak column). That is the opposite of the basic/standard rule
+         03-04 follows, and it is why this screen's dot shows its
+         verdict at once. The PEAK AGGREGATE is separate and stays
+         unresolved until all four sub-parts have resolved — see the
+         PEAK QUESTION MODEL block in js/main.js.
+
+         SHAPE INVENTORY — slide 66, by unique XML id:
+           on-canvas   id=8  progress-bar stock mock (image22.png)
+                       id=3  flag graphic (image1.png)
+                       id=6  question stem, 3 paragraphs
+                       id=10 flour photo (image71.png)
+                       id=25 "3x" indicator box (left)
+                       id=5  "7x" indicator box (right)
+                       id=31 bottom rule
+                       id=32 "هل إجابتي صحيحة؟" check button (GREYED — state 1)
+                       id=72 "هل يمكنني الحصول على تلميح؟" hint button + id=82 its icon
+                       id=35 "عودة" back button
+           off-canvas  id=15 CORRECT feedback  (x -480)
+                       id=39 INCORRECT feedback (x -927, fill #FFE5E5)
+                       id=74 hint overlay group (x -969): body id=77 +
+                             "عودة إلى السؤال" button id=78 + icon id=80
+         Off-canvas shapes are classed as INTENTIONAL STAGED CONTENT,
+         not scratch: each is a state this template renders at runtime,
+         and each matches a documented state of ValueInputQuestion.
+
+         ATTEMPTS / FEEDBACK — the canonical 2-attempt default
+         (_question-template-defaults.md). Slide 66 authors exactly two
+         feedback bodies, one per outcome, and they share the same
+         pedagogical explanation; only the titles differ
+         ("צדקתם!" vs "זו טעות. אל דאגה, הבנה נבנית בהדרגה."). Both are
+         reproduced verbatim, including the two authored blank
+         paragraphs inside each.
+
+         FINAL-WRONG REVEAL — VIEW MY ANSWER TOGGLE, required. The
+         correct values overwrite the learner's own entries, so all three
+         of the toggle's applicability conditions hold (the final
+         incorrect state reveals the solution; the reveal writes into the
+         SAME fields that held the learner's answer; afterwards they can
+         no longer see what they submitted). Slide 66 authoring no such
+         control does NOT override that global interaction rule —
+         producer ruling, 2026-09-14, correcting an earlier build of this
+         screen that shipped without it.
+         The solution is shown IMMEDIATELY on the final wrong attempt (no
+         intervening click), and the popup carries the shared toggle:
+         "מעבר לתשובה שלי" restores the learner's raw submitted strings
+         with their own per-field ✓/✕, and "התשובה הנכונה" returns to the
+         solution view. Switching is unlimited and lossless, and never
+         touches attempts, the result, the dot or navigation. Back always
+         re-opens on the SOLUTION view. Implementation and state live in
+         js/main.js; the button is rendered by the shared
+         renderPopupAction() into .scq-popup-actions.
+
+         HINT — visible and enabled from entry (canonical default; the
+         deck mocks it in its enabled cyan-outline state while Check is
+         greyed). Slide 66 authors the hint BODY and the close-button
+         label but no title, so the canonical generic title "تلميح" is
+         used.
+
+         FIGMA — not inspected; the connector is unauthenticated in this
+         session. Geometry comes from this slide's own EMU/rendered
+         evidence plus the approved sibling implementations.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="2" id="s2">
+      <!-- Progress Question nav — FOUR sub-parts of the one peak
+           question (slides 66, 68, 70, 71). RTL: sub-part 1 is first in
+           DOM and therefore renders physically rightmost. -->
+      <nav class="progress-question" aria-label="التنقُّل بين الأسئلة">
+        <div class="progress-question__item" data-question="1">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 1</span>
+        </div>
+        <div class="progress-question__connector" data-connector="1"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="2">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 2</span>
+        </div>
+        <div class="progress-question__connector" data-connector="2"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="3">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 3</span>
+        </div>
+        <div class="progress-question__connector" data-connector="3"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="4">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 4</span>
+        </div>
+      </nav>
+
+      <!-- animation-system · question text → float-in, group 1. The
+           progress nav above is a progress indicator → excluded (it also
+           carries a translateX(-50%) centring transform, which is one
+           more reason it must never float). Check/hint/back pills
+           excluded. -->
+      <div class="scq-question" data-reveal="1">
+        <div class="scq-right-col">
+          <!-- ¶1 — the ratio. The numeral group is written in its
+               DISPLAYED physical order inside an LTR isolate; see the
+               block comment above for the glyph-by-glyph verification
+               and why plain bidi would not reproduce it. -->
+          <p class="scq-intro">النسبة بين طحين الحنطة وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>.</p>
+          <!-- ¶2 — the authored `x` is its own en-US run in the source;
+               isolated so the Latin letter cannot be reordered by the
+               surrounding RTL text. -->
+          <p class="scq-intro">لتحضير كميات مختلفة من العجين، تضرب سمر النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi> بـ <bdi dir="ltr">x</bdi>، بحيث إنّ <bdi dir="ltr">x</bdi> هو عدد الغرامات.</p>
+          <!-- ¶3 — WEIGHT-ONLY emphasis. Slide 66's stem textbox carries
+               no <a:solidFill> anywhere and the rendered slide shows the
+               line black, so the bold is preserved and no accent colour
+               is invented. `.scq-setup` is this lomda's established name
+               for that treatment. -->
+          <p class="scq-setup">أكملوا التعبير الجبري المناسب لكل نوع من الطحين‎.</p>
+        </div>
+      </div>
+
+      <!-- Flour photo. Decorative-contextual, mounted from S2_IMAGE.
+           No zoom affordance: slide 66 draws none. -->
+      <!-- animation-system · photo + its two answer fields → float-in,
+           group 2, ONE unit (the fields are the answer block of this
+           question and are laid over the photo). Same right side as the
+           question, below it → top-before-bottom. Container-scope: the
+           subtree holds text inputs (allowed to float per Interaction
+           safety rules — not JS-measured; verdict icons are class-driven)
+           and no zoom/DnD/canvas. Transform check: .viq-figure has none;
+           the translateX(-50%) lives on the CHILD .viq-fields, which is
+           not the animated element, so nothing is overridden. -->
+      <div class="viq-figure" data-reveal="2">
+        <img class="viq-figure-img" id="s2-img" alt="" loading="lazy">
+        <!-- TWO INDEPENDENT answer fields (Variant C / Case A): the
+             sub-part is ONE scored unit — correct only if both fields
+             are correct — but each field shows its OWN verdict, so a
+             mixed board is possible and correct.
+             dir="ltr" makes DOM order map physically LEFT→RIGHT,
+             reproducing slide 66's own box order: spelt (3x) left at
+             x 982.7, wheat (7x) right at x 1103. Each field's
+             aria-label names its own flour so the mapping is not
+             carried by position alone. -->
+        <div class="viq-fields" id="s2viq-fields" dir="ltr">
+          <span class="viq-field" id="s2viq-field-spelt">
+            <input id="s2viq-input-spelt" class="viq-input" type="text" inputmode="text"
+                   dir="ltr" autocomplete="off" spellcheck="false"
+                   aria-label="التعبير الجبري لكمية طحين الحنطة"
+                   oninput="s2viqOnInput()">
+            <span class="viq-field-ico" id="s2viq-ico-spelt" aria-hidden="true"></span>
+          </span>
+          <span class="viq-field" id="s2viq-field-wheat">
+            <input id="s2viq-input-wheat" class="viq-input" type="text" inputmode="text"
+                   dir="ltr" autocomplete="off" spellcheck="false"
+                   aria-label="التعبير الجبري لكمية طحين القمح"
+                   oninput="s2viqOnInput()">
+            <span class="viq-field-ico" id="s2viq-ico-wheat" aria-hidden="true"></span>
+          </span>
+        </div>
+        <!-- Recall trigger (client request, 2026-09-29: learners may not
+             know how to type x on a Hebrew keyboard). Inline in the
+             question column per _global-components.md → RecallPopup;
+             icon first so it renders at the visual right. Opens the
+             part-wide #recall-overlay below. -->
+        <button class="scq-hint recall-btn" type="button" onclick="openRecallPopup()">
+          <svg class="scq-hint-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+            <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+            <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+            <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+            <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+            <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+            <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+            <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+            <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+          </svg>
+          <span>كيف نكتب <bdi dir="ltr">x</bdi> على لوحة المفاتيح؟</span>
+        </button>
+      </div>
+
+      <!-- Check button. Starts DISABLED — slide 66 mocks it in exactly
+           that greyed state (id=32), agreeing with the template's own
+           state 1. Becomes "متابعة" on resolution. -->
+      <button class="btn-continue" id="s2viq-check" disabled onclick="s2viqCheck()">
+        <span class="nav-label" data-label="هل إجابتي صحيحة؟"><span>هل إجابتي صحيحة؟</span></span>
+      </button>
+      <!-- Hint — visible and enabled from entry. The canonical 720 bulb
+           vector is used, not the deck's stock Office bulb-and-gear
+           graphic (id=82). -->
+      <button class="scq-hint" id="s2viq-hint" type="button" onclick="s2viqOpenHint()">
+        <svg class="scq-hint-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+          <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+          <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+          <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+          <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+          <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+          <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+          <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+          <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+        </svg>
+        <span class="nav-label" data-label="هل يمكنني الحصول على تلميح؟"><span>هل يمكنني الحصول على تلميح؟</span></span>
+      </button>
+      <button class="scq-back" id="s2-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+    <!-- Feedback popup for S2. Lives OUTSIDE the .screen div, like every
+         feedback popup in this lomda, so goTo()'s id-suffix sweep closes
+         it on navigation. Draggable via the shared popupPointerDown().
+         Title and body are written from the authored content in
+         js/main.js — nothing is hardcoded here. -->
+    <!-- animation-system · m-popup on the ROOT whose .hidden is toggled:
+         fade-in on every open (incl. content swaps between attempts),
+         instant close, opacity only — drag geometry untouched. -->
+    <div class="scq-popup m-popup hidden" id="s2viq-popup" role="status" aria-live="polite"
+         onpointerdown="popupPointerDown(event, 's2viq-popup')">
+      <div class="scq-popup-scroll">
+        <div class="scq-popup-header">
+          <p class="scq-popup-title" id="s2viq-popup-title"></p>
+        </div>
+        <div class="scq-popup-body" id="s2viq-popup-body"></div>
+      </div>
+    </div>
+
+    <!-- Hint overlay for S2. Slide 66 authors the hint BODY (id=77) and
+         the close-button label (id=78) but no title, so the canonical
+         generic title "تلميح" is used. Unlike the feedback popup this
+         component keeps all three dismissal paths (authored button,
+         backdrop, Esc). -->
+    <!-- animation-system · m-popup on the OVERLAY (the toggled element), so
+         backdrop + hint popup fade in as one unit; the inner
+         .scq-hint-popup is deliberately NOT marked. -->
+    <div class="scq-hint-overlay m-popup hidden" id="s2viq-hint-overlay" onclick="s2viqCloseHintOnBackdrop(event)">
+      <div class="scq-hint-popup" role="dialog" aria-modal="true" aria-labelledby="s2viq-hint-title">
+        <div class="scq-hint-content">
+          <h2 class="scq-hint-title" id="s2viq-hint-title">تلميح
+            <svg class="scq-hint-title-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+              <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+              <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+              <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+              <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+              <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+              <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+              <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+              <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+            </svg>
+          </h2>
+          <div class="scq-hint-body">
+            <p>احرصوا على تكبير المقدارَين في النسبة بنفس عامل التوسيع.</p>
+          </div>
+          <button class="scq-hint-close" type="button" onclick="s2viqCloseHint()">عودة إلى السؤال</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RecallPopup — "how to type x" keyboard guide (client request,
+         2026-09-29, S2 needs algebraic expressions typed). One part-wide
+         instance per _global-components.md → RecallPopup; visual per
+         720-design-guidelines → RecallPopup / ContentPopup / General
+         Popup Close Btn (vector exported from the component, 30×30).
+         Text is live; the two keyboards are the producer's blank
+         renders (assets/img/keyboard-step*.jpg), highlights baked in.
+         Closes on the button, the backdrop, Escape and every goTo(). -->
+    <!-- animation-system · m-popup on the OVERLAY, like the hint overlays. -->
+    <div class="recall-overlay m-popup hidden" id="recall-overlay" onclick="closeRecallPopupOnBackdrop(event)">
+      <div class="recall-popup" role="dialog" aria-modal="true" aria-labelledby="kb-info-title">
+        <button class="recall-popup-close" type="button" onclick="closeRecallPopup()" aria-label="إغلاق">
+          <svg viewBox="0 0 30 30" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="29" height="29" rx="14.5" fill="#fff" stroke="#303030"/>
+            <path d="M19 11L11 19M11 11L19 19" stroke="#303030" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="kb-info">
+          <h2 class="kb-info-title" id="kb-info-title">كيف نكتب <bdi dir="ltr">x</bdi> على لوحة المفاتيح؟</h2>
+          <div class="kb-steps">
+            <section class="kb-step" aria-label="مرحلة 1">
+              <div class="kb-step-head">
+                <span class="kb-step-num" aria-hidden="true">1</span>
+                <div class="kb-step-text">
+                  <h3 class="kb-step-title">نحوّل اللغة إلى الإنجليزية</h3>
+                  <p class="kb-step-line">نضغط على <bdi dir="ltr" class="kb-key">Alt + Shift</bdi> معًا</p>
+                </div>
+              </div>
+              <!-- Live key labels over the blank render: each key's rectangle was
+                   measured on the source PNG and is placed in % of the image, so the
+                   labels track the image at any size. Latin top-left, Arabic
+                   bottom-right, as on an Arabic-English keyboard (101 layout). -->
+              <div class="kb-board">
+                <img class="kb-step-img" src="assets/img/keyboard-step1-alt-shift.jpg" width="960" height="355" alt="لوحة مفاتيح يظهر فيها المفتاحان ‎ Alt و-Shift  باللون الأخضر" loading="lazy">
+                <div class="kb-keys" aria-hidden="true">
+                <span class="kb-k" style="left:4.03%;top:7.73%;width:5.48%;height:14.02%"><span class="kb-k-c">Esc</span></span>
+                <span class="kb-k" style="left:10.00%;top:7.73%;width:5.58%;height:14.02%"><span class="kb-k-top">!</span><span class="kb-k-main">1</span></span>
+                <span class="kb-k" style="left:16.11%;top:7.73%;width:5.58%;height:14.02%"><span class="kb-k-top">@</span><span class="kb-k-main">2</span></span>
+                <span class="kb-k" style="left:22.17%;top:7.73%;width:5.73%;height:14.02%"><span class="kb-k-top">#</span><span class="kb-k-main">3</span></span>
+                <span class="kb-k" style="left:28.38%;top:7.73%;width:5.68%;height:14.02%"><span class="kb-k-top">$</span><span class="kb-k-main">4</span></span>
+                <span class="kb-k" style="left:34.55%;top:7.73%;width:5.68%;height:14.02%"><span class="kb-k-top">%</span><span class="kb-k-main">5</span></span>
+                <span class="kb-k" style="left:40.76%;top:7.73%;width:5.68%;height:14.02%"><span class="kb-k-top">^</span><span class="kb-k-main">6</span></span>
+                <span class="kb-k" style="left:46.97%;top:7.73%;width:5.63%;height:14.02%"><span class="kb-k-top">&amp;</span><span class="kb-k-main">7</span></span>
+                <span class="kb-k" style="left:53.13%;top:7.73%;width:5.68%;height:14.02%"><span class="kb-k-top">*</span><span class="kb-k-main">8</span></span>
+                <span class="kb-k" style="left:59.34%;top:7.73%;width:5.63%;height:14.02%"><span class="kb-k-top">(</span><span class="kb-k-main">9</span></span>
+                <span class="kb-k" style="left:65.50%;top:7.73%;width:5.73%;height:14.02%"><span class="kb-k-top">)</span><span class="kb-k-main">0</span></span>
+                <span class="kb-k" style="left:71.76%;top:7.73%;width:5.68%;height:14.02%"><span class="kb-k-top">_</span><span class="kb-k-main">-</span></span>
+                <span class="kb-k" style="left:77.97%;top:7.73%;width:5.77%;height:14.02%"><span class="kb-k-top">+</span><span class="kb-k-main">=</span></span>
+                <span class="kb-k" style="left:84.28%;top:7.73%;width:10.19%;height:14.02%"><span class="kb-k-c">Backspace</span></span>
+                <span class="kb-k" style="left:4.03%;top:23.07%;width:9.02%;height:14.55%"><span class="kb-k-c">Tab</span></span>
+                <span class="kb-k" style="left:13.54%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">Q</span><span class="kb-k-ar">ض</span></span>
+                <span class="kb-k" style="left:19.75%;top:23.07%;width:5.63%;height:14.55%"><span class="kb-k-top">W</span><span class="kb-k-ar">ص</span></span>
+                <span class="kb-k" style="left:25.91%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">E</span><span class="kb-k-ar">ث</span></span>
+                <span class="kb-k" style="left:32.12%;top:23.07%;width:5.73%;height:14.55%"><span class="kb-k-top">R</span><span class="kb-k-ar">ق</span></span>
+                <span class="kb-k" style="left:38.33%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">T</span><span class="kb-k-ar">ف</span></span>
+                <span class="kb-k" style="left:44.54%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">Y</span><span class="kb-k-ar">غ</span></span>
+                <span class="kb-k" style="left:50.75%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">U</span><span class="kb-k-ar">ع</span></span>
+                <span class="kb-k" style="left:56.91%;top:23.07%;width:5.68%;height:14.55%"><span class="kb-k-top">I</span><span class="kb-k-ar">ه</span></span>
+                <span class="kb-k" style="left:63.12%;top:23.07%;width:5.77%;height:14.55%"><span class="kb-k-top">O</span><span class="kb-k-ar">خ</span></span>
+                <span class="kb-k" style="left:69.38%;top:23.07%;width:5.82%;height:14.55%"><span class="kb-k-top">P</span><span class="kb-k-ar">ح</span></span>
+                <span class="kb-k" style="left:75.69%;top:23.07%;width:5.73%;height:14.55%"><span class="kb-k-top">{</span><span class="kb-k-main">[</span><span class="kb-k-ar">ج</span></span>
+                <span class="kb-k" style="left:81.95%;top:23.07%;width:5.58%;height:14.55%"><span class="kb-k-top">}</span><span class="kb-k-main">]</span><span class="kb-k-ar">د</span></span>
+                <span class="kb-k" style="left:87.97%;top:23.07%;width:6.50%;height:14.55%"><span class="kb-k-c">Enter</span></span>
+                <span class="kb-k" style="left:4.03%;top:39.06%;width:11.06%;height:14.68%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:15.67%;top:39.06%;width:5.92%;height:14.68%"><span class="kb-k-top">A</span><span class="kb-k-ar">ش</span></span>
+                <span class="kb-k" style="left:22.08%;top:39.06%;width:5.87%;height:14.68%"><span class="kb-k-top">S</span><span class="kb-k-ar">س</span></span>
+                <span class="kb-k" style="left:28.48%;top:39.06%;width:5.82%;height:14.68%"><span class="kb-k-top">D</span><span class="kb-k-ar">ي</span></span>
+                <span class="kb-k" style="left:34.84%;top:39.06%;width:5.87%;height:14.68%"><span class="kb-k-top">F</span><span class="kb-k-ar">ب</span></span>
+                <span class="kb-k" style="left:41.24%;top:39.06%;width:5.73%;height:14.68%"><span class="kb-k-top">G</span><span class="kb-k-ar">ل</span></span>
+                <span class="kb-k" style="left:47.50%;top:39.06%;width:5.82%;height:14.68%"><span class="kb-k-top">H</span><span class="kb-k-ar">ا</span></span>
+                <span class="kb-k" style="left:53.81%;top:39.06%;width:5.87%;height:14.68%"><span class="kb-k-top">J</span><span class="kb-k-ar">ت</span></span>
+                <span class="kb-k" style="left:60.16%;top:39.06%;width:5.87%;height:14.68%"><span class="kb-k-top">K</span><span class="kb-k-ar">ن</span></span>
+                <span class="kb-k" style="left:66.52%;top:39.06%;width:5.87%;height:14.68%"><span class="kb-k-top">L</span><span class="kb-k-ar">م</span></span>
+                <span class="kb-k" style="left:72.88%;top:39.06%;width:5.82%;height:14.68%"><span class="kb-k-top">:</span><span class="kb-k-main">;</span><span class="kb-k-ar">ك</span></span>
+                <span class="kb-k" style="left:79.18%;top:39.06%;width:5.82%;height:14.68%"><span class="kb-k-top">&quot;</span><span class="kb-k-main">'</span><span class="kb-k-ar">ط</span></span>
+                <span class="kb-k" style="left:85.49%;top:39.06%;width:8.98%;height:14.68%"><span class="kb-k-top">|</span><span class="kb-k-main">\</span></span>
+                <span class="kb-k" style="left:4.03%;top:55.05%;width:8.98%;height:14.55%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:13.54%;top:55.05%;width:5.82%;height:14.55%"><span class="kb-k-top">|</span><span class="kb-k-main">\</span></span>
+                <span class="kb-k" style="left:19.84%;top:55.05%;width:5.77%;height:14.55%"><span class="kb-k-top">Z</span><span class="kb-k-ar">ئ</span></span>
+                <span class="kb-k" style="left:26.10%;top:55.05%;width:5.73%;height:14.55%"><span class="kb-k-top">X</span><span class="kb-k-ar">ء</span></span>
+                <span class="kb-k" style="left:32.31%;top:55.05%;width:5.68%;height:14.55%"><span class="kb-k-top">C</span><span class="kb-k-ar">ؤ</span></span>
+                <span class="kb-k" style="left:38.48%;top:55.05%;width:5.53%;height:14.55%"><span class="kb-k-top">V</span><span class="kb-k-ar">ر</span></span>
+                <span class="kb-k" style="left:44.54%;top:55.05%;width:5.68%;height:14.55%"><span class="kb-k-top">B</span><span class="kb-k-ar">لا</span></span>
+                <span class="kb-k" style="left:50.70%;top:55.05%;width:5.73%;height:14.55%"><span class="kb-k-top">N</span><span class="kb-k-ar">ى</span></span>
+                <span class="kb-k" style="left:56.91%;top:55.05%;width:5.68%;height:14.55%"><span class="kb-k-top">M</span><span class="kb-k-ar">ة</span></span>
+                <span class="kb-k" style="left:63.12%;top:55.05%;width:5.77%;height:14.55%"><span class="kb-k-top">&lt;</span><span class="kb-k-main">,</span><span class="kb-k-ar">و</span></span>
+                <span class="kb-k" style="left:69.43%;top:55.05%;width:5.82%;height:14.55%"><span class="kb-k-top">&gt;</span><span class="kb-k-main">.</span><span class="kb-k-ar">ز</span></span>
+                <span class="kb-k" style="left:75.79%;top:55.05%;width:5.82%;height:14.55%"><span class="kb-k-top">?</span><span class="kb-k-main">/</span><span class="kb-k-ar">ظ</span></span>
+                <span class="kb-k" style="left:82.10%;top:55.05%;width:12.37%;height:14.55%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:4.03%;top:70.90%;width:8.88%;height:14.15%"><span class="kb-k-c">Ctrl</span></span>
+                <span class="kb-k" style="left:13.44%;top:70.90%;width:8.01%;height:14.15%"><span class="kb-k-c">Win</span></span>
+                <span class="kb-k" style="left:22.03%;top:70.90%;width:8.59%;height:14.15%"><span class="kb-k-c">Alt</span></span>
+                <span class="kb-k" style="left:65.65%;top:70.90%;width:6.60%;height:14.15%"><span class="kb-k-c">Alt Gr</span></span>
+                <span class="kb-k" style="left:72.78%;top:70.90%;width:6.94%;height:14.15%"><span class="kb-k-c">☰</span></span>
+                <span class="kb-k" style="left:80.25%;top:70.90%;width:6.07%;height:14.15%"><span class="kb-k-c">Ctrl</span></span>
+                </div>
+              </div>
+            </section>
+            <div class="kb-steps-divider" aria-hidden="true"></div>
+            <section class="kb-step" aria-label="مرحلة 2">
+              <div class="kb-step-head">
+                <span class="kb-step-num" aria-hidden="true">2</span>
+                <div class="kb-step-text">
+                  <h3 class="kb-step-title">نضغط على <bdi dir="ltr" class="kb-key">X</bdi></h3>
+                </div>
+              </div>
+              <!-- Live key labels over the blank render: each key's rectangle was
+                   measured on the source PNG and is placed in % of the image, so the
+                   labels track the image at any size. Latin top-left, Arabic
+                   bottom-right, as on an Arabic-English keyboard (101 layout). -->
+              <div class="kb-board">
+                <img class="kb-step-img" src="assets/img/keyboard-step2-x.jpg" width="960" height="323" alt="لوحة مفاتيح يظهر فيها المفتاح‎ X ‎باللون الأخضر" loading="lazy">
+                <div class="kb-keys" aria-hidden="true">
+                <span class="kb-k" style="left:5.55%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-c">Esc</span></span>
+                <span class="kb-k" style="left:11.51%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-top">!</span><span class="kb-k-main">1</span></span>
+                <span class="kb-k" style="left:17.47%;top:8.94%;width:5.55%;height:14.99%"><span class="kb-k-top">@</span><span class="kb-k-main">2</span></span>
+                <span class="kb-k" style="left:23.43%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-top">#</span><span class="kb-k-main">3</span></span>
+                <span class="kb-k" style="left:29.48%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-top">$</span><span class="kb-k-main">4</span></span>
+                <span class="kb-k" style="left:35.54%;top:8.94%;width:5.64%;height:14.99%"><span class="kb-k-top">%</span><span class="kb-k-main">5</span></span>
+                <span class="kb-k" style="left:41.59%;top:8.94%;width:5.68%;height:14.99%"><span class="kb-k-top">^</span><span class="kb-k-main">6</span></span>
+                <span class="kb-k" style="left:47.74%;top:8.94%;width:5.59%;height:14.99%"><span class="kb-k-top">&amp;</span><span class="kb-k-main">7</span></span>
+                <span class="kb-k" style="left:53.79%;top:8.94%;width:5.64%;height:14.99%"><span class="kb-k-top">*</span><span class="kb-k-main">8</span></span>
+                <span class="kb-k" style="left:59.84%;top:8.94%;width:5.68%;height:14.99%"><span class="kb-k-top">(</span><span class="kb-k-main">9</span></span>
+                <span class="kb-k" style="left:65.94%;top:8.94%;width:5.68%;height:14.99%"><span class="kb-k-top">)</span><span class="kb-k-main">0</span></span>
+                <span class="kb-k" style="left:72.09%;top:8.94%;width:5.64%;height:14.99%"><span class="kb-k-top">_</span><span class="kb-k-main">-</span></span>
+                <span class="kb-k" style="left:78.19%;top:8.94%;width:5.68%;height:14.99%"><span class="kb-k-top">+</span><span class="kb-k-main">=</span></span>
+                <span class="kb-k" style="left:84.29%;top:8.94%;width:10.07%;height:14.99%"><span class="kb-k-c">Backspace</span></span>
+                <span class="kb-k" style="left:5.55%;top:24.76%;width:8.92%;height:15.41%"><span class="kb-k-c">Tab</span></span>
+                <span class="kb-k" style="left:14.88%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">Q</span><span class="kb-k-ar">ض</span></span>
+                <span class="kb-k" style="left:20.98%;top:24.76%;width:5.64%;height:15.41%"><span class="kb-k-top">W</span><span class="kb-k-ar">ص</span></span>
+                <span class="kb-k" style="left:27.03%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">E</span><span class="kb-k-ar">ث</span></span>
+                <span class="kb-k" style="left:33.13%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">R</span><span class="kb-k-ar">ق</span></span>
+                <span class="kb-k" style="left:39.23%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">T</span><span class="kb-k-ar">ف</span></span>
+                <span class="kb-k" style="left:45.33%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">Y</span><span class="kb-k-ar">غ</span></span>
+                <span class="kb-k" style="left:51.43%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">U</span><span class="kb-k-ar">ع</span></span>
+                <span class="kb-k" style="left:57.49%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">I</span><span class="kb-k-ar">ه</span></span>
+                <span class="kb-k" style="left:63.63%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">O</span><span class="kb-k-ar">خ</span></span>
+                <span class="kb-k" style="left:69.73%;top:24.76%;width:5.78%;height:15.41%"><span class="kb-k-top">P</span><span class="kb-k-ar">ح</span></span>
+                <span class="kb-k" style="left:75.92%;top:24.76%;width:5.68%;height:15.41%"><span class="kb-k-top">{</span><span class="kb-k-main">[</span><span class="kb-k-ar">ج</span></span>
+                <span class="kb-k" style="left:81.98%;top:24.76%;width:5.64%;height:15.41%"><span class="kb-k-top">}</span><span class="kb-k-main">]</span><span class="kb-k-ar">د</span></span>
+                <span class="kb-k" style="left:87.94%;top:24.76%;width:6.42%;height:15.41%"><span class="kb-k-c">Enter</span></span>
+                <span class="kb-k" style="left:5.55%;top:41.13%;width:10.58%;height:15.68%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:16.50%;top:41.13%;width:5.96%;height:15.68%"><span class="kb-k-top">A</span><span class="kb-k-ar">ش</span></span>
+                <span class="kb-k" style="left:22.83%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">S</span><span class="kb-k-ar">س</span></span>
+                <span class="kb-k" style="left:29.07%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">D</span><span class="kb-k-ar">ي</span></span>
+                <span class="kb-k" style="left:35.35%;top:41.13%;width:5.96%;height:15.68%"><span class="kb-k-top">F</span><span class="kb-k-ar">ب</span></span>
+                <span class="kb-k" style="left:41.64%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">G</span><span class="kb-k-ar">ل</span></span>
+                <span class="kb-k" style="left:47.87%;top:41.13%;width:5.87%;height:15.68%"><span class="kb-k-top">H</span><span class="kb-k-ar">ا</span></span>
+                <span class="kb-k" style="left:54.11%;top:41.13%;width:5.87%;height:15.68%"><span class="kb-k-top">J</span><span class="kb-k-ar">ت</span></span>
+                <span class="kb-k" style="left:60.30%;top:41.13%;width:5.87%;height:15.68%"><span class="kb-k-top">K</span><span class="kb-k-ar">ن</span></span>
+                <span class="kb-k" style="left:66.54%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">L</span><span class="kb-k-ar">م</span></span>
+                <span class="kb-k" style="left:72.83%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">:</span><span class="kb-k-main">;</span><span class="kb-k-ar">ك</span></span>
+                <span class="kb-k" style="left:79.11%;top:41.13%;width:5.91%;height:15.68%"><span class="kb-k-top">&quot;</span><span class="kb-k-main">'</span><span class="kb-k-ar">ط</span></span>
+                <span class="kb-k" style="left:85.44%;top:41.13%;width:8.92%;height:15.68%"><span class="kb-k-top">|</span><span class="kb-k-main">\</span></span>
+                <span class="kb-k" style="left:5.55%;top:57.91%;width:8.78%;height:15.27%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:14.83%;top:57.91%;width:5.82%;height:15.27%"><span class="kb-k-top">|</span><span class="kb-k-main">\</span></span>
+                <span class="kb-k" style="left:21.03%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">Z</span><span class="kb-k-ar">ئ</span></span>
+                <span class="kb-k" style="left:27.13%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">X</span><span class="kb-k-ar">ء</span></span>
+                <span class="kb-k" style="left:33.18%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">C</span><span class="kb-k-ar">ؤ</span></span>
+                <span class="kb-k" style="left:39.28%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">V</span><span class="kb-k-ar">ر</span></span>
+                <span class="kb-k" style="left:45.33%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">B</span><span class="kb-k-ar">لا</span></span>
+                <span class="kb-k" style="left:51.43%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">N</span><span class="kb-k-ar">ى</span></span>
+                <span class="kb-k" style="left:57.49%;top:57.91%;width:5.73%;height:15.27%"><span class="kb-k-top">M</span><span class="kb-k-ar">ة</span></span>
+                <span class="kb-k" style="left:63.63%;top:57.91%;width:5.82%;height:15.27%"><span class="kb-k-top">&lt;</span><span class="kb-k-main">,</span><span class="kb-k-ar">و</span></span>
+                <span class="kb-k" style="left:69.82%;top:57.91%;width:5.82%;height:15.27%"><span class="kb-k-top">&gt;</span><span class="kb-k-main">.</span><span class="kb-k-ar">ز</span></span>
+                <span class="kb-k" style="left:76.02%;top:57.91%;width:5.82%;height:15.27%"><span class="kb-k-top">?</span><span class="kb-k-main">/</span><span class="kb-k-ar">ظ</span></span>
+                <span class="kb-k" style="left:82.30%;top:57.91%;width:12.06%;height:15.27%"><span class="kb-k-c">Shift</span></span>
+                <span class="kb-k" style="left:5.55%;top:74.28%;width:8.87%;height:15.41%"><span class="kb-k-c">Ctrl</span></span>
+                <span class="kb-k" style="left:14.83%;top:74.28%;width:7.76%;height:15.41%"><span class="kb-k-c">Win</span></span>
+                <span class="kb-k" style="left:23.01%;top:74.28%;width:8.50%;height:15.41%"><span class="kb-k-c">Alt</span></span>
+                <span class="kb-k" style="left:65.99%;top:74.28%;width:6.61%;height:15.41%"><span class="kb-k-c">Alt Gr</span></span>
+                <span class="kb-k" style="left:72.97%;top:74.28%;width:7.02%;height:15.41%"><span class="kb-k-c">☰</span></span>
+                <span class="kb-k" style="left:80.45%;top:74.28%;width:6.01%;height:15.41%"><span class="kb-k-c">Ctrl</span></span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 03 (S3) — FullImageWithTextOverlay · influencer clip
+
+         SOURCE — presentation order 67 → ppt/slides/slide67.xml. The
+         .pptx was re-checked before extraction and is byte-identical to
+         the S1/S2 passes (same md5); the file was re-unzipped anyway and
+         slide67.xml compared byte for byte against the earlier
+         extraction before anything was read from it.
+
+         PRESENTER NOTE — resolved through slide67's OWN .rels
+         (rId → ppt/notesSlides/notesSlide61.xml; 67 ≠ 61), cached
+         slidenum reads "67":
+             שם המסך בפגימה: FullImageWithTextOverlay
+             שם התמונה:< משפיען אוכל מאפייה>
+             לייצר מהתמונה סרטון מגונרט שמתנגן בלחיצה על כפתור פליי,
+             של המשפיען עם הטקסט:
+             "רוצים להפוך את הלחם לעשיר יותר בסיבים בלי לשנות את כמות
+              הקמח? יש לי טריק פשוט! הוסיפו כמות גרם מסוימת של קמח
+              כוסמין, והפחיתו בדיוק את אותה הכמות מקמח החיטה. ככה הכמות
+              הכוללת נשארת אותו הדבר, וגם היחס בין הקמחים נשמר!"
+             להתנות את ההמשך רק אחרי צפייה בסרטון
+
+         ═══ WHAT IS NOT BUILT, AND WHY ═══
+         The note asks for TWO things this screen cannot carry yet:
+           (a) a GENERATED VIDEO of the influencer, produced from the
+               still, played from a play button;
+           (b) CONTINUE GATED on having watched it.
+         The video does not exist. assets/video/ in this part holds only
+         Character_1_Running.mp4 and Character_2_Running.mp4 — the two
+         companion clips for S0 — and no influencer clip exists anywhere
+         in this lomda. The note is an instruction to PRODUCE that asset
+         ("לייצר... סרטון מגונרט"), i.e. it is outstanding producer work,
+         not something to invent here.
+
+         So neither is stubbed. A dead <video src> looks wired and fails
+         silently, and a gate on a video that cannot play is a
+         permanently locked gate — a defect, not a faithful build. The
+         same call was made in this lomda for slide 76's missing alert
+         sound: report the outstanding asset, build the half that is
+         fully specified.
+
+         Consequently this screen ships as the plain
+         FullImageWithTextOverlay the note names — full-bleed band,
+         floating card, authored line — with Continue UNGATED. The
+         slide's own play affordance (group id=13, a grey circle +
+         triangle, 206×191px centred at canvas 640,225 over the phone)
+         is deliberately NOT drawn: a play button that starts nothing is
+         worse than none. When the clip lands, the additions are a
+         <video> with native controls, the play overlay, and a gate on
+         its `ended` event — the contract for that already exists
+         (figma-lomda-builder → "Non-negotiable video rules": native
+         controls, controlsList cleanup, play-overlay removed on first
+         play, gate independent of controls). Flagged in the report.
+
+         SHAPE INVENTORY — slide 67, by unique XML id:
+           id=15 pic    image72.jpeg — full-bleed band, srcRect
+                        l=-27 t=9068 r=27 b=2287
+           id=2  pic    image18.png — the stock "متابعة" pill
+           id=3  cxnSp  the bottom rule
+           id=4  sp     "عودة" Back pill
+           id=8  sp     the floating card, ONE authored paragraph
+           id=13 grpSp  the play affordance (Oval + Isosceles Triangle)
+         No off-canvas shapes, no hidden shapes, no OMML.
+
+         AUTHORED COPY — id=8, a single <a:p>, Assistant 18pt regular,
+         paragraph alignment RIGHT. 18pt maps to 24px on this canvas, the
+         same Body/B-3 role S1 uses. One line, no authored break, nothing
+         to drop.
+
+         IMAGE — the note names "משפיען אוכל מאפייה", and
+         assets/img/משפיען אוכל מאפייה.jpg is supplied (1672×941).
+         Verified against the deck's own embedded copy (image72.jpeg,
+         1284×723): same photograph, same 1.777 framing, no watermark,
+         and the supplied file is the higher-resolution one. Checked for
+         cropped-away UI furniture the way 03-06's game art required —
+         there is none here: the producer's srcRect removes only a 9.07%
+         strip off the top and 2.29% off the bottom, both empty
+         background, and the phone and hand sit entirely inside the kept
+         region.
+
+         CARD — same x, same width and the SAME bottom edge as S1's card
+         (both end at render y 614 = 104px up from the canvas bottom),
+         so the composition constant is shared. Its VERTICAL PADDING
+         differs from S1's, though: measured from each slide's own box,
+         S1 is ~42px around two lines and this one ~22px around one.
+         Each screen therefore matches its own slide rather than being
+         unified — noted in the report so it can be unified if the
+         producer prefers.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="3" id="s3">
+      <!-- INSTRUCTIONAL video, not decorative character media. It is
+           learner-facing content (a 10s explainer the learner is meant to
+           watch), so it follows figma-lomda-builder → SKILL.md →
+           "Non-negotiable video rules" and NOT the decorative-character
+           contract in _global-components.md:
+             · native `controls` — never hidden or replaced;
+             · `controlslist` + `disablepictureinpicture` trim the bar
+               without removing it;
+             · sound ON — no `muted`, which is also why there is no
+               autoplay: playback only ever starts from the learner's own
+               gesture on the Play affordance below, so no autoplay policy
+               is fought and nothing moves or sounds unbidden;
+             · a play-overlay IS allowed and is removed once playback
+               starts, with the native controls live throughout.
+           The watch gate is separate from the controls by that same rule:
+           Continue stays disabled until the element genuinely fires
+           `ended`. -->
+      <!-- MEDIA COMPOSITION, not a bare <video>.
+
+           `#s3-stage` is the fullscreen target and `#s3-frame` is the
+           clip's own box inside it. The text card lives INSIDE the
+           frame, so the explanation travels with the picture: a native
+           per-element fullscreen would take only the <video> and strip
+           the card away, which is why `controlslist` carries
+           `nofullscreen` and the wrapper owns its own control instead
+           (s3ToggleFullscreen). The card is still real HTML text —
+           never burnt into the clip — so it stays selectable,
+           translatable, screen-reader visible and editable.
+
+           Moving the card inside the frame does not move it on screen:
+           the frame is bottom-anchored to the band, so the card's
+           approved 182px-from-canvas-bottom becomes the same point
+           expressed against the frame. See css/style.css. -->
+      <!-- animation-system · INSTRUCTIONAL video composition → fade-in
+           ONLY, ONE group (DECISIONS → Video zones → "Long-form /
+           continue-to-watch videos"). Marked on the band, which is the
+           whole video area: stage, frame, <video>, the text card, the
+           play overlay and the fullscreen button all ride in this single
+           fade. The card is NOT split into its own float group as on
+           S1/S5/S8 because it lives INSIDE the frame (it must travel
+           with the picture into fullscreen), so a second animation on
+           it would stack on the media wrapper. Opacity only: no
+           geometry, no pointer-events block, and none of the play /
+           ended-gate / fullscreen logic is touched — the controls are
+           interactive from the first frame. The frame's own fullscreen
+           `transform: translate(-50%,-50%)` is untouched: it is on
+           .video-frame (not the animated element) and fade never drives
+           transform anyway. Continue/Back excluded. -->
+      <div class="fito-img" data-reveal="1" data-reveal-fade>
+        <div class="video-stage" id="s3-stage">
+          <div class="video-frame" id="s3-frame">
+            <video id="s3-video" class="fito-video" data-xapi-report="001"
+                   controls controlslist="noplaybackrate nodownload nofullscreen"
+                   disablepictureinpicture playsinline preload="auto"
+                   onplay="s3VideoOnPlay()" onended="s3VideoOnEnded()"></video>
+
+            <div class="fito-text fito-text--single" id="s3-card">
+              <p>خلال استراحة الظهر، شاهدت سمر فيديو لمؤثر في مجال الخَبز‎.</p>
+            </div>
+
+            <!-- THE CANONICAL PLAY CONTROL — the Design Guidelines' Video
+                 Player button, per the producer's ruling of 2026-09-15:
+
+                   Video Player · size=Large, Type=Full screen
+                   component 408:8444 · inner button 408:8446
+                   icon variant type=play, color=black, size=large
+
+                 MEASURED off 408:8446 by the producer (2026-09-15) and used
+                 verbatim — the Figma connector is unauthenticated here, so
+                 these numbers are the component, not an approximation:
+
+                   button frame   80 × 80
+                   dark circle    79.9 × 79.9  #303030   → r 39.95
+                   white triangle 39 × 44  at x 25.3, y 18
+
+                 The optical offset is the COMPONENT'S OWN: x 25.3 puts the
+                 glyph's centre at 44.8, i.e. 4.8 right of the button's 40,
+                 while y 18 centres it vertically on 40 exactly. Nothing is
+                 nudged by eye here. No creative variant — solid dark disc,
+                 white triangle, nothing else.
+
+                 This REPLACES two earlier wrong answers, both recorded in
+                 tests/README.md: an invented 84px white disc with a purple
+                 glyph, and the 224px grey circle drawn on slide 67, which
+                 the producer has ruled is not the authoritative design
+                 source even though the slide and its note do author a play
+                 affordance.
+
+                 ONE central control only. It is removed by the element's own
+                 `play` event and does not come back while the clip runs; the
+                 native strip at the bottom stays live throughout and is the
+                 secondary control, never the primary hint. -->
+            <button class="video-play" id="s3-play" type="button"
+                    onclick="s3VideoPlay()" aria-label="تشغيل الفيديو">
+              <svg viewBox="0 0 80 80" aria-hidden="true" focusable="false">
+                <circle cx="40" cy="40" r="39.95" fill="#303030"/>
+                <polygon points="25.3,18 25.3,62 64.3,40" fill="#FFFFFF"/>
+              </svg>
+            </button>
+
+            <!-- Custom fullscreen control. A real <button>, so mouse,
+                 touch, Enter and Space all reach it through the
+                 platform's own activation behaviour with no extra key
+                 handling. Its accessible name is swapped by
+                 s3SyncFullscreenBtn() on every `fullscreenchange`, so
+                 it stays truthful even when the learner leaves
+                 fullscreen with Escape or the browser's own UI. -->
+            <button class="video-fs" id="s3-fs" type="button"
+                    onclick="s3ToggleFullscreen()"
+                    aria-label="شاشة كاملة" aria-pressed="false">
+              <svg class="video-fs-enter" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <svg class="video-fs-exit" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M9 4v3.5A1.5 1.5 0 0 1 7.5 9H4M20 9h-3.5A1.5 1.5 0 0 1 15 7.5V4M15 20v-3.5a1.5 1.5 0 0 1 1.5-1.5H20M4 15h3.5A1.5 1.5 0 0 1 9 16.5V20"
+                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Continue starts DISABLED and is released only by the video's
+           own `ended` event (s3VideoOnEnded). Back is never gated. -->
+      <button class="btn-continue" id="s3-continue" disabled onclick="advanceScreen()">
+        <span class="nav-label" data-label="متابعة"><span>متابعة</span></span>
+      </button>
+      <button class="scq-back" id="s3-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 04 (S4) — SingleChoiceQuestion
+         Peak question A, SUB-PART 2 of 4
+
+         SOURCE — presentation order 68 → ppt/slides/slide68.xml. The
+         .pptx was re-checked before extraction (byte-identical to the
+         S1/S2/S3 passes, same md5), re-unzipped anyway, and
+         slide68.xml compared byte for byte against the earlier
+         extraction before anything was read from it.
+
+         PRESENTER NOTE — resolved through slide68's OWN .rels
+         (rId → ppt/notesSlides/notesSlide62.xml; 68 ≠ 62), cached
+         slidenum reads "68":
+             הנחיות הפקה:
+             שם המסך בפיגמה: SingleChoiceQuestionImage
+             שאלה 2 מתוך 4
+             שימו לב שבמשוב ארוך, לאפשר גלילה.
+
+         TEMPLATE + SCORING ROLE — both authored. "שאלה 2 מתוך 4"
+         confirms this is the SECOND of the peak question's four scored
+         sub-items, which is what the producer asked to have verified
+         per slide rather than assumed from the roster.
+
+         NO IMAGE, despite the note naming "SingleChoiceQuestionImage".
+         Slide 68's relationships carry only image22.png (the stock
+         progress mock), image1.png (the flag) and the two hint-icon
+         SVGs — there is no content image, and the rendered slide's left
+         half is empty. The approved sibling 03-04's S1 sits in exactly
+         the same position (same template name, no raster), so the plain
+         SingleChoiceQuestion markup is used and no image column is
+         invented.
+
+         ANSWER KEY — גלי, on three independent pieces of evidence:
+           1. INDICATOR FILL. Slide 68 draws four option groups; three
+              carry the deck's stock cyan #00B0F0 and exactly one —
+              "سمر" (id=32) — is #00B050 GREEN. A distinctly-coloured
+              indicator is corroborating source evidence
+              (pptx-script-extraction → "A pre-filled/colored indicator
+              shape").
+           2. THE FEEDBACK'S OWN CONCLUSION. Both feedback bodies end
+              "כלומר, כמות הקמחים נשארה 10x, אך היחס לא נשמר." — the
+              ratio is NOT preserved.
+           3. THE STEM. The influencer claims the ratio WILL be
+              preserved; Gali says it will NOT. The explanation sides
+              with Gali, so "سمر" is the correct option and the other
+              three are wrong.
+         All three agree; nothing is inferred from position or colour
+         alone.
+
+         OPTION ORDER — taken from the slide's own GEOMETRY, not XML
+         document order. The four groups sit at canvas y 249.4, 324.4,
+         399.5 and 474.5, so top-to-bottom the learner sees:
+             1  המשפיען        (id=11, y 249.4)
+             2  גלי            (id=32, y 324.4)  ← correct
+             3  كِلاهما مخطئ    (id=37, y 399.5)
+             4  لا يمكن المعرفة   (id=27, y 474.5)
+         The XML lists them 11, 27, 32, 37 — a flat text dump would have
+         produced the wrong order.
+
+         SHAPE INVENTORY — slide 68, by unique XML id:
+           on-canvas   id=21 progress-bar stock mock (image22.png)
+                       id=3  flag graphic (image1.png)
+                       id=6  question stem, 3 paragraphs
+                       id=11/32/37/27  the four option groups
+                       id=18 bottom rule
+                       id=5  "هل إجابتي صحيحة؟" check (GREYED — state 1)
+                       id=2  "هل يمكنني الحصول على تلميح؟" hint + id=12 its icon
+                       id=14 "عودة" back
+           off-canvas  id=20 CORRECT feedback   (x -472, h 645)
+                       id=22 INCORRECT feedback (x -927, h 645, #FFE5E5)
+                       id=43 hint overlay group (x -969): body id=45 +
+                             "عودة إلى السؤال" button id=46
+         Both feedback boxes are 645px tall — which is why the note asks
+         for scrolling.
+
+         SCROLL GATE — authored, not a judgement call:
+         "שימו לב שבמשוב ארוך, לאפשר גלילה." Both outcomes use the
+         scroll-gated popup variant, so Continue stays disabled until
+         the learner has actually scrolled the explanation to its end.
+         The variant and its CSS are ported verbatim from 03-04.
+
+         FEEDBACK BODIES — identical in the deck between the two
+         outcomes; only the titles differ ("נכון!" vs "זו טעות, אבל עצם
+         ההתמודדות מפתחת את החשיבה!"). The correct box additionally
+         carries an empty paragraph between its title and body, and the
+         incorrect box does not. That blank is PowerPoint's way of
+         spacing a title from a body inside ONE textbox; in this
+         component the title and body are separate elements with their
+         own 4px gap, so the leading blank is not reproduced — doing so
+         would open the body with a spurious empty line. The authored
+         blanks WITHIN the body are preserved.
+
+         NO VIEW MY ANSWER TOGGLE — correct, and required. This is a
+         SingleChoiceQuestion: the learner's own pick and the correct
+         option are marked simultaneously and remain distinguishable
+         after final feedback, so the toggle's applicability test fails
+         on its third condition. _global-components.md names
+         SingleChoiceQuestion as a standing exclusion.
+
+         FIGMA — not inspected; the connector is unauthenticated in this
+         session. Geometry comes from this slide's own EMU/rendered
+         evidence plus the approved sibling implementations.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="4" id="s4">
+      <nav class="progress-question" aria-label="التنقُّل بين الأسئلة">
+        <div class="progress-question__item" data-question="1">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 1</span>
+        </div>
+        <div class="progress-question__connector" data-connector="1"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="2">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 2</span>
+        </div>
+        <div class="progress-question__connector" data-connector="2"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="3">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 3</span>
+        </div>
+        <div class="progress-question__connector" data-connector="3"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="4">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 4</span>
+        </div>
+      </nav>
+
+      <!-- animation-system · question text + answer options → float-in,
+           ONE group (1), never per option. The progress nav above is
+           excluded (progress indicator, and it centres with a static
+           transform). Check/hint/back pills excluded. -->
+      <div class="scq-question" data-reveal="1">
+        <div class="scq-right-col">
+          <!-- ¶1 — plain. The authored `x` runs are en-US in the source
+               and are isolated so the Latin letter cannot be reordered
+               by the surrounding RTL text. -->
+          <p class="scq-intro">أوصى المؤثر بإضافة  <bdi dir="ltr">x</bdi> غرام من طحين الحنطة وتقليل <bdi dir="ltr">x</bdi> غرام من طحين القمح، للحفاظ على النسبة بين نوعَيّ الطحين.</p>
+          <!-- ¶2 — PHRASE-LEVEL bold on "גלי חשבה לעצמה: " only; the
+               quoted thought that follows is plain. Phrase-level
+               contrast inside an otherwise plain paragraph is the
+               strongest form of authored-emphasis evidence, so it is
+               preserved as <strong> and nothing else in the line is
+               bolded. -->
+          <p class="scq-intro"><strong>فكرت سمر في نفسها: </strong>"إذا أضفنا <bdi dir="ltr">x</bdi> إلى مقدار واحد في النسبة، وطرحنا <bdi dir="ltr">x</bdi> من المقدار الآخر، لن نحافظ على النسبة الأصلية".</p>
+          <!-- ¶3 — the question itself, WHOLE-paragraph bold. Weight
+               only, plain body colour: slide 68's stem textbox carries
+               no <a:solidFill> on any run and the render shows the line
+               black, so no accent colour is invented. -->
+          <p class="scq-setup">مَن منهما على صواب؟</p>
+
+          <!-- Option order is the slide's own top-to-bottom GEOMETRY
+               (y 249.4 / 324.4 / 399.5 / 474.5), not XML document
+               order. o2 = גלי is the correct answer. -->
+          <div class="scq-answers" role="radiogroup" aria-label="اختاروا الإجابة الصحيحة">
+            <button class="scq-opt" type="button" role="radio" aria-checked="false" data-id="o1" onclick="s4scSelect('o1')">
+              <span class="scq-radio" aria-hidden="true"></span>
+              <span class="scq-opt-text">المؤثر</span>
+            </button>
+            <button class="scq-opt" type="button" role="radio" aria-checked="false" data-id="o2" onclick="s4scSelect('o2')">
+              <span class="scq-radio" aria-hidden="true"></span>
+              <span class="scq-opt-text">سمر</span>
+            </button>
+            <button class="scq-opt" type="button" role="radio" aria-checked="false" data-id="o3" onclick="s4scSelect('o3')">
+              <span class="scq-radio" aria-hidden="true"></span>
+              <span class="scq-opt-text">كِلاهما مخطئ</span>
+            </button>
+            <button class="scq-opt" type="button" role="radio" aria-checked="false" data-id="o4" onclick="s4scSelect('o4')">
+              <span class="scq-radio" aria-hidden="true"></span>
+              <span class="scq-opt-text">لا يمكن المعرفة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check starts DISABLED — slide 68 mocks it greyed (id=5),
+           agreeing with the template's own state 1. -->
+      <button class="btn-continue" id="s4sc-check" disabled onclick="s4scCheck()">
+        <span class="nav-label" data-label="هل إجابتي صحيحة؟"><span>هل إجابتي صحيحة؟</span></span>
+      </button>
+      <button class="scq-hint" id="s4sc-hint" type="button" onclick="s4scOpenHint()">
+        <svg class="scq-hint-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+          <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+          <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+          <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+          <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+          <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+          <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+          <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+          <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+        </svg>
+        <span class="nav-label" data-label="هل يمكنني الحصول على تلميح؟"><span>هل يمكنني الحصول على تلميح؟</span></span>
+      </button>
+      <button class="scq-back" id="s4-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+    <!-- S4 feedback popup — scroll-gated, per slide 68's own note
+         ("שימו לב שבמשוב ארוך, לאפשר גלילה."). Lives outside the
+         .screen div so goTo()'s id-suffix sweep closes it on
+         navigation. No action row: SingleChoiceQuestion is a standing
+         exclusion from the View My Answer Toggle. -->
+    <!-- animation-system · m-popup on the toggled root; fade-in on every
+         open, opacity only. The scroll gate, the scroll hint bubble and
+         drag are untouched (the hint is a child, not marked). -->
+    <div class="scq-popup m-popup hidden" id="s4sc-popup" role="status" aria-live="polite"
+         onpointerdown="popupPointerDown(event, 's4sc-popup')">
+      <div class="scq-popup-scroll" id="s4sc-popup-scroll" onscroll="s4scCheckScrollGate()">
+        <div class="scq-popup-header">
+          <p class="scq-popup-title" id="s4sc-popup-title"></p>
+        </div>
+        <div class="scq-popup-body" id="s4sc-popup-body"></div>
+      </div>
+      <div class="scq-scroll-hint" id="s4sc-scroll-hint" aria-hidden="true">
+        <svg class="scq-scroll-hint-arrow" viewBox="0 0 38.75 43.519" width="38.75" height="43.519" fill="none" xmlns="http://www.w3.org/2000/svg"><path transform="translate(0 43.519) rotate(-90)" d="M18.2954 2C19.835 -0.666664 23.684 -0.666669 25.2236 2L42.9771 32.75C44.5167 35.4167 42.5922 38.75 39.513 38.75H4.00597C0.926771 38.75 -0.997736 35.4167 0.541865 32.75L18.2954 2Z" fill="currentColor"/></svg>
+        <div class="scq-scroll-hint-card">مرّروا إلى الأسفل<br>للمتابعة</div>
+      </div>
+    </div>
+
+    <!-- S4 hint overlay. Slide 68 authors the hint BODY (id=45) and the
+         close-button label (id=46) but no title, so the canonical
+         generic title "تلميح" is used. -->
+    <!-- animation-system · m-popup on the OVERLAY (toggled element), never
+         on the inner .scq-hint-popup as well. -->
+    <div class="scq-hint-overlay m-popup hidden" id="s4sc-hint-overlay" onclick="s4scCloseHintOnBackdrop(event)">
+      <div class="scq-hint-popup" role="dialog" aria-modal="true" aria-labelledby="s4sc-hint-title">
+        <div class="scq-hint-content">
+          <h2 class="scq-hint-title" id="s4sc-hint-title">تلميح
+            <svg class="scq-hint-title-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+              <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+              <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+              <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+              <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+              <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+              <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+              <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+              <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+            </svg>
+          </h2>
+          <div class="scq-hint-body">
+            <p>جرّبوا تعويض قيَم مختلفة بدلًا من <bdi dir="ltr">x</bdi>، وافحصوا ما إذا كانت النسبة ستُحفَظ.</p>
+          </div>
+          <button class="scq-hint-close" type="button" onclick="s4scCloseHint()">عودة إلى السؤال</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 05 (S5) — FullImageWithTextOverlay · the festival order
+
+         SOURCE — presentation order 69 → ppt/slides/slide69.xml. The
+         .pptx was re-checked before extraction (byte-identical to the
+         S1-S4 passes, same md5), re-unzipped anyway, and slide69.xml
+         compared byte for byte against the earlier extraction before
+         anything was read from it.
+
+         PRESENTER NOTE — resolved through slide69's OWN .rels
+         (rId → ppt/notesSlides/notesSlide63.xml; 69 ≠ 63), cached
+         slidenum reads "69":
+             שם המסך בפגימה: FullImageWithTextOverlay
+             שם התמונה:<מאפייה טלפון>
+
+         The note names "מאפייה טלפון" — the BAKERY-PHONE photo, not the
+         festival one, even though the copy talks about a food festival.
+         Taken from the note rather than guessed from the text: both
+         מאפייה טלפון.jpg and פסטיבל אוכל.jpg are supplied in this part,
+         so a guess here would have been easy and wrong.
+
+         SCORING ROLE — NONE. No question, options, input or feedback:
+         a narrative screen between sub-parts 2 and 3. This slide's own
+         evidence only; it settles nothing about slides 70-72.
+
+         SHAPE INVENTORY — slide 69, by unique XML id:
+           id=6  pic    image73.jpeg — full-bleed band,
+                        srcRect t=985 b=23828
+           id=2  pic    image18.png — the stock "متابعة" pill
+           id=3  cxnSp  the bottom rule
+           id=4  sp     "عودة" Back pill
+           id=8  sp     the floating card, THREE authored paragraphs
+         That is the whole slide — no flag mock, no off-canvas shapes,
+         no hidden shapes, no OMML.
+
+         AUTHORED COPY — id=8, three separate <a:p> elements, so the two
+         breaks are STRUCTURAL and are reproduced as three <p>. All runs
+         Assistant 18pt regular, paragraph alignment RIGHT — 18pt maps to
+         24px on this canvas, the same Body/B-3 role S1 and S3 use.
+         Nothing bold, nothing to drop.
+
+         IMAGE — verified against the deck's own embedded copy
+         (image73.jpeg, 1281×855): same photograph, and the supplied
+         assets/img/מאפייה טלפון.jpg is the higher-resolution original
+         (1535×1024), no watermark.
+
+         THE CROP IS STRUCTURAL HERE, NOT object-position — and this is
+         the one place in this part where that matters. Slide 69's
+         srcRect is t=985 b=23828, i.e. it keeps rows 0.985%..76.17% and
+         throws away the bottom QUARTER: the foreground counter with the
+         flour bowl and dough. That is a heavy, strongly asymmetric crop,
+         unlike S1's symmetric 12.383/12.383 or S3's mild 9.07/2.29.
+
+         `object-fit: cover` cannot express a srcRect, and here it
+         provably breaks it. At a 1280×900 viewport the band is 732px
+         tall against a source that scales to 854px, so the visible
+         window is 85.8% of the image height while the producer kept only
+         75.2% — larger than their kept region, so NO object-position
+         exists that avoids reintroducing the foreground they removed.
+         Centred cover at 1280×720 already reaches 82.3% down the image,
+         past their 76.17% cut line.
+
+         So the band carries an inner FRAME that is the full source,
+         pulled up by the crop and sized from BOTH axes, which reproduces
+         the srcRect at every canvas height. Construction and the reason
+         for each half of the `max()` are in css/style.css. This is the
+         technique the sibling 03-06 validated for the same template.
+         S1 and S3 keep their approved plain-cover rule untouched; the
+         frame is opted into by a modifier class on this screen only.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="5" id="s5">
+      <!-- animation-system · background scene → fade-in, group 1. Marked
+           on the BAND, not on .fito-img-frame: the frame carries a static
+           `transform: translateX(-50%)` that reproduces the slide's
+           srcRect crop, and it must never be the animated element. Fade
+           does not drive transform, so the crop geometry is untouched. -->
+      <div class="fito-img fito-img--framed" data-reveal="1" data-reveal-fade>
+        <div class="fito-img-frame">
+          <img class="fito-photo" id="s5-img" alt="" loading="lazy">
+        </div>
+      </div>
+
+      <!-- animation-system · text card → float-in, group 2. No static
+           transform (right/bottom anchored). -->
+      <div class="fito-text" data-reveal="2">
+        <p>رائحة الخبز الطازج خرجت منذ وقت طويل من حدود المخبز‎...</p>
+        <p>وفجأة وصلت طلبية كبيرة لمهرجان طعام محلي‎!</p>
+        <p>وطلبوا من سمر، بمناسبة المهرجان، تحضير أرغفة خبز أكبر من المعتاد‎.</p>
+      </div>
+
+      <button class="btn-continue" onclick="advanceScreen()">
+        <span class="nav-label" data-label="متابعة"><span>متابعة</span></span>
+      </button>
+      <button class="scq-back" id="s5-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 06 (S6) — MultipleChoiceQuestion · the two scaling methods
+         PEAK SUB-PART 3 of 4.
+
+         SOURCE — presentation order 70 → ppt/slides/slide70.xml,
+         resolved through <p:sldIdLst>'s 70th entry (rId74) in
+         presentation.xml.rels, not by filename. The .pptx was re-checked
+         before extraction (md5 0eb1ccb8c4238ba62f34365fb1ee7ac4, the
+         same deck as the S1-S5 passes) and re-unzipped into its own
+         tree.
+
+         PRESENTER NOTE — resolved through slide70's OWN .rels
+         (rId3 → ppt/notesSlides/notesSlide64.xml; 70 ≠ 64), cached
+         slidenum reads "70":
+             הנחיות הפקה:
+             מסך לא בתבנית, צריך להיות multiple choice
+             שאלה 3 מתוך 4
+             שימו לב שבמשוב ארוך, לאפשר גלילה.
+
+         THIS SETTLES THE OPEN MAPPING QUESTION. The note names this
+         slide "שאלה 3 מתוך 4" in as many words, so slide 70 is peak
+         sub-part 3 in its own right — not a section of a combined
+         70+71 item. Slide 71 is extracted on its own terms next; this
+         screen decides only its own number.
+
+         "מסך לא בתבנית" — the slide is NOT drawn on a template master;
+         the author drew it ad hoc and asks for a multiple choice. The
+         instruction line "اختاروا الجُمل الصحيحة:" is plural, four
+         statements are offered and TWO are keyed correct, so this is
+         the MULTI-select MultipleChoiceQuestion, not SingleChoice-
+         Question. Built from 720-templates → MultipleChoiceQuestion.md,
+         reusing the approved sibling methodica-ar-math-ratio-03-04's own
+         S6 (the same template, the same option count) rather than a new
+         component.
+
+         SHAPE INVENTORY — slide 70, by unique XML id:
+           id=6   sp     the stem, 4 paragraphs (¶2-¶3 auto-numbered)
+           id=15  grpSp  statement 1 pill + label   (stroke #00B0F0)
+           id=42  grpSp  statement 2 pill + label   (stroke #00B050)
+           id=54  grpSp  statement 3 pill + label   (stroke #00B050)
+           id=29  grpSp  statement 4 pill + label   (stroke #00B0F0)
+           id=61  sp     marker square, statement 1 (fill #00B0F0)
+           id=14  sp     marker square, statement 2 (fill #00B050)
+           id=59  sp     marker square, statement 3 (fill #00B050)
+           id=65  sp     marker square, statement 4 (fill #00B0F0)
+           id=5   sp     "هل إجابتي صحيحة؟" check pill, mocked GREY (disabled)
+           id=2   sp     "هل يمكنني الحصول على تلميح؟" hint pill + id=12 its bulb icon
+           id=13  sp     "عودة" Back pill
+           id=4   cxnSp  the bottom rule
+           id=3   pic    image1.png — the flag
+           id=69  pic    image22.png — the stock 6-question progress mock
+           id=26  sp     CORRECT feedback panel   (off-canvas, x -471.9)
+           id=16  sp     FINAL-WRONG feedback panel (off-canvas, #FFE5E5)
+           id=48  grpSp  hint overlay + its "عودة إلى السؤال" button (off-canvas)
+         No hidden shapes, no OMML, no content image — slide70.xml.rels
+         carries only the flag, the progress mock and the two hint-icon
+         SVGs.
+
+         THE PROGRESS MOCK IS NOT STATE. id=69 is image22.png, the stock
+         six-question bar that appears on 29 slides across parts 02-06;
+         here it happens to render "سؤال 4" as current with a red ✗ on
+         3, which contradicts this slide's own note ("שאלה 3 מתוך 4").
+         It is furniture, and the real bar is the shared Progress
+         Question component driven by this part's peak model.
+
+         ANSWER KEY = {o2, o3} — three independent, agreeing signals:
+           1. STROKE. Two of the four pills carry #00B050 green
+              (statements 2 and 3); the other two carry the deck's stock
+              cyan #00B0F0. The same convention that keyed S4.
+           2. MARKER FILL. On the deck's own render the two green rows'
+              squares are FILLED solid and the two cyan rows' squares are
+              empty outlines — i.e. the slide is drawn in its answered
+              state, with exactly those two ticked.
+           3. THE MATHEMATICS, which the feedback spells out: multiplying
+              both flours by k keeps 3x : 7x (statement 2 true); adding a
+              constant k to each gives the NEW ratio (3x + k) : (7x + k),
+              which the feedback says in as many words is "אינו שקול"
+              to 3x : 7x (statement 3 true, statement 4 false); and
+              statement 1's premise — that the two methods add "the same
+              amount of each" — is false of the multiplying method.
+
+         AUTHORED TYPO, CORRECTED ON THE PRODUCER'S INSTRUCTION
+         (2026-09-14). The source writes the second term with a CAPITAL
+         K — "(3x + k) : (7x + K)" — in all three places that carry the
+         expression (id=57 statement 3, id=26 ¶8 and id=16 ¶8), while
+         every other k on the slide is lower case. It was first shipped
+         verbatim and raised rather than silently changed; the producer
+         then ruled it a mathematical-variable consistency error, so all
+         three now read "(3x + k) : (7x + k)". This is the ONLY authored
+         character changed on this screen — no other equation, ratio
+         order or wording is touched. See docs/pending-assets.md item 3.
+
+         RATIO GLYPH ORDER — measured, not assumed. The stem's ¶1 and
+         statement 2 both author the ratio as three separate runs
+         ("7 :" / " " / "3 "), which PowerPoint lays out right-to-left,
+         so the deck's own 1600px export shows, left to right,
+         ": 3 : 7 של היחס". Statement 3's expression is instead ONE
+         en-US run, which renders left-to-right unchanged. Both are
+         therefore written here in the LEFT-TO-RIGHT order the export
+         shows, inside <bdi dir="ltr"> isolates so the browser cannot
+         reorder them: "3 : 7" and "(3x + k) : (7x + k)". Verified
+         glyph-by-glyph against zoomed crops of the export. (The export
+         shows a capital K in that second term; see the note above for
+         why it now ships lower case. ORDER is unchanged.)
+
+         FEEDBACK — the two panels' bodies are IDENTICAL in the deck (9
+         paragraphs each, the same 3 authored blank lines, the same
+         expressions); only the titles differ, so this is the
+         shared-explanation default rather than an assumption. The
+         terminal-wrong title additionally carries the canonical fixed
+         second line "התשובה הנכונה מוצגת." per
+         _question-template-defaults.md.
+
+         SCROLL GATE on both long outcomes — the note asks for it in as
+         many words, and both source panels are 437.6 × 511.7, taller
+         than the canvas. The mechanism unlocks immediately if the body
+         does not actually overflow, so it can never strand the learner.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="6" id="s6">
+      <nav class="progress-question" aria-label="التنقُّل بين الأسئلة">
+        <div class="progress-question__item" data-question="1">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 1</span>
+        </div>
+        <div class="progress-question__connector" data-connector="1"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="2">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 2</span>
+        </div>
+        <div class="progress-question__connector" data-connector="2"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="3">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 3</span>
+        </div>
+        <div class="progress-question__connector" data-connector="3"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="4">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 4</span>
+        </div>
+      </nav>
+
+      <!-- animation-system · question text (intro + numbered list +
+           instruction) + the four checkbox options → float-in, ONE
+           group (1), never per option. Progress nav excluded (progress
+           indicator with a static centring transform). Check/hint/back
+           pills excluded. -->
+      <div class="scq-question" data-reveal="1">
+        <div class="scq-right-col">
+          <!-- ¶1 — plain. The ratio is a numeral group, so it is written
+               in the LTR order the deck's own render shows (glyph-by-
+               glyph verification in the block comment above) and
+               isolated so the browser cannot reorder it.
+               The two &#160; before the sentence colon are AUTHORED: the
+               source's third run is "3  :" (two spaces), which the deck
+               lays out as a visible gap between the numeral group and
+               the colon that introduces the list. Ordinary spaces would
+               collapse to one there, so they are written as no-break
+               spaces to survive HTML white-space collapsing. -->
+          <p class="scq-intro">فكرت سمر في طريقتين لتكبير الأرغفة استعدادًا للمهرجان مع الحفاظ على النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi>&#160;&#160;:</p>
+          <!-- ¶2-¶3 — an AUTO-NUMBERED list in the source
+               (<a:buAutoNum type="arabicPeriod"> with marL 457200 EMU /
+               indent -457200), so they are a real <ol> with a hanging
+               marker, not two paragraphs with typed-in digits. -->
+          <ol class="scq-list">
+            <li>زيادة وزن نوعَيّ الطحين بـ <bdi class="scq-expr" dir="ltr">k</bdi> مرات.</li>
+            <li>إضافة وزن ثابت مقداره <bdi class="scq-expr" dir="ltr">k</bdi> غرام إلى كلا نوعَيّ الطحين‎.</li>
+          </ol>
+          <!-- ¶4 — whole-paragraph bold, WEIGHT only: slide 70's stem
+               textbox carries no <a:solidFill> on any run and the deck's
+               own render shows the line black. The plural
+               "ההיגדים" is what makes this a MULTI-select. -->
+          <p class="scq-setup">اختاروا الجُمل الصحيحة:</p>
+
+          <!-- MULTI-select: role="group" of role="checkbox" options
+               (never radio), aria-checked mirroring live Set membership.
+               DOM order = the slide's own top-to-bottom geometry
+               (y 296.9 / 371.9 / 448.0 / 522.0). -->
+          <div class="scq-answers" role="group" aria-label="اختاروا الجُمل الصحيحة">
+            <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
+                    data-id="o1" onclick="s6mcToggle('o1')">
+              <span class="scq-check" aria-hidden="true"></span>
+              <span class="scq-opt-text">في الطريقتين، سيتم الحفاظ على الطعم والقوام، لأننا أضفنا نفس الكمية من كل نوع من الطحين</span>
+            </button>
+            <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
+                    data-id="o2" onclick="s6mcToggle('o2')">
+              <span class="scq-check" aria-hidden="true"></span>
+              <span class="scq-opt-text">زيادة كميات الطحين بـ <bdi class="scq-expr" dir="ltr">k</bdi> ستحافظ على النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi></span>
+            </button>
+            <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
+                    data-id="o3" onclick="s6mcToggle('o3')">
+              <span class="scq-check" aria-hidden="true"></span>
+              <span class="scq-opt-text">إضافة <bdi class="scq-expr" dir="ltr">k</bdi> غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي <bdi class="scq-expr" dir="ltr">(3x + k) : (7x + k)</bdi></span>
+            </button>
+            <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
+                    data-id="o4" onclick="s6mcToggle('o4')">
+              <span class="scq-check" aria-hidden="true"></span>
+              <span class="scq-opt-text">إضافة نفس العدد <bdi class="scq-expr" dir="ltr">k</bdi> إلى المقدارين تحافظ على النسبة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check starts DISABLED — slide 70 mocks it greyed (id=5),
+           agreeing with the template's own state 1. -->
+      <button class="btn-continue" id="s6mc-check" disabled onclick="s6mcCheck()">
+        <span class="nav-label" data-label="هل إجابتي صحيحة؟"><span>هل إجابتي صحيحة؟</span></span>
+      </button>
+      <button class="scq-hint" id="s6mc-hint" type="button" onclick="s6mcOpenHint()">
+        <svg class="scq-hint-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+          <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+          <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+          <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+          <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+          <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+          <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+          <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+          <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+        </svg>
+        <span class="nav-label" data-label="هل يمكنني الحصول على تلميح؟"><span>هل يمكنني الحصول على تلميح؟</span></span>
+      </button>
+      <button class="scq-back" id="s6-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+    <!-- S6 feedback popup — scroll-gated, per slide 70's own note
+         ("שימו לב שבמשוב ארוך, לאפשר גלילה."). Lives outside the
+         .screen div so goTo()'s id-suffix sweep closes it on
+         navigation. No action row: MultipleChoiceQuestion shows the full
+         correct set alongside the learner's own selections at the same
+         time, so the View My Answer Toggle's "one slot, two possible
+         values" applicability rule excludes it. -->
+    <!-- animation-system · m-popup on the toggled root; fade-in on every
+         open, opacity only. Scroll gate / scroll hint / drag untouched. -->
+    <div class="scq-popup m-popup hidden" id="s6mc-popup" role="status" aria-live="polite"
+         onpointerdown="popupPointerDown(event, 's6mc-popup')">
+      <div class="scq-popup-scroll" id="s6mc-popup-scroll" onscroll="s6mcCheckScrollGate()">
+        <div class="scq-popup-header">
+          <p class="scq-popup-title" id="s6mc-popup-title"></p>
+        </div>
+        <div class="scq-popup-body" id="s6mc-popup-body"></div>
+      </div>
+      <div class="scq-scroll-hint" id="s6mc-scroll-hint" aria-hidden="true">
+        <svg class="scq-scroll-hint-arrow" viewBox="0 0 38.75 43.519" width="38.75" height="43.519" fill="none" xmlns="http://www.w3.org/2000/svg"><path transform="translate(0 43.519) rotate(-90)" d="M18.2954 2C19.835 -0.666664 23.684 -0.666669 25.2236 2L42.9771 32.75C44.5167 35.4167 42.5922 38.75 39.513 38.75H4.00597C0.926771 38.75 -0.997736 35.4167 0.541865 32.75L18.2954 2Z" fill="currentColor"/></svg>
+        <div class="scq-scroll-hint-card">مرّروا إلى الأسفل<br>للمتابعة</div>
+      </div>
+    </div>
+
+    <!-- S6 hint overlay. Slide 70 authors the hint BODY (id=22) and the
+         close-button label (id=24) but no title, so the canonical
+         generic title "تلميح" is used. -->
+    <!-- animation-system · m-popup on the OVERLAY (toggled element), never
+         on the inner .scq-hint-popup as well. -->
+    <div class="scq-hint-overlay m-popup hidden" id="s6mc-hint-overlay" onclick="s6mcCloseHintOnBackdrop(event)">
+      <div class="scq-hint-popup" role="dialog" aria-modal="true" aria-labelledby="s6mc-hint-title">
+        <div class="scq-hint-content">
+          <h2 class="scq-hint-title" id="s6mc-hint-title">تلميح
+            <svg class="scq-hint-title-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+              <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+              <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+              <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+              <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+              <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+              <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+              <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+              <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+            </svg>
+          </h2>
+          <div class="scq-hint-body">
+            <p>يمكنكم تعويض قيَم بدلًا من <bdi class="scq-expr" dir="ltr">k</bdi> و- <bdi class="scq-expr" dir="ltr">x</bdi> وفحص الجُمل المختلفة‎.</p>
+          </div>
+          <button class="scq-hint-close" type="button" onclick="s6mcCloseHint()">عودة إلى السؤال</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 07 (S7) — ValueInputQuestion · the original quantities
+         PEAK SUB-PART 4 of 4 — the last scored sub-item of this part.
+
+         SOURCE — presentation order 71 → ppt/slides/slide71.xml,
+         resolved through <p:sldIdLst>'s 71st entry (rId75) in
+         presentation.xml.rels, not by filename. The .pptx was re-checked
+         before extraction (md5 0eb1ccb8c4238ba62f34365fb1ee7ac4, the
+         same deck as every earlier pass) and re-unzipped into its own
+         tree; slide70.xml was re-compared byte for byte as a control and
+         is unchanged.
+
+         PRESENTER NOTE — resolved through slide71's OWN .rels
+         (rId3 → ppt/notesSlides/notesSlide65.xml; 71 ≠ 65), cached
+         slidenum reads "71":
+             הנחיות הפקה:
+             שם המסך בפיגמה:ValueInputQuestion
+             שאלה 4 מתוך 4
+             שם התמונה:< מאפייה הוספה>
+             התשובות הנכונות הן:
+             כוסמין 90
+             חיטה 210
+             שימו לב שבמשוב ארוך, לאפשר גלילה.
+
+         So the template, the scoring role (sub-part 4 of 4), the image
+         and the ANSWER KEY are all authored — none inferred. With slide
+         70's own note reading "שאלה 3 מתוך 4", the four-way split of the
+         peak question is now confirmed end to end from the slides' own
+         notes, and PEAK_SUBPARTS is complete.
+
+         ANSWER KEY = spelt 90, wheat 210. Three agreeing signals:
+           1. the note states it in as many words;
+           2. the slide's own pre-filled indicator boxes read 90 (id=7)
+              and 210 (id=31), the same convention that keyed S2;
+           3. the mathematics the feedback works through — 3x + 100 =
+              7x - 20 → 120 = 4x → x = 30, so 3x = 90 and 7x = 210.
+         90 : 210 reduces to 3 : 7, this part's running ratio, and after
+         the change both flours are 190 g, which is what the question
+         asks for.
+
+         A RESOLVED PRODUCER COMMENT sits on this slide
+         (modernComment_303_A50AF67.xml, 2026-08-28, status="resolved"):
+             יש אי התאמה בין המשוב לשאלה.
+             במשוב מוסיפים כוסמין ומורידים חיטה
+         It is recorded here because it was found, not because it still
+         applies: the current stem says she ADDED 100 g spelt and REMOVED
+         20 g wheat, and the current feedback works 3x + 100 against
+         7x - 20 — the same direction. The mismatch it reports is no
+         longer present, consistent with its resolved status. Nothing was
+         changed on account of it; it is producer correspondence, not an
+         instruction to this build.
+
+         SHAPE INVENTORY — slide 71, by unique XML id:
+           id=6   sp     the stem, 9 paragraphs (3 authored blanks)
+           id=11  pic    image74.jpeg — the content photo, NO srcRect
+           id=7   sp     indicator box "90"  (spelt)
+           id=31  sp     indicator box "210" (wheat)
+           id=5   sp     "هل إجابتي صحيحة؟" check pill, mocked GREY (disabled)
+           id=2   sp     "هل يمكنني الحصول على تلميح؟" hint pill + id=12 its bulb icon
+           id=8   sp     "عودة" Back pill
+           id=4   cxnSp  the bottom rule
+           id=3   pic    image1.png — the flag
+           id=15  pic    image22.png — the stock 6-question progress mock
+           id=26  sp     CORRECT feedback panel     (off-canvas, x -481.3)
+           id=28  sp     FINAL-WRONG feedback panel (off-canvas, #FFE5E5)
+           id=21  grpSp  hint overlay + its "عودة إلى السؤال" button (off-canvas)
+         No hidden shapes, no OMML. As on slide 70, the progress mock is
+         stock furniture — it renders "سؤال 4" of six with a red mark on
+         3, which is not this part's state.
+
+         THE FIELDS ARE INLINE, and that is what the slide authors. ¶7 and
+         ¶9 each carry a long run of spaces where the box sits
+         ("…הכוסמין היא                        גרם."), with the drawn
+         box (id=7 / id=31) laid over that gap — i.e. the author was
+         simulating an inline field inside the sentence. They are
+         therefore real inline fields here, not absolutely-positioned
+         boxes, which is also what keeps them correct when the text
+         reflows. The canonical .viq-field box (103 × 55) matches the
+         slide's own 103.4 × 54.5 almost exactly.
+
+         IMAGE — assets/img/מאפייה הוספה.jpg, the file the note names.
+         The picture carries an EMPTY <a:srcRect/>, so it is uncropped,
+         and `object-fit: contain` keeps it undistorted and uncut — the
+         same decision already approved for S2's photo.
+
+         THE ASSET WAS REPLACED 2026-09-14, on the producer's ruling.
+         The originally supplied 1536 × 1024 PNG carried two baked-in
+         callouts, and one of them — "קמח חיטה +20 גרם" — stated the
+         OPPOSITE direction from the stem ("והורידה 20 גרם קמח חיטה"),
+         from the feedback ("7x - 20") and from the key. A learner
+         reading it would have set up 3x + 100 = 7x + 20 and got 60/140.
+         The ruling was to use slide 71's OWN clean embedded picture
+         (ppt/media/image74.jpeg, 431 × 287) and to add no callouts,
+         labels, arrows, chalkboard or anything else the slide does not
+         have. Transcoded JPEG → PNG so the filename — and therefore the
+         note's own image name — is unchanged; the superseded file is
+         kept under docs/superseded-assets/.
+
+         The frame geometry and the crop are UNCHANGED by the swap: the
+         box is still the slide's own 431.2 × 283.7 at x 50.7 / y 146.4,
+         and `contain` still letterboxes by ~5px because the source
+         aspect (1.5017) differs slightly from the box (1.5199) — 0.5px
+         different from the old asset's 1.5000, i.e. visually identical
+         placement.
+
+         RATIO GLYPH ORDER — measured against the deck's own 1600px
+         export, as on every other screen here. ¶1 authors the ratio as
+         three runs ("7 :" / " " / "3 ."), which PowerPoint lays out
+         right-to-left, so the export shows, left to right: ". 3 : 7".
+         Written here as an LTR isolate holding "3 : 7" with the authored
+         space before the sentence period preserved as &#160;.
+
+         FEEDBACK — the two panels share one worked solution, identical
+         paragraph for paragraph; only the opening differs. The
+         final-wrong panel adds a second BOLD line "לא נורא, בואו נסביר:"
+         before the authored blank that separates title from body in both
+         panels. That line is carried as the first body paragraph in bold
+         rather than as part of the title, so the canonical terminal-wrong
+         second line stays adjacent to the authored title, as the contract
+         requires, and the correct panel's structure is mirrored exactly.
+
+         VIEW MY ANSWER TOGGLE — REQUIRED here. The terminal-wrong reveal
+         writes 90 / 210 into the very inputs the learner typed into, so
+         the reveal is destructive and the toggle's applicability rule
+         ("one slot, two possible values") is met. Same contract and same
+         shared implementation as S2.
+
+         SCROLL GATE — authored ("שימו לב שבמשוב ארוך, לאפשר גלילה."),
+         and both source panels are 437.6 × 607.9, taller than the
+         canvas. Unlike S6's, this body is long enough that the gate is
+         expected to engage; whether it does is MEASURED after the build
+         and reported.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="7" id="s7">
+      <nav class="progress-question" aria-label="التنقُّل بين الأسئلة">
+        <div class="progress-question__item" data-question="1">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 1</span>
+        </div>
+        <div class="progress-question__connector" data-connector="1"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="2">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 2</span>
+        </div>
+        <div class="progress-question__connector" data-connector="2"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="3">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 3</span>
+        </div>
+        <div class="progress-question__connector" data-connector="3"><div class="progress-question__connector-line"></div></div>
+        <div class="progress-question__item" data-question="4">
+          <div class="progress-question__icon">
+            <svg class="progress-question__icon-check" viewBox="0 0 12.7273 9.18763" fill="none" aria-hidden="true"><path d="M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z" fill="currentColor"/></svg>
+            <svg class="progress-question__icon-x" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z" fill="currentColor"/></svg>
+          </div>
+          <span class="progress-question__label">سؤال 4</span>
+        </div>
+      </nav>
+
+      <!-- The bakery photo, mounted from S7_IMAGE. Decorative-contextual:
+           slide 71 draws no zoom affordance, so none is invented. -->
+      <!-- animation-system · content image → float-in, group 2. It sits
+           on the physical LEFT, so per the RTL order rule it reveals
+           AFTER the right-side question block even though it precedes
+           it in the DOM (group numbering follows reading order, not DOM
+           order). Not zoom-measured (no zoom affordance). No static
+           transform on .viq-figure--left (left/top positioned). -->
+      <div class="viq-figure viq-figure--left" data-reveal="2">
+        <img class="viq-figure-img" id="s7-img" alt="" loading="lazy">
+      </div>
+
+      <!-- animation-system · question text + the two INLINE answer fields
+           → float-in, ONE group (1); right side, so first. Container-scope:
+           the subtree holds text inputs (allowed to float — not
+           JS-measured, verdict icons are class-driven) and nothing
+           zoom/DnD/canvas. No static transform on .scq-question. Progress
+           nav and Check/hint/back pills excluded. -->
+      <div class="scq-question" data-reveal="1">
+        <div class="scq-right-col">
+          <!-- ¶1 — the ratio, written in the LEFT-TO-RIGHT order the
+               deck's own export shows and isolated so the browser cannot
+               reorder it. The &#160; before the sentence period is
+               authored: the source's third run is "3 ." with a space. -->
+          <p class="scq-intro">في وصفة سمر الأصلية، النسبة بين كمية طحين الحنطة وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>&#160;.</p>
+          <p class="scq-intro">بالإضافة إلى الخبز المعروف، تريد مفاجأة الزوار بوصفة جديدة تعتمد على كميات متساوية من طحين الحنطة وطحين القمح‎.</p>
+          <!-- ¶3, ¶5 and ¶8 are AUTHORED empty paragraphs, reproduced as
+               real blank lines rather than as invented margins. -->
+          <p class="stem-gap" aria-hidden="true"></p>
+          <p class="scq-intro">ولذلك أضافت 100 غرام من طحين الحنطة وقلّلت 20 غرام من طحين القمح‎.</p>
+          <p class="stem-gap" aria-hidden="true"></p>
+          <!-- ¶6 — whole-paragraph bold, WEIGHT only: slide 71's stem
+               textbox carries no <a:solidFill> on any run. -->
+          <p class="scq-setup">أكملوا‎:</p>
+          <!-- ¶7 / ¶9 — the two answer fields, INLINE inside their own
+               sentences, which is what the slide authors (a long run of
+               spaces with the drawn box laid over it). Each field's
+               aria-label names its own flour, so the mapping never rests
+               on position alone. -->
+          <p class="scq-intro viq-line">الكمية الأصلية من طحين الحنطة هي <span class="viq-field" id="s7viq-field-spelt"><input id="s7viq-input-spelt" class="viq-input" type="text" inputmode="numeric" dir="ltr" autocomplete="off" spellcheck="false" aria-label="الكمية الأصلية من طحين الحنطة بالغرام" oninput="s7viqOnInput()"><span class="viq-field-ico" id="s7viq-ico-spelt" aria-hidden="true"></span></span> غرام.</p>
+          <p class="stem-gap" aria-hidden="true"></p>
+          <p class="scq-intro viq-line">الكمية الأصلية من طحين القمح هي <span class="viq-field" id="s7viq-field-wheat"><input id="s7viq-input-wheat" class="viq-input" type="text" inputmode="numeric" dir="ltr" autocomplete="off" spellcheck="false" aria-label="الكمية الأصلية من طحين القمح بالغرام" oninput="s7viqOnInput()"><span class="viq-field-ico" id="s7viq-ico-wheat" aria-hidden="true"></span></span> غرام.</p>
+        </div>
+      </div>
+
+      <!-- Check starts DISABLED — slide 71 mocks it greyed (id=5). -->
+      <button class="btn-continue" id="s7viq-check" disabled onclick="s7viqCheck()">
+        <span class="nav-label" data-label="هل إجابتي صحيحة؟"><span>هل إجابتي صحيحة؟</span></span>
+      </button>
+      <button class="scq-hint" id="s7viq-hint" type="button" onclick="s7viqOpenHint()">
+        <svg class="scq-hint-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+          <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+          <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+          <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+          <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+          <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+          <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+          <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+          <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+        </svg>
+        <span class="nav-label" data-label="هل يمكنني الحصول على تلميح؟"><span>هل يمكنني الحصول على تلميح؟</span></span>
+      </button>
+      <button class="scq-back" id="s7-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+    <!-- S7 feedback popup — scroll-gated per slide 71's own note, AND
+         carrying the View My Answer Toggle's action row, which
+         renderPopupAction() appends inside the scroll column so the
+         toggle arrives at the end of the explanation rather than
+         hovering over it. -->
+    <!-- animation-system · m-popup on the toggled root; fade-in on every
+         open, including the View-My-Answer content swap. Opacity only:
+         scroll gate, scroll hint, action row and drag untouched. -->
+    <div class="scq-popup m-popup hidden" id="s7viq-popup" role="status" aria-live="polite"
+         onpointerdown="popupPointerDown(event, 's7viq-popup')">
+      <div class="scq-popup-scroll" id="s7viq-popup-scroll" onscroll="s7viqCheckScrollGate()">
+        <div class="scq-popup-header">
+          <p class="scq-popup-title" id="s7viq-popup-title"></p>
+        </div>
+        <div class="scq-popup-body" id="s7viq-popup-body"></div>
+      </div>
+      <div class="scq-scroll-hint" id="s7viq-scroll-hint" aria-hidden="true">
+        <svg class="scq-scroll-hint-arrow" viewBox="0 0 38.75 43.519" width="38.75" height="43.519" fill="none" xmlns="http://www.w3.org/2000/svg"><path transform="translate(0 43.519) rotate(-90)" d="M18.2954 2C19.835 -0.666664 23.684 -0.666669 25.2236 2L42.9771 32.75C44.5167 35.4167 42.5922 38.75 39.513 38.75H4.00597C0.926771 38.75 -0.997736 35.4167 0.541865 32.75L18.2954 2Z" fill="currentColor"/></svg>
+        <div class="scq-scroll-hint-card">مرّروا إلى الأسفل<br>للمتابعة</div>
+      </div>
+    </div>
+
+    <!-- S7 hint overlay. Slide 71 authors the hint BODY (id=23) and the
+         close-button label (id=24) but no title, so the canonical
+         generic title "تلميح" is used. -->
+    <!-- animation-system · m-popup on the OVERLAY (toggled element), never
+         on the inner .scq-hint-popup as well. -->
+    <div class="scq-hint-overlay m-popup hidden" id="s7viq-hint-overlay" onclick="s7viqCloseHintOnBackdrop(event)">
+      <div class="scq-hint-popup" role="dialog" aria-modal="true" aria-labelledby="s7viq-hint-title">
+        <div class="scq-hint-content">
+          <h2 class="scq-hint-title" id="s7viq-hint-title">تلميح
+            <svg class="scq-hint-title-ico" viewBox="0 0 25.9999 22.2883" fill="none" aria-hidden="true">
+              <path d="M17.7925 2.76345C16.3676 1.37911 14.5057 0.68776 12.5488 0.815545C9.07995 1.04163 6.27286 3.9168 6.01796 7.50134C5.85646 9.77363 6.7035 11.9443 8.34374 13.4548C9.23036 14.2723 9.74016 15.465 9.74016 16.7265H11.2284H14.7733H16.2615C16.2615 15.4847 16.7919 14.2707 17.7181 13.3959C19.17 12.0263 20.0012 10.0751 20.0012 8.04361C20.0012 6.01215 19.1953 4.12486 17.7909 2.76018L17.7925 2.76345ZM13.0001 5.54524C11.6701 5.54524 10.5856 6.66582 10.5856 8.04525C10.5856 8.46956 10.2515 8.81524 9.84149 8.81524C9.43143 8.81524 9.09736 8.46956 9.09736 8.04525C9.09736 5.8172 10.8484 4.00527 13.0001 4.00527C13.4133 4.00527 13.7473 4.35094 13.7473 4.77525C13.7473 5.19957 13.4133 5.54524 13.0001 5.54524Z" fill="currentColor"/>
+              <path d="M9.73858 19.6245C9.73858 20.3289 9.99823 20.9908 10.478 21.4904L10.4938 21.5068C10.9783 22.0098 11.6242 22.2883 12.3114 22.2883H13.6888C14.3775 22.2883 15.025 22.0114 15.5111 21.5052C15.9956 21.0039 16.2631 20.3355 16.2631 19.6277V17.9895H9.73858V19.6245ZM11.2268 19.5294H14.7717V19.6277C14.7717 19.9243 14.6609 20.2077 14.4566 20.419C14.254 20.6254 13.9753 20.7483 13.6888 20.7483H12.3114C12.028 20.7483 11.7588 20.6336 11.5561 20.4305L11.5451 20.4174C11.3424 20.211 11.2268 19.9226 11.2268 19.6261V19.5311V19.5294Z" fill="currentColor"/>
+              <path d="M25.2558 7.27531H22.607C22.1954 7.27531 21.8629 7.62099 21.8629 8.0453C21.8629 8.46961 22.197 8.81529 22.607 8.81529H25.2558C25.6674 8.81529 25.9999 8.46961 25.9999 8.0453C25.9999 7.62099 25.6658 7.27531 25.2558 7.27531Z" fill="currentColor"/>
+              <path d="M4.1386 8.0453C4.1386 7.61935 3.80453 7.27531 3.39447 7.27531H0.744124C0.332481 7.27531 0 7.62099 0 8.0453C0 8.46961 0.334064 8.81529 0.744124 8.81529H3.39289C3.80453 8.81529 4.13701 8.46961 4.13701 8.0453H4.1386Z" fill="currentColor"/>
+              <path d="M20.8702 3.11398C21.0175 3.11398 21.1663 3.06811 21.2961 2.97472L23.4667 1.40198C23.804 1.15788 23.8847 0.677863 23.6488 0.328911C23.4129 -0.0200418 22.949 -0.105232 22.6118 0.140509L20.4412 1.71325C20.1039 1.95736 20.0232 2.43737 20.2591 2.78632C20.4032 3.00094 20.6343 3.11562 20.8702 3.11562V3.11398Z" fill="currentColor"/>
+              <path d="M4.70372 13.1172L2.53309 14.69C2.19586 14.9341 2.11512 15.4141 2.35102 15.763C2.49509 15.9777 2.72625 16.0923 2.96215 16.0923C3.10939 16.0923 3.25822 16.0465 3.38804 15.9531L5.55867 14.3803C5.8959 14.1362 5.97665 13.6562 5.74074 13.3073C5.50484 12.9583 5.04095 12.8731 4.70372 13.1189V13.1172Z" fill="currentColor"/>
+              <path d="M23.4668 14.6884L21.2961 13.1157C20.9589 12.8716 20.495 12.9567 20.2591 13.3041C20.0232 13.653 20.1055 14.133 20.4412 14.3771L22.6118 15.9499C22.7416 16.0449 22.8904 16.0891 23.0377 16.0891C23.272 16.0891 23.5032 15.9744 23.6488 15.7598C23.8847 15.4109 23.8024 14.9309 23.4668 14.6868V14.6884Z" fill="currentColor"/>
+              <path d="M5.55869 1.71322L3.38806 0.140478C3.05083 -0.103625 2.58694 -0.0184349 2.35104 0.328879C2.11513 0.677832 2.19746 1.15785 2.53311 1.40195L4.70374 2.97469C4.83356 3.06971 4.98239 3.11395 5.12963 3.11395C5.36395 3.11395 5.5951 2.99927 5.74076 2.78465C5.97666 2.4357 5.89434 1.95569 5.55869 1.71158V1.71322Z" fill="currentColor"/>
+            </svg>
+          </h2>
+          <div class="scq-hint-body">
+            <p>وسّعوا النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi> بـ <bdi class="scq-expr" dir="ltr">x</bdi> مرات، واستخدموا الإضافات لإيجاد <bdi class="scq-expr" dir="ltr">x</bdi>، ثم عوّضوه في التعابير المناسبة للكميات الأصلية من الطحين‎.</p>
+          </div>
+          <button class="scq-hint-close" type="button" onclick="s7viqCloseHint()">عودة إلى السؤال</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         Screen 08 (S8) — FullImageWithTextOverlay · the festival payoff
+         THE LAST SCREEN OF PART 05.
+
+         SOURCE — presentation order 72 → ppt/slides/slide72.xml,
+         resolved through <p:sldIdLst>'s 72nd entry (rId76) in
+         presentation.xml.rels, not by filename.
+
+         THE DECK CHANGED before this extraction: md5
+         9f0ab00a0ca264c7950435b3590281c0, against
+         0eb1ccb8c4238ba62f34365fb1ee7ac4 for every earlier pass. A full
+         file-by-file diff of the two extractions found exactly two
+         content slides changed — slide 67 (this part's S3: its photo was
+         re-cropped and moved up) and slide 60 (part 04's, a namespace
+         declaration hoisted by a re-save, text byte-identical). Slide 71
+         was re-compared byte for byte as a control and is unchanged.
+         S3's change is reported to the producer, not acted on here.
+
+         PRESENTER NOTE — resolved through slide72's OWN .rels
+         (rId2 → ppt/notesSlides/notesSlide66.xml; 72 ≠ 66), cached
+         slidenum reads "72":
+             שם המסך בפגימה: FullImageWithTextOverlay
+             שם התמונה:<פסטיבל אוכל>
+
+         PRODUCER COMMENT on this slide
+         (modernComment_305_522D2838.xml, 2026-08-30, status="resolved"):
+             מאיה - רק לדאוג לתמונה בלי גופיה
+         It is resolved in the DECK's own artwork and was NOT resolved in
+         the asset folder — see the IMAGE note below.
+
+         SCORING ROLE — NONE. No question, options, input, hint or
+         feedback: the closing narrative screen of the part. The peak
+         question's four scored sub-items are already complete (S2, S4,
+         S6, S7), so this screen adds nothing to PEAK_SUBPARTS.
+
+         SHAPE INVENTORY — slide 72, by unique XML id:
+           id=6  pic    image75.jpeg — the band, srcRect t=5295 b=32031
+           id=8  sp     the white card, TWO authored paragraphs
+           id=2  pic    image18.png — the stock "متابعة" pill
+           id=4  sp     "عودة" Back pill
+           id=3  cxnSp  the bottom rule
+         That is the whole slide — five shapes, no hidden shapes, no
+         OMML, and NO flag mock (unlike slides 65/69/71). The flag is
+         global chrome in this lomda and renders on every screen; its
+         absence from this one slide's mock changes nothing.
+
+         COPY — id=8, two separate <a:p>, so the break is structural and
+         is reproduced as two <p>. Neither run carries an explicit size
+         (no sz on any rPr, no lvl1pPr override), exactly like slide 65's
+         card, which this part already renders at the 24px Body/B-3 role.
+
+         IMAGE — assets/img/פסטיבל אוכל.jpg, the file the note names.
+         REPLACED 2026-09-14 with the deck's own embedded copy
+         (ppt/media/image75.jpeg, 1282 × 1026), transcoded JPEG → PNG so
+         the filename and the note's image name are unchanged.
+         The file previously on disk (1402 × 1122) is a SUPERSEDED render
+         of the same scene: in it the woman at centre-right wears a black
+         sleeveless גופיה, which is precisely what this slide's own
+         producer comment asked to avoid. The deck's copy has her in a
+         sleeved shirt — i.e. the comment is resolved in the deck and was
+         not resolved in the asset folder. The same handling the producer
+         ruled for S7's photo is applied here, and the superseded file is
+         kept under docs/superseded-assets/ rather than destroyed.
+         Reported for confirmation; a corrected high-resolution PNG
+         dropped in at the same path needs no code change.
+
+         THE CROP IS STRUCTURAL, and has to be. srcRect t=5295 b=32031
+         keeps source rows 5.295%..67.969% and drops the bottom third.
+         `object-fit: cover` fits that at 1280×720 / 1366×768 / 1920×1080
+         (window 53.9% of the image height against a kept 62.7%) but
+         NOT at 1280×900, where the band grows to 732px and the window
+         becomes 71.5% — larger than the kept region, so no
+         object-position exists that avoids reintroducing what the
+         producer cut. Same failure mode as S5, so the same approved
+         `.fito-img--framed` technique is reused, with this screen's own
+         frame numbers. At 1280×900 the frame lands exactly on the cut
+         line (67.97%).
+
+         CARD — the shared `.fito-text` hugging box, NOT the slide's own
+         1041px width. Measured: the authored card leaves ~262px of empty
+         surface to the left of its longest line. That is not new here —
+         slide 67's authored card carries a 254px surplus that the built
+         S3 does not reproduce either, and the producer approved S3's
+         card. Same composition constants as every other card in the part
+         (right 32px, bottom 104px); only the vertical padding differs,
+         and it is this slide's own: 94.8px around two 24px/1.2 lines
+         (57.6px) gives ~19px.
+
+         END OF PART. Continue here crosses to part 06 through the shared
+         PartNav contract — see crossToNextPart() in js/main.js.
+         ═══════════════════════════════════════════════════════ -->
+    <section class="screen" data-screen="8" id="s8">
+      <!-- animation-system · background scene → fade-in, group 1. On the
+           BAND, not on .fito-img-frame (which owns the static
+           translateX(-50%) crop transform and must never be animated). -->
+      <div class="fito-img fito-img--framed" data-reveal="1" data-reveal-fade>
+        <div class="fito-img-frame">
+          <img class="fito-photo" id="s8-img" alt="" loading="lazy">
+        </div>
+      </div>
+
+      <!-- animation-system · text card → float-in, group 2. No static
+           transform (right/bottom anchored). -->
+      <div class="fito-text" data-reveal="2">
+        <p>وصلت سمر إلى المهرجان، وكان الكشك ناجحًا‎!</p>
+        <p>وخلال ذلك، فهمت كيف تساعد النسب في الحفاظ على وصفة ثابتة حتى عندما تتغيّر الكميات‎.</p>
+      </div>
+
+      <button class="btn-continue" onclick="advanceScreen()">
+        <span class="nav-label" data-label="متابعة"><span>متابعة</span></span>
+      </button>
+      <button class="scq-back" id="s8-back" onclick="goBack()">
+        <span class="nav-label" data-label="عودة"><span>عودة</span></span>
+      </button>
+    </section>
+
+
+  </div>
+
+  <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
+  <script src="../unit-js/05-motion.js?v=7"></script>
+  <script src="../unit-js/08-partnav.js?v=7"></script>
+  <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
+  <script src="../unit-js/10-identity.js?v=7"></script>
+  <script src="../unit-js/15-engine.js?v=7"></script>
+  <script src="../unit-js/20-xapi.js?v=7"></script>
+  <script src="../unit-js/22-scoring.js?v=7"></script>
+  <script src="../unit-js/25-report.js?v=7"></script>
+  <script src="../unit-js/40-resume.js?v=7"></script>
+  <script src="../unit-js/45-painters.js?v=7"></script>
+  <script src="../unit-js/50-loader.js?v=7"></script>
+  <script src="js/main.js?v=7"></script>
+  <script src="../unit-js/90-boot.js?v=7"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   unit-js/15-engine.js  —  methodica-math-ratio-03 (all parts)
+   unit-js/15-engine.js  —  methodica-ar-math-ratio-03 (all parts)
    Shared engine helpers: DECLARATIONS ONLY, nothing runs at load.
    Every declaration here used to be pasted, byte-identical, into each
    part's js/main.js (hash-checked at the move). Loaded before main.js,
@@ -22,9 +22,9 @@
    later part READS it back — the key string must stay byte-identical
    across all parts (720-templates → _global-components.md → Companion
    character system → "Cross-part persistence"). Confirmed against
-   methodica-math-ratio-03-01/js/main.js and -02/js/main.js:
-   CHARACTER_STORAGE_KEY = 'methodica_math_ratio_03_selectedCharacter'. */
-const CHARACTER_STORAGE_KEY = 'methodica_math_ratio_03_selectedCharacter';
+   methodica-ar-math-ratio-03-01/js/main.js and -02/js/main.js:
+   CHARACTER_STORAGE_KEY = 'methodica_ar_math_ratio_03_selectedCharacter'. */
+const CHARACTER_STORAGE_KEY = 'methodica_ar_math_ratio_03_selectedCharacter';
 
 const DEFAULT_CHARACTER = 'character-1';
 
@@ -105,7 +105,7 @@ function setNavLabel(el, text) {
 /* ═══════════════════════════════════════════════════════════
    Feedback popup — shared drag/clamp/action-button mechanics.
    Ported verbatim from the approved sibling
-   methodica-math-ratio-03-02 (720-templates → _global-components.md →
+   methodica-ar-math-ratio-03-02 (720-templates → _global-components.md →
    Feedback popup system). Reused as-is by every question screen in
    this part; do not reimplement per screen.
    ═══════════════════════════════════════════════════════════ */

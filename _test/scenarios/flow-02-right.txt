@@ -1,0 +1,18 @@
+# part 02 — every question answered right (multi-selects clicked in reverse order), to the part's end; from the live round QA/2026-11-10_moe-runbook-checks phase 3 (he-0302-C). Every right answer's response must equal Kata's pattern
+window.__set = function(id, v){ var e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }; window.__rd = function(p){ var s = document.getElementById(p + '-popup-scroll'); if (s) s.scrollTop = s.scrollHeight; var f = window[p + 'CheckScrollGate']; if (typeof f === 'function') f(); };
+goTo(1); __set('s1viq-input-left','2'); __set('s1viq-input-right','3'); s1viqCheck()
+goTo(2); s2scSelect('o1'); s2scCheck()
+goTo(3); __set('s3viq-input-left','4'); __set('s3viq-input-right','3'); s3viqCheck()
+goTo(4); __set('s4viq-input-plain','15'); __set('s4viq-input-uphill','6'); s4viqCheck()
+goTo(5); s5scSelect('o4'); s5scCheck()
+goTo(6); __set('s6viq-input','6'); s6viqCheck()
+goTo(7); s7dqSelect(1,'3/4'); s7dqSelect(2,'7/4'); s7dqCheck()
+goTo(8); __set('s8viq-input','6'); s8viqCheck()
+if (!(masteryState().passed)) throw new Error('masteryState().passed')
+await new Promise(r => setTimeout(r, 800))
+if (!(!document.querySelector("#s8viq-check").disabled)) throw new Error('!document.querySelector("#s8viq-check").disabled')
+document.querySelector("#s8viq-check").click()
+await new Promise(r => setTimeout(r, 1500))
+if (!(document.querySelector("#s8viq-check").disabled === true)) throw new Error('document.querySelector("#s8viq-check").disabled === true')
+document.querySelector("#s8viq-check").click()
+await new Promise(r => setTimeout(r, 1000))

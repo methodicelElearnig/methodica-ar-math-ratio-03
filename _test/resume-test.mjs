@@ -85,10 +85,10 @@ const COUNT = `(()=>{const L=__stmts();return {answered:L.filter(s=>s.verb.start
 
 let fails = 0;
 for (const sc of SC) {
-  const url = `${BASE}methodica-math-ratio-03-${sc.part}/index.html?xapiLib=../_test/xapi-720-k.js`;
+  const url = `${BASE}methodica-ar-math-ratio-03-${sc.part}/index.html?xapiLib=../_test/xapi-720-${process.env.XAPI_STUB || 'l'}.js`;   /* -l = production (2026-11-14); XAPI_STUB=k runs the rollback library */
   /* reset from a same-origin page that is NOT the lomda: a lomda page would flush its restored
      document back on pagehide */
-  await send('Page.navigate', { url: BASE + 'metadata/methodica-math-ratio-03_unit.json' }); await sleep(600);
+  await send('Page.navigate', { url: BASE + 'metadata/methodica-ar-math-ratio-03_unit.json' }); await sleep(600);
   await ev(`sessionStorage.clear(); localStorage.clear(); true`);
   await send('Page.navigate', { url }); await sleep(3000);
   evs = [];

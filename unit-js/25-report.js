@@ -2,7 +2,7 @@
 // ============================================================
 //  REPORT MODAL — "מצאתם בעיה?"
 // ============================================================
-/* Shared by all six components of methodica-math-ratio-03 — ported verbatim (logic) from
+/* Shared by all six components of methodica-ar-math-ratio-03 — ported verbatim (logic) from
    methodica-math-ratio-05, itself from ratio-01. Definition-only: 90-boot.js calls
    initReportModal(). Guide: Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md §7.
 

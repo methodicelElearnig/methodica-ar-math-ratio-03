@@ -1,0 +1,19 @@
+initialized onlinelesson -
+initialized question 001
+answered.last question 001/q1 true 1 «نعم»
+completed question 001 true 1
+initialized question 002
+answered.last question 002/q1 true 1 «النسبة بين مساحة المثلث ADC ومساحة المثلث ADB[.]هي 1:1»
+completed question 002 true 1
+initialized question 003
+answered.last question 003/q1 true 1 «4 : 1»
+answered.last question 003/q2 true 1 «2 : 1»
+answered.last question 003/q3 true 1 «16»
+completed question 003 true 1
+initialized question 004
+answered.last question 004/q1 true 1 «a/(a+b) هو جزء زمن المشي في المنطقة المستوية من زمن المشي الكلّي.[,]a/b هي النسبة بين زمن المشي في المنطقة المستوية وزمن المشي في الوادي.[,]تكبير زمن المشي في كل جزء بـ x مرات سيجعل زمن المسار الكلّي ax + bx.»
+completed question 004 true 1
+initialized question 005
+answered.last question 005/q1 true 1 «يمكن توضيح نسبة رياضية خاصة بواسطتها»
+completed question 005 true 1
+completed onlinelesson - true 1

@@ -10,14 +10,19 @@
       xapiRequestedHint ref exists in the metadata; every declared question has exactly ONE
       reportQ site (D-9); a choice screen offers as many options as its question has answers
       (xapiChoiceAnswer reports answers[] by position)
-   4. the library loader line and its XAPI_USING_G regex agree (guide §3.5)
+   4. the library loader line and its XAPI_USING_G regex agree (guide §3.5); resume on loads -l (the
+      leave save, BOOT-AND-RESUME-HARDENING-2026-11-03.md §2.10)
    5. guide §3.3: no top-level name is declared both in unit-js/ and in a part's main.js
-      (regex scan of top-level declarations — the authoring scripts use the AST equivalent) */
+      (regex scan of top-level declarations — the authoring scripts use the AST equivalent)
+   6. per part (fix R, 2026-11-14, hardening doc §2.3 C1/C2): one inline boot-cover net, which raises
+      __resumeInFlight itself on ?registration and keeps 800 ms and the 11000 ceiling; two script
+      preloads byte-equal to the loader's URLs (letter from 50-loader.js, no ?v=, no crossorigin) and
+      the Kata preconnect. Behaviour is in _test/write-guard.mjs. */
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const ROOT = path.join(__dirname, '..');
-const PARTS = ['01', '02', '03', '04', '05', '06'].map(u => 'methodica-math-ratio-03-' + u);
+const PARTS = ['01', '02', '03', '04', '05', '06'].map(u => 'methodica-ar-math-ratio-03-' + u);
 let failures = 0, checks = 0;
 const ok = (cond, msg) => { checks++; if (!cond) { failures++; console.log('  FAIL ' + msg); } };
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -31,7 +36,7 @@ function existsExact(rel) {
   }
   return true;
 }
-const SHIP = /^(unit-js\/[^/]+\.js|unit-css\/[^/]+\.css|unit-assets\/.+|metadata\/[^/]+\.json|methodica-math-ratio-03-0\d\/(index\.html|js\/main\.js|css\/style\.css|assets\/.+))$/;
+const SHIP = /^(unit-js\/[^/]+\.js|unit-css\/[^/]+\.css|unit-assets\/.+|metadata\/[^/]+\.json|methodica-ar-math-ratio-03-0\d\/(index\.html|js\/main\.js|css\/style\.css|assets\/.+))$/;
 
 function checkRef(fromFile, ref) {
   ref = ref.split(/[?#]/)[0];
@@ -71,7 +76,7 @@ PARTS.forEach(u => { for (const m of read(u + '/index.html').matchAll(/(?:src|hr
 ok(vs.size === 1, 'more than one ?v= across the index.html files: ' + [...vs].join(', '));
 PARTS.forEach(u => {
   const html = read(u + '/index.html');
-  for (const m of html.matchAll(/(?:src|href)="([^"]+\.(?:js|css))"/g)) ok(false, `${u}/index.html: ${m[1]} has no ?v=`);
+  for (const m of html.matchAll(/(?:src|href)="([^"]+\.(?:js|css))"/g)) if (!/^https?:/.test(m[1])) ok(false, `${u}/index.html: ${m[1]} has no ?v=`);   // the CDN preloads (C2) must NOT carry one
 });
 
 /* 3. xAPI seams against metadata */
@@ -122,7 +127,25 @@ const loader = read('unit-js/50-loader.js');
 const letters = [...loader.matchAll(/xapi-720-([a-z])\.js'/g)].map(m => m[1]);
 const re = (loader.match(/XAPI_USING_G = \/xapi-720-\[([a-z]+)\]/) || [])[1] || '';
 letters.forEach(l => ok(re.includes(l), `50-loader.js loads xapi-720-${l}.js but XAPI_USING_G's regex lacks '${l}'`));
-if (/RESUME_ENABLED = true;/.test(read('unit-js/10-identity.js'))) ok(letters.includes('k'), 'resume on must load -k');
+if (/RESUME_ENABLED = true;/.test(read('unit-js/10-identity.js'))) ok(letters.includes('l'), 'resume on must load -l (the leave save)');
+
+/* 6. C1 / C2 per part */
+const CDN = (loader.match(/var CDN = '([^']+)'/) || [])[1] || '';
+const libLetter = (loader.match(/RESUME_ENABLED \? 'xapi-720-([a-z])\.js'/) || [])[1];
+PARTS.forEach(u => {
+  const html = read(u + '/index.html');
+  const nets = (html.match(/<script>[\s\S]*?<\/script>/g) || []).filter(x => /boot-cover/.test(x));
+  ok(nets.length === 1, `${u}: ${nets.length} inline scripts handle boot-cover (want 1)`);
+  const net = nets[0] || '';
+  ok(/if \(\/\[\?&\]registration=\/\.test\(location\.search\)\) window\.__resumeInFlight = true;/.test(net), `${u}: C1 the net does not raise __resumeInFlight on ?registration`);
+  ok(/setTimeout\(tick, 800\)/.test(net) && /< 11000\b/.test(net) && /__resumeInFlight &&/.test(net), `${u}: C1 the net lost 800 ms / the 11000 ceiling / its __resumeInFlight wait`);
+  const head = html.split('</head>')[0];
+  const pre = [...head.matchAll(/<link rel="preload" as="script"[^>]*>/g)].map(m => m[0]);
+  ok(pre.length === 2 && pre[0].includes('href="' + CDN + 'xapiwrapper.min.js"') && pre[1].includes('href="' + CDN + 'xapi-720-' + libLetter + '.js"')
+     && !pre.some(x => /crossorigin|\.js\?/.test(x)), `${u}: C2 preloads are not the loader's two URLs (letter ${libLetter}): ${pre.join(' ')}`);
+  ok(head.indexOf('rel="preload"') >= 0 && head.indexOf('rel="preload"') < head.indexOf('rel="stylesheet"'), `${u}: C2 the preloads must come before the first stylesheet`);
+  ok(/<link rel="preconnect" href="https:\/\/kata\.cet\.ac\.il">/.test(head), `${u}: C2 no preconnect to kata.cet.ac.il`);
+});
 
 /* 5. no name in both layers */
 const topNames = src => {

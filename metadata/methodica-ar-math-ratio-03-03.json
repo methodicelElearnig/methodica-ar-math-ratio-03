@@ -1,0 +1,362 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/",
+  "title": "وقت التدريب 2",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": false,
+  "recommendedAfterFail": [
+    "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/"
+  ],
+  "isRequired": false,
+  "relativeDifficulty": 2,
+  "masteryLevel": null,
+  "order": 3,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "algorithmic-thinking"
+  ],
+  "languages": [
+    "Arabic"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 18,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-11-15T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-001/",
+      "title": "أولاد وبنات في الصف",
+      "informationToBot": "מטרת הפריט: תרגול צמצום יחס אלגברי והצבה בנתון כדי למצוא מספר כולל. מה התלמיד אמור להבין/לתרגל: היחס x : 2x מצטמצם ב-x ל-1 : 2; אם מספר הבנות 2x הוא 24 אז x = 12 ומספר התלמידים הוא x + 2x = 36. כיווני חשיבה ואסטרטגיות: לצמצם בגורם המשותף; למצוא את x מתוך הנתון ולהציב בסכום. טעויות נפוצות: החלפת סדר היחס (בנות : בנים); חישוב סך התלמידים כמספר הבנות בלבד (24) או כ-x בלבד (12) במקום x + 2x. מידע נוסף: שני סעיפים; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-001/q1",
+          "questionType": "fill-in",
+          "questionText": "يوجد في الصف x أولاد و-2x بنات. أ. ما هي النسبة المختزلة بين عدد الأولاد وعدد البنات؟ __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "1 : 2",
+            "1:2"
+          ],
+          "correctXapiResponsesPattern": [
+            "1 : 2",
+            "1:2"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-001/q2",
+          "questionType": "numeric",
+          "questionText": "يوجد في الصف x أولاد و-2x بنات. معلوم أن عدد البنات هو 24. ب. كم عدد الطلاب في الصف؟ __ طالبًا.",
+          "answers": [],
+          "correctAnswers": [
+            36
+          ],
+          "correctXapiResponsesPattern": [
+            "36"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-002/",
+      "title": "كتب دنيا وأمل",
+      "informationToBot": "מטרת הפריט: תרגול הצבה של ערך x ביחס עם ביטויים אלגבריים וצמצום התוצאה. מה התלמיד אמור להבין/לתרגל: הצבת x = 10 ביחס (x + 5) : (2x + 1) נותנת 15 : 21, ולאחר צמצום ב-3 מקבלים 5 : 7. כיווני חשיבה ואסטרטגיות: להציב בשני חלקי היחס, לחשב כל חלק ואז לצמצם. טעויות נפוצות: השארת היחס בלי צמצום; הצבה בחלק אחד בלבד; טעות בסדר פעולות בחישוב 2x + 1. מידע נוסף: סעיף יחיד; שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-002/q1",
+          "questionType": "fill-in",
+          "questionText": "النسبة بين عدد كتب دنيا وعدد كتب أمل هي (x+5):(2x+1). معطى: x = 10. ما هي النسبة المختزلة بين عدد كتب دنيا وعدد كتب أمل؟ __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "5 : 7",
+            "5:7"
+          ],
+          "correctXapiResponsesPattern": [
+            "5 : 7",
+            "5:7"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-003/",
+      "title": "مبنى ضخم في لعبة حاسوب",
+      "informationToBot": "מטרת הפריט: תרגול ניסוח יחס אלגברי מתוך חוק בנייה, והבנת המשמעות של היחס בהצבה. מה התלמיד אמור להבין/לתרגל: אם על כל a קומות מתחת לקרקע יש 3 קומות מעליה אז מספר הקומות מעל הקרקע הוא 3a והיחס הוא a : 3a (או כשבר a/3a); בהצבת a = 3 מתקבל 3 : 9 (1 : 3), כלומר מספר הקומות מעל הקרקע גדול ממספר הקומות מתחתיה. כיווני חשיבה ואסטרטגיות: לפרש \"על כל פריט אחד מגודל א' נקבל 3 פריטים מגודל ב'\" כהכפלה של שני הגדלים באותו a. טעויות נפוצות: בחירה ב-a : 3 (הכפלת חלק אחד בלבד); רישום היחס בסדר הפוך. מידע נוסף: שני סעיפים — בחירה מרובה (הביטויים הנכונים: a : 3a וגם השבר a/3a) והשלמה בעזרת רשימה נפתחת; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-003/q1",
+          "questionType": "choice",
+          "questionText": "أ. في لعبة حاسوب، تخطط مجموعة من اللاعبين مبنى ضخمًا. لكي يبدو المبنى متناسبًا، اتّفقوا على قاعدة ثابتة: مقابل كل a طوابق تحت الأرض، سيتم بناء 3 طوابق فوقها. اختاروا جميع التعابير التي تصف النسبة بين عدد الطوابق تحت الأرض وعدد الطوابق فوق الأرض.",
+          "answers": [
+            "a : 3a",
+            "a : 3",
+            "a/3a"
+          ],
+          "correctAnswers": [
+            "a : 3a",
+            "a/3a"
+          ],
+          "correctXapiResponsesPattern": [
+            "a : 3a[,]a/3a"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "a : 3a",
+                "description": "a : 3a"
+              },
+              {
+                "id": "a : 3",
+                "description": "a : 3"
+              },
+              {
+                "id": "a/3a",
+                "description": "a/3a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-003/q2",
+          "questionType": "matching",
+          "questionText": "ب. النسبة بين عدد الطوابق تحت الأرض وعدد الطوابق فوق الأرض a:3a. أكملوا: إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون __ عدد الطوابق تحت الأرض. (اختاروا إجابة من القائمة)",
+          "answers": {
+            "source": [
+              "إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون"
+            ],
+            "target": [
+              "أكبر من",
+              "أصغر من",
+              "يساوي"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون",
+              "target": "أكبر من"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون[.]أكبر من"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون",
+                "description": "إذا عوّضنا a = 3، فإن عدد الطوابق فوق الأرض سيكون"
+              }
+            ],
+            "target": [
+              {
+                "id": "أكبر من",
+                "description": "أكبر من"
+              },
+              {
+                "id": "أصغر من",
+                "description": "أصغر من"
+              },
+              {
+                "id": "يساوي",
+                "description": "يساوي"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-004/",
+      "title": "بطاقات جوائز حنان وسامر",
+      "informationToBot": "מטרת הפריט: פתרון בעיית יחס שבה מעבירים כמות בין שני אנשים ומגיעים לשוויון, בעזרת הרחבת היחס ומשוואה. מה התלמיד אמור להבין/לתרגל: ביחס 7 : 4 הכמויות הן 7x ו-4x; לאחר העברת 15 כרטיסים מתקיים 7x − 15 = 4x + 15, ומכאן x = 10, כלומר לעמית היו 70 כרטיסים ולעומר 40. כיווני חשיבה ואסטרטגיות: להרחיב את היחס פי x, לבטא את הכמויות אחרי ההעברה, לרשום משוואת שוויון, לפתור ולהציב חזרה. טעויות נפוצות: הוספת 15 לשני הצדדים או הפחתה משני הצדדים; מענה עם x במקום עם מספר הכרטיסים. מידע נוסף: סעיף יחיד עם שתי תיבות הקלדה (עמית ועומר); שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-004/q1",
+          "questionType": "performance",
+          "questionText": "لعبت حنان وسامر في الأركيد وجمعا بطاقات جوائز. النسبة بين عدد بطاقات حنان وعدد بطاقات سامر هي 7:4. بعد أن أعطت حنان لسامر 15 بطاقة، أصبح عدد بطاقات سامر مساويًا لعدد بطاقات حنان. أكملوا: عدد البطاقات التي كانت لدى حنان في البداية هو: __ عدد البطاقات التي كانت لدى سامر في البداية هو: __",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "حنان",
+              "response": "70"
+            },
+            {
+              "stepId": "سامر",
+              "response": "40"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "حنان[.]70[,]سامر[.]40"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "حنان",
+                "description": null
+              },
+              {
+                "id": "سامر",
+                "description": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-005/",
+      "title": "آلات الحلوى",
+      "informationToBot": "מטרת הפריט: תרגול מעבר מיחס למשוואה — ביטוי הכמויות באמצעות x, בניית משוואה לפי הפרש נתון ופתרונה. מה התלמיד אמור להבין/לתרגל: ביחס 7 : 3 הכמויות הן 7x ו-3x; אם במכונה 1 יש 120 ממתקים יותר אז 3x + 120 = 7x; פתרון: 4x = 120, x = 30, ולכן 210 ממתקים במכונה 1 ו-90 במכונה 2. כיווני חשיבה ואסטרטגיות: להרחיב כל מספר ביחס באותו x; להוסיף את ההפרש לכמות הקטנה כדי להשוות לגדולה; לפתור ולהציב. טעויות נפוצות: בחירה ב-3 + x או ב-10x (חיבור x או סכום הרכיבים); משוואה שבה ההפרש מתווסף לצד הלא נכון. מידע נוסף: שלושה סעיפים — שתי גרירות (התאמת ביטוי לכל מכונה; גרירת המשוואה למקום המסומן) והקלדה של שתי כמויות; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-005/q1",
+          "questionType": "matching",
+          "questionText": "وُضعت في مجمّع ألعاب آلتان للحلوى بأحجام مختلفة. في الآلة 1 توجد كمية أكبر من الحلوى، والنسبة بين عدد قطع الحلوى في الآلة 1 وعدد الحلوى في الآلة 2 يجب أن تكون 7:3. سمر مسؤولة عن تعبئة الآلتين وتريد معرفة عدد قطع الحلوى التي عليها وضعها في كل واحدة. أ. اسحبوا ولائموا لكل آلة التعبير الذي يصف عدد قطع الحلوى فيها.",
+          "answers": {
+            "source": [
+              "الآلة 1",
+              "الآلة 2"
+            ],
+            "target": [
+              "3x",
+              "10x",
+              "3+x",
+              "7x"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "الآلة 1",
+              "target": "7x"
+            },
+            {
+              "source": "الآلة 2",
+              "target": "3x"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "الآلة 1[.]7x[,]الآلة 2[.]3x"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "الآلة 1",
+                "description": "الآلة 1"
+              },
+              {
+                "id": "الآلة 2",
+                "description": "الآلة 2"
+              }
+            ],
+            "target": [
+              {
+                "id": "3x",
+                "description": "3x"
+              },
+              {
+                "id": "10x",
+                "description": "10x"
+              },
+              {
+                "id": "3+x",
+                "description": "3+x"
+              },
+              {
+                "id": "7x",
+                "description": "7x"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-005/q2",
+          "questionType": "matching",
+          "questionText": "ب. معطى: في الآلة 1 يوجد 120 قطعة حلوى أكثر من الآلة 2. اسحبوا المعادلة المناسبة إلى المكان المشار إليه.",
+          "answers": {
+            "source": [
+              "المعادلة"
+            ],
+            "target": [
+              "3x + 7x = 120",
+              "7x + 120 = 3x",
+              "3x + 120 = 7x"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "المعادلة",
+              "target": "3x + 120 = 7x"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "المعادلة[.]3x + 120 = 7x"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "المعادلة",
+                "description": "المعادلة"
+              }
+            ],
+            "target": [
+              {
+                "id": "3x + 7x = 120",
+                "description": "3x + 7x = 120"
+              },
+              {
+                "id": "7x + 120 = 3x",
+                "description": "7x + 120 = 3x"
+              },
+              {
+                "id": "3x + 120 = 7x",
+                "description": "3x + 120 = 7x"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-005/q3",
+          "questionType": "performance",
+          "questionText": "ت. حصلنا على المعادلة: 3x + 120 = 7x. ساعدوا سمر على تعبئة الآلتين بالكمية المناسبة: حلوا المعادلة وجدوا عدد قطع الحلوى التي عليها وضعها في كل آلة. للآلة 1: __ قطعة حلوى. للآلة 2: __ قطعة حلوى.",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "الآلة 1",
+              "response": "210"
+            },
+            {
+              "stepId": "الآلة 2",
+              "response": "90"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "الآلة 1[.]210[,]الآلة 2[.]90"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "الآلة 1",
+                "description": null
+              },
+              {
+                "id": "الآلة 2",
+                "description": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

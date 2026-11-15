@@ -1,0 +1,155 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/",
+  "title": "السؤال الأكبر",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": true,
+  "recommendedAfterFail": [],
+  "isRequired": true,
+  "relativeDifficulty": 5,
+  "masteryLevel": null,
+  "order": 5,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "interpretation-and-reasoning"
+  ],
+  "languages": [
+    "Arabic"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 8,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-11-15T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/methodica-ar-math-ratio-03-05-001/",
+      "title": "مخبز سمر (4 بنود)",
+      "informationToBot": "מטרת הפריט: שאלת שיא — \n\nיישום והנמקה בנושא ייצוג יחס באמצעות ביטויים אלגבריים: הרחבה, הבחנה בין הוספה להכפלה, ופתרון משוואה. מה התלמיד אמור להבין/לתרגל: (א) יחס 3 : 7 מורחב פי x הוא 3x : 7x; (ב) הוספת x לחלק אחד והפחתת x מהשני משנה את היחס (4x : 6x = 2 : 3); (ג) הכפלת שני הקמחים פי k שומרת על היחס, ואילו הוספת k לשניהם יוצרת יחס (3x + k) : (7x + k); (ד) מ-3x + 100 = 7x − 20 מתקבל x = 30, ולכן הכמויות המקוריות 90 גרם כוסמין ו-210 גרם חיטה. כיווני חשיבה ואסטרטגיות: להגדיר את הכמויות דרך x; לבדוק טענות על ידי הצבת ערכים; לבנות משוואת שוויון לפי הנתון. טעויות נפוצות: אמונה שהוספת אותו מספר לשני חלקי היחס שומרת עליו; חישוב הכמויות המקוריות בלי לפתור את x; כתיבת x3 במקום 3x. מידע נוסף: 4 סעיפים שצריך להצליח ב-3 לפחות; מסכי סיפור מקשרים וסרטון של משפיען אפייה בין הסעיפים; הסעיף הראשון כולל שני שדות הקלדה (3x ו-7x; גם X גדולה מתקבלת); לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/methodica-ar-math-ratio-03-05-001/q1",
+          "questionType": "fill-in",
+          "questionText": "افتتحت سمر الخبازة مخبزًا جديدًا. سر الرغيف المثالي هو الدمج بين نوعين من الطحين: طحين الحنطة وطحين القمح. النسبة بين طحين الحنطة وطحين القمح هي 3:7. لتحضير كميات مختلفة من العجين، تضرب سمر النسبة 3:7 بـ x، بحيث إنّ x هو عدد الغرامات. أكملوا التعبير الجبري المناسب لكل نوع من الطحين.",
+          "answers": [],
+          "correctAnswers": [
+            "طحين الحنطة: 3x, طحين القمح: 7x",
+            "طحين الحنطة: 3X, طحين القمح: 7X"
+          ],
+          "correctXapiResponsesPattern": [
+            "طحين الحنطة: 3x, طحين القمح: 7x",
+            "طحين الحنطة: 3X, طحين القمح: 7X"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/methodica-ar-math-ratio-03-05-001/q2",
+          "questionType": "choice",
+          "questionText": "خلال استراحة الظهر، شاهدت سمر فيديو لمؤثر في مجال الخَبز. أوصى المؤثر بإضافة x غرام من طحين الحنطة وتقليل x غرام من طحين القمح، للحفاظ على النسبة بين نوعَيّ الطحين. فكرت سمر في نفسها: \"إذا أضفنا x إلى مقدار واحد في النسبة، وطرحنا x من المقدار الآخر، لن نحافظ على النسبة الأصلية\". مَن منهما على صواب؟",
+          "answers": [
+            "المؤثر",
+            "سمر",
+            "كِلاهما مخطئ",
+            "لا يمكن المعرفة"
+          ],
+          "correctAnswers": [
+            "سمر"
+          ],
+          "correctXapiResponsesPattern": [
+            "سمر"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "المؤثر",
+                "description": "المؤثر"
+              },
+              {
+                "id": "سمر",
+                "description": "سمر"
+              },
+              {
+                "id": "كِلاهما مخطئ",
+                "description": "كِلاهما مخطئ"
+              },
+              {
+                "id": "لا يمكن المعرفة",
+                "description": "لا يمكن المعرفة"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/methodica-ar-math-ratio-03-05-001/q3",
+          "questionType": "choice",
+          "questionText": "فكرت سمر في طريقتين لتكبير الأرغفة استعدادًا للمهرجان مع الحفاظ على النسبة 3:7: (1) زيادة وزن نوعَيّ الطحين بـ k مرات. (2) إضافة وزن ثابت مقداره k غرام إلى كلا نوعَيّ الطحين. اختاروا الجُمل الصحيحة:",
+          "answers": [
+            "في الطريقتين، سيتم الحفاظ على الطعم والقوام، لأننا أضفنا نفس الكمية من كل نوع من الطحين",
+            "زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7",
+            "إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)",
+            "إضافة نفس العدد k إلى المقدارين تحافظ على النسبة"
+          ],
+          "correctAnswers": [
+            "زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7",
+            "إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)"
+          ],
+          "correctXapiResponsesPattern": [
+            "زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7[,]إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "في الطريقتين، سيتم الحفاظ على الطعم والقوام، لأننا أضفنا نفس الكمية من كل نوع من الطحين",
+                "description": "في الطريقتين، سيتم الحفاظ على الطعم والقوام، لأننا أضفنا نفس الكمية من كل نوع من الطحين"
+              },
+              {
+                "id": "زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7",
+                "description": "زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7"
+              },
+              {
+                "id": "إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)",
+                "description": "إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)"
+              },
+              {
+                "id": "إضافة نفس العدد k إلى المقدارين تحافظ على النسبة",
+                "description": "إضافة نفس العدد k إلى المقدارين تحافظ على النسبة"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-05/methodica-ar-math-ratio-03-05-001/q4",
+          "questionType": "performance",
+          "questionText": "في وصفة سمر الأصلية، النسبة بين كمية طحين الحنطة وطحين القمح هي 3:7. بالإضافة إلى الخبز المعروف، تريد مفاجأة الزوار بوصفة جديدة تعتمد على كميات متساوية من طحين الحنطة وطحين القمح. ولذلك أضافت 100 غرام من طحين الحنطة وقلّلت 20 غرام من طحين القمح. أكملوا: الكمية الأصلية من طحين الحنطة هي __ غرام. الكمية الأصلية من طحين القمح هي __ غرام.",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "طحين الحنطة",
+              "response": "90"
+            },
+            {
+              "stepId": "طحين القمح",
+              "response": "210"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "طحين الحنطة[.]90[,]طحين القمح[.]210"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "طحين الحنطة",
+                "description": null
+              },
+              {
+                "id": "طحين القمح",
+                "description": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
