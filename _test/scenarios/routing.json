@@ -116,7 +116,7 @@
   "after": 3500
  },
  {
-  "eval": "(()=>{ const set=(id,v)=>{const e=document.getElementById(id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true}));};\n goTo(1); set('s1viq-input-first','9'); set('s1viq-input-second','9'); s1viqCheck(); set('s1viq-input-first','8'); s1viqCheck();\n goTo(2); set('s2viq-input','1'); s2viqCheck(); set('s2viq-input','2'); s2viqCheck();\n goTo(3); set('s3viq-input-first','9'); set('s3viq-input-second','9'); s3viqCheck(); set('s3viq-input-first','8'); s3viqCheck();\n goTo(4); s4mcSelected.clear(); s4mcSelected.add('o2'); s4mcCheck(); s4mcSelected.add('o1'); s4mcCheck();\n goTo(5); const st=s5dqState(); st.selection='קטן מ'; s5dqCheck(); st.selection='שווה ל'; s5dqCheck();\n return [mastery1State().allResolved, mastery1State().passed] })()",
+  "eval": "(()=>{ const set=(id,v)=>{const e=document.getElementById(id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true}));};\n goTo(1); set('s1viq-input-first','9'); set('s1viq-input-second','9'); s1viqCheck(); set('s1viq-input-first','8'); s1viqCheck();\n goTo(2); set('s2viq-input','1'); s2viqCheck(); set('s2viq-input','2'); s2viqCheck();\n goTo(3); set('s3viq-input-first','9'); set('s3viq-input-second','9'); s3viqCheck(); set('s3viq-input-first','8'); s3viqCheck();\n goTo(4); s4mcSelected.clear(); s4mcSelected.add('o2'); s4mcCheck(); s4mcSelected.add('o1'); s4mcCheck();\n goTo(5); const st=s5dqState(); st.selection='أصغر من'; s5dqCheck(); st.selection='يساوي'; s5dqCheck();\n return [mastery1State().allResolved, mastery1State().passed] })()",
   "expect": [
    true,
    false

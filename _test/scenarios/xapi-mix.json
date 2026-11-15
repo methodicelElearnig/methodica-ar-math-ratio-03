@@ -49,7 +49,7 @@
   "expect": [
    "answered",
    false,
-   "מכונה 1[.]3x[,]מכונה 2[.]7x"
+   "الآلة 1[.]3x[,]الآلة 2[.]7x"
   ],
   "label": "03 drag board: matching response in Kata's form + verdict (11.11.26)"
  },
