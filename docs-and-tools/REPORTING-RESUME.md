@@ -11,8 +11,8 @@
 > - Shared files differ from Hebrew only in: `15-engine.js` (Arabic retry titles), `90-boot.js` (hint
 >   pill follows the primary button), `10-base.css` (Arabic font stack), `25-report.js/.css` (Arabic
 >   dialog; the Google Form values stay Hebrew on purpose).
-> - Part 03 S5: Continue always goes on to S6 (Arabic QA, cceb5dd, 10.11.26). Hebrew holds the learner
->   on S5 below 2 of 3 and ends the component there. Open with the unit owner.
+> - Part 03 S5: as Hebrew again (owner, 15.11.26) — below 2 of 3 the learner stays on S5 and the component
+>   ends there. The Arabic QA change of 10.11.26 (cceb5dd: Continue always to S6) is reverted.
 > - Kata: components go into the Hebrew unit (parent-unit mode), see SEND-METADATA.md.
 >
 > Everything below is the Hebrew unit's record.
