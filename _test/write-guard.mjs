@@ -30,7 +30,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BASE = resolve(process.argv[2] || join(HERE, '..'));
-const UNIT = 'methodica-math-ratio-03';
+const UNIT = 'methodica-ar-math-ratio-03';
 const PARTS = ['01', '02', '03', '04', '05', '06'];
 const CDN = 'https://lomdot.education.gov.il/metodica/720active/common/';
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg',

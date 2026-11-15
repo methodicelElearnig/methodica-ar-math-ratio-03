@@ -1,13 +1,13 @@
 [
  {
-  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "nav": "metadata/methodica-ar-math-ratio-03_unit.json",
   "after": 500
  },
  {
   "eval": "sessionStorage.clear(); localStorage.clear(); true"
  },
  {
-  "nav": "methodica-math-ratio-03-01/index.html?xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-01/index.html?xapiLib=../_test/xapi-720-k.js",
   "after": 3500
  },
  {
@@ -36,12 +36,12 @@
   "label": "PROD 01: repeat clicks send nothing more"
  },
  {
-  "eval": "localStorage.getItem('methodica_math_ratio_03_01_result')",
+  "eval": "localStorage.getItem('methodica_ar_math_ratio_03_01_result')",
   "expect": "pass",
   "label": "01 verdict recorded"
  },
  {
-  "nav": "methodica-math-ratio-03-01/index.html?dev=1&xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-01/index.html?dev=1&xapiLib=../_test/xapi-720-k.js",
   "after": 3000
  },
  {
@@ -74,7 +74,7 @@
   "label": "DEV 02: S0 Back shown"
  },
  {
-  "nav": "methodica-math-ratio-03-02/index.html?xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-02/index.html?xapiLib=../_test/xapi-720-k.js",
   "after": 3000
  },
  {
@@ -94,7 +94,7 @@
   "label": "PROD: PartNav back/forward are no-ops"
  },
  {
-  "nav": "methodica-math-ratio-03-01/index.html?dev=1&registration=ABC&xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-01/index.html?dev=1&registration=ABC&xapiLib=../_test/xapi-720-k.js",
   "after": 3000
  },
  {
@@ -105,14 +105,14 @@
   "label": "?dev=1 + registration -> DEV_NAV off"
  },
  {
-  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "nav": "metadata/methodica-ar-math-ratio-03_unit.json",
   "after": 500
  },
  {
   "eval": "sessionStorage.clear(); localStorage.clear(); true"
  },
  {
-  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
   "after": 3500
  },
  {
@@ -134,7 +134,7 @@
   "label": "03: S5 continue ends the component as a fail"
  },
  {
-  "eval": "localStorage.getItem('methodica_math_ratio_03_03_result')",
+  "eval": "localStorage.getItem('methodica_ar_math_ratio_03_03_result')",
   "expect": "fail",
   "label": "03 verdict recorded"
  },

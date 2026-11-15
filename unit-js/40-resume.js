@@ -1,7 +1,7 @@
 'use strict';
 /* ═══════════════════════════════════════════════════════════════════
    RESUME — save / restore execution state to KATA (xAPI State API)
-   Shared by all six components of methodica-math-ratio-03 (ported from methodica-math-ratio-05,
+   Shared by all six components of methodica-ar-math-ratio-03 (ported from methodica-math-ratio-05,
    ratio-01's v6 layer). Definition-only; ../unit-js/90-boot.js calls
    initResumeResetHatch() and initResumeLeaveHandlers(), and ../unit-js/50-loader.js drives the
    restore itself. Full design: Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md §8.
@@ -148,8 +148,8 @@ var UI_CHARACTER_KEY = CHARACTER_STORAGE_KEY;   // 15-engine.js (loaded earlier)
 /* Each part records its own end-of-part verdict ('pass' / 'fail') under this key when it ends
    (crossToNextPart → setUnitResult). Nothing routes on it — the platform does — but it is the
    durable verdict in the document (D-12). */
-function partResultKey(slug) { return 'methodica_math_ratio_03_' + String(slug || currentPartSlug()).slice(-2) + '_result'; }
-var RESULT_KEYS      = ['01', '02', '03', '04', '05', '06'].map(function (n) { return partResultKey('methodica-math-ratio-03-' + n); });
+function partResultKey(slug) { return 'methodica_ar_math_ratio_03_' + String(slug || currentPartSlug()).slice(-2) + '_result'; }
+var RESULT_KEYS      = ['01', '02', '03', '04', '05', '06'].map(function (n) { return partResultKey('methodica-ar-math-ratio-03-' + n); });
 
 /* One-step migration only (v5 → v6), mechanical and jsdom-testable. A current-version document
    comes back as is; any other version → null (discarded). */

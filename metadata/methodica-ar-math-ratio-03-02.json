@@ -1,0 +1,293 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/",
+  "title": "זמן תרגול",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": false,
+  "recommendedAfterFail": [],
+  "isRequired": true,
+  "relativeDifficulty": 3,
+  "masteryLevel": null,
+  "order": 2,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "process-thinking"
+  ],
+  "languages": [
+    "Hebrew"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 16,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-09-30T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/",
+      "title": "מלבן שאורכו 2a ורוחבו 3a",
+      "informationToBot": "מטרת הפריט: תרגול צמצום יחס עם ביטויים אלגבריים וחישוב שטח בעזרת משתנה. מה התלמיד אמור להבין/לתרגל: היחס 2a : 3a מצטמצם ב-a (שאינו 0) ל-2 : 3; שטח המלבן הוא 2a · 3a = 6a²; הכפלת האורך פי 2 נותנת 4a : 3a ולאחר צמצום 4 : 3. כיווני חשיבה ואסטרטגיות: לרשום את היחס ולצמצם בגורם המשותף; להכפיל מקדמים וחזקות בנפרד; בסעיף ג' לבדוק אילו מימדים השתנו. טעויות נפוצות: בחירה ב-3a² או ב-36a בחישוב שטח (בלבול בין a · a לבין 2a); הכפלה של שני המימדים בסעיף ג'. מידע נוסף: שלושה סעיפים; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q1",
+          "questionType": "fill-in",
+          "questionText": "נתון מלבן שאורכו הוא 2a ס\"מ ורוחבו 3a ס\"מ. א. מהו היחס המצומצם בין אורך המלבן לרוחבו? __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "2 : 3",
+            "2:3"
+          ],
+          "correctXapiResponsesPattern": [
+            "2 : 3",
+            "2:3"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q2",
+          "questionType": "choice",
+          "questionText": "נתון מלבן שאורכו הוא 2a ס\"מ ורוחבו 3a ס\"מ. ב. איזו אפשרות מבטאת את שטח המלבן בעזרת a?",
+          "answers": [
+            "6a²",
+            "3a²",
+            "a²",
+            "36a"
+          ],
+          "correctAnswers": [
+            "6a²"
+          ],
+          "correctXapiResponsesPattern": [
+            "6a²"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "6a²",
+                "description": "6a²"
+              },
+              {
+                "id": "3a²",
+                "description": "3a²"
+              },
+              {
+                "id": "a²",
+                "description": "a²"
+              },
+              {
+                "id": "36a",
+                "description": "36a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-001/q3",
+          "questionType": "fill-in",
+          "questionText": "נתון מלבן שאורכו הוא 2a ס\"מ ורוחבו 3a ס\"מ. ג. אורך המלבן הוכפל פי 2 והתקבל מלבן חדש. מהו היחס המצומצם החדש בין אורך המלבן לרוחבו? __ : __",
+          "answers": [],
+          "correctAnswers": [
+            "4 : 3",
+            "4:3"
+          ],
+          "correctXapiResponsesPattern": [
+            "4 : 3",
+            "4:3"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/",
+      "title": "מסלול טיול של 21 ק\"מ",
+      "informationToBot": "מטרת הפריט: תרגול הרחבת יחס נתון ופתרון משוואה לפי אורך כולל, והבנת השפעת שינוי הכמות הכוללת על גורם ההרחבה. מה התלמיד אמור להבין/לתרגל: ביחס 5 : 2 המרחקים הם 5x ו-2x, ומהמשוואה 5x + 2x = 21 מקבלים x = 3, כלומר 15 ק\"מ במישור ו-6 ק\"מ בעלייה; במסלול של 42 ק\"מ היחס נשמר אבל x גדל פי 2 (x = 6). כיווני חשיבה ואסטרטגיות: להגדיר את שני המרחקים באמצעות x, לבנות משוואת סכום ולפתור; בסעיף ב' לחשב מחדש את x. טעויות נפוצות: סברה ש-x נשאר קבוע כי היחס נשמר; חלוקה שגויה של 21 ק\"מ. מידע נוסף: שני סעיפים עם תמונת תמרור (הגדלה בלחיצה); לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/q1",
+          "questionType": "performance",
+          "questionText": "א. קבוצת מטיילים מתכננת מסלול טיול שאורכו 21 ק\"מ, חלקו במישור חלקו בעלייה. היחס בין אורך הדרך במישור לבין אורך הדרך בעלייה הוא 5 : 2. השלימו: המרחק שילכו במישור הוא __ ק\"מ. המרחק שילכו בעלייה הוא __ ק\"מ.",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "במישור",
+              "response": "15"
+            },
+            {
+              "stepId": "בעלייה",
+              "response": "6"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "במישור[.]15[,]בעלייה[.]6"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "במישור",
+                "description": null
+              },
+              {
+                "id": "בעלייה",
+                "description": null
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-002/q2",
+          "questionType": "choice",
+          "questionText": "ב. קבוצת המטיילים מוכנה לאתגר הבא! במסלול הקודם, שאורכו 21 ק\"מ, מצאנו שגורם ההרחבה הוא x = 3. הפעם הקבוצה יוצאת למסלול של 42 ק\"מ, שיימשך מספר ימים. היחס בין המישור לעלייה נשאר 5 : 2. מה קרה לגורם ההרחבה x?",
+          "answers": [
+            "x נשאר ללא שינוי, כי היחס 5 : 2 נשמר",
+            "לא ניתן לדעת מה קרה ל-x ללא נתונים נוספים",
+            "x קטן פי 2, כי החלוקה נעשית על מסלול ארוך יותר",
+            "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+          ],
+          "correctAnswers": [
+            "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+          ],
+          "correctXapiResponsesPattern": [
+            "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "x נשאר ללא שינוי, כי היחס 5 : 2 נשמר",
+                "description": "x נשאר ללא שינוי, כי היחס 5 : 2 נשמר"
+              },
+              {
+                "id": "לא ניתן לדעת מה קרה ל-x ללא נתונים נוספים",
+                "description": "לא ניתן לדעת מה קרה ל-x ללא נתונים נוספים"
+              },
+              {
+                "id": "x קטן פי 2, כי החלוקה נעשית על מסלול ארוך יותר",
+                "description": "x קטן פי 2, כי החלוקה נעשית על מסלול ארוך יותר"
+              },
+              {
+                "id": "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2",
+                "description": "x גדל פי 2, כי אורך המסלול הכולל גדל פי 2"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/",
+      "title": "גרף היקף הריבוע לפי אורך הצלע",
+      "informationToBot": "מטרת הפריט: תרגול קריאת גרף והבעת הקשר בין צלע להיקף באמצעות ביטוי אלגברי (P = 4x) ומשוואה. מה התלמיד אמור להבין/לתרגל: היקף ריבוע גדול פי 4 מאורך הצלע; בצלע 1.5 ס\"מ ההיקף 6 ס\"מ; היקף בין 3 ל-7 ס\"מ מתאים לצלע בין 3/4 ל-7/4 ס\"מ; ואם סכום הצלע וההיקף הוא 30 ס\"מ אז x + 4x = 30 ולכן x = 6. כיווני חשיבה ואסטרטגיות: להיעזר בגרף (נקודת אמצע בין x = 1 ל-x = 2), לחלק את ערכי ההיקף ב-4 כדי למצוא צלע, ולבנות משוואה מהנתון. טעויות נפוצות: בלבול בין היקף לצלע; חישוב הגבולות בלי חלוקה ב-4. מידע נוסף: יישומון גרף אינטראקטיבי (עם הגדלה); שלושה סעיפים; הסעיף השני הוא שתי רשימות נפתחות להשלמה מהמספר הקטן לגדול; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q1",
+          "questionType": "numeric",
+          "questionText": "לפניכם גרף המתאר את הקשר בין אורך צלע הריבוע לבין היקפו, בס\"מ. היעזרו בגרף והשלימו: כאשר אורך הצלע הוא 1.5 ס\"מ, ההיקף הוא __ ס\"מ.",
+          "answers": [],
+          "correctAnswers": [
+            6
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q2",
+          "questionType": "matching",
+          "questionText": "לפניכם גרף המתאר את הקשר בין אורך צלע הריבוע לבין היקפו, בס\"מ. היעזרו בגרף והשלימו מהמספר הקטן לגדול: אם ידוע שהיקף הריבוע הוא בין 3 ל-7 ס\"מ, אז אורך צלע הריבוע הוא בין __ לבין __ ס\"מ.",
+          "answers": {
+            "source": [
+              "בין",
+              "לבין"
+            ],
+            "target": [
+              "1/4",
+              "2/4",
+              "3/4",
+              "4/4",
+              "5/4",
+              "6/4",
+              "7/4",
+              "8/4"
+            ]
+          },
+          "correctAnswers": [
+            {
+              "source": "בין",
+              "target": "3/4"
+            },
+            {
+              "source": "לבין",
+              "target": "7/4"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "בין[.]3/4[,]לבין[.]7/4"
+          ],
+          "xapiInteractionComponents": {
+            "source": [
+              {
+                "id": "בין",
+                "description": "בין"
+              },
+              {
+                "id": "לבין",
+                "description": "לבין"
+              }
+            ],
+            "target": [
+              {
+                "id": "1/4",
+                "description": "1/4"
+              },
+              {
+                "id": "2/4",
+                "description": "2/4"
+              },
+              {
+                "id": "3/4",
+                "description": "3/4"
+              },
+              {
+                "id": "4/4",
+                "description": "4/4"
+              },
+              {
+                "id": "5/4",
+                "description": "5/4"
+              },
+              {
+                "id": "6/4",
+                "description": "6/4"
+              },
+              {
+                "id": "7/4",
+                "description": "7/4"
+              },
+              {
+                "id": "8/4",
+                "description": "8/4"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-02/methodica-ar-math-ratio-03-02-003/q3",
+          "questionType": "numeric",
+          "questionText": "לפניכם גרף המתאר את הקשר בין אורך צלע הריבוע לבין היקפו, בס\"מ. היעזרו בגרף והשלימו: אם הסכום של אורך הצלע והיקף הריבוע הוא 30 ס\"מ, אז אורך צלע הריבוע הוא __ ס\"מ.",
+          "answers": [],
+          "correctAnswers": [
+            6
+          ],
+          "correctXapiResponsesPattern": [
+            "6"
+          ],
+          "xapiInteractionComponents": null
+        }
+      ]
+    }
+  ]
+}

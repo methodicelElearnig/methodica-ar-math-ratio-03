@@ -1,7 +1,7 @@
 [
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-01/index.html"
+    "nav": "methodica-ar-math-ratio-03-01/index.html"
   },
   {
     "expect": [
@@ -19,7 +19,7 @@
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-02/index.html"
+    "nav": "methodica-ar-math-ratio-03-02/index.html"
   },
   {
     "expect": [
@@ -37,7 +37,7 @@
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-03/index.html"
+    "nav": "methodica-ar-math-ratio-03-03/index.html"
   },
   {
     "expect": [
@@ -55,7 +55,7 @@
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-04/index.html"
+    "nav": "methodica-ar-math-ratio-03-04/index.html"
   },
   {
     "expect": [
@@ -73,7 +73,7 @@
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-05/index.html"
+    "nav": "methodica-ar-math-ratio-03-05/index.html"
   },
   {
     "expect": [
@@ -91,7 +91,7 @@
   },
   {
     "after": 6000,
-    "nav": "methodica-math-ratio-03-06/index.html"
+    "nav": "methodica-ar-math-ratio-03-06/index.html"
   },
   {
     "expect": [

@@ -1,13 +1,13 @@
 [
  {
-  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "nav": "metadata/methodica-ar-math-ratio-03_unit.json",
   "after": 500
  },
  {
   "eval": "sessionStorage.clear(); localStorage.clear(); true"
  },
  {
-  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
   "after": 3500
  },
  {
@@ -59,14 +59,14 @@
   "label": "03-03 gate at 1/3: two clicks on S5 -> one completed success:false, scaled 1/3, stays on S5, button disabled"
  },
  {
-  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "nav": "metadata/methodica-ar-math-ratio-03_unit.json",
   "after": 500
  },
  {
   "eval": "sessionStorage.clear(); localStorage.clear(); true"
  },
  {
-  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "nav": "methodica-ar-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
   "after": 3500
  },
  {

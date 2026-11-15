@@ -1,0 +1,167 @@
+{
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/",
+  "title": "שאלת שיא",
+  "learningUnitId": "methodica-ar-math-ratio-03",
+  "componentPurpose": "practice",
+  "isAssessment": true,
+  "recommendedAfterFail": [],
+  "isRequired": true,
+  "relativeDifficulty": 5,
+  "masteryLevel": null,
+  "order": 5,
+  "depthLevel": "core-curriculum-basic",
+  "cognitiveLevels": [
+    "interpretation-and-reasoning"
+  ],
+  "languages": [
+    "Hebrew"
+  ],
+  "skills": [],
+  "estimatedTimeInMinutes": 8,
+  "createdAt": "2026-09-30T00:00:00.000Z",
+  "updatedAt": "2026-09-30T00:00:00.000Z",
+  "subContent": [
+    {
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/methodica-ar-math-ratio-03-06-001/",
+      "title": "משחק הקונטרול — זוויות ויחס (4 סעיפים)",
+      "informationToBot": "מטרת הפריט: שאלת שיא — \nשימוש ביחס אלגברי בין זוויות של שני נתיבי טיסה: זיהוי זוויות צמודות, הרחבה, משוואה וחישוב גודל הזוויות. מה התלמיד אמור להבין/לתרגל: (א) ביחס α : β = 3 : 2 עם גורם הרחבה x, סכום הזוויות הוא 3x + 2x, וזוויות צמודות מסתכמות ב-180° (זיו ושחר צודקות; עומר טועה כי זוויות צמודות אינן שוות); (ב) יחס 3 : 2 פירושו α גדולה מ-β פי 1.5, ואפשר לדעת זאת בלי לדעת את גודלן; (ג) מ-5x = 180° מתקבל x = 36, ולכן α = 108° ו-β = 72°; (ד) ביחס 1 : 3 החלק של α מתוך הסכום הוא x/4x = 1/4, לכן α = 45° ולא 60°, וטענת עומר שגויה. כיווני חשיבה ואסטרטגיות: לזהות את סוג הזוויות (צמודות/קודקודיות), לבנות משוואה לפי סכום הזוויות, לפתור ולהציב. טעויות נפוצות: בלבול בין זוויות צמודות לקודקודיות (2x = 3x); חישוב החלק כ-1/3 במקום 1/4; סברה שאי אפשר לדעת פי כמה גדולה זווית בלי לדעת מעלות. מידע נוסף: 4 סעיפים שצריך להצליח ב-3 לפחות; מסכי מסגרת בסגנון משחק מכ\"ם ואישור מעבר מטוס (לחיצה על כפתור) בין הסעיפים; לכל סעיף שני ניסיונות ורמז. צילום מסך: לא צורף.",
+      "contentType": "practice",
+      "mediaFormat": "interactive-content",
+      "questions": [
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/methodica-ar-math-ratio-03-06-001/q1",
+          "questionType": "choice",
+          "questionText": "היחס בין גודל הזווית α לבין גודל זווית β הוא 3 : 2, וגורם ההרחבה הוא x. זיו, עומר ושחר משחקים איתכם, ולכל אחד מהם יש רעיון אחר לפתרון. סמנו את כל מי שצודק:",
+          "answers": [
+            "זיו טוענת: \"הסכום של α ו-β הוא 2x + 3x\".",
+            "עומר טוען: \"α ו-β הן זוויות קודקודיות ושוות, לכן נוכל למצוא את x באמצעות המשוואה 2x = 3x\".",
+            "שחר טוענת: \"α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°\"."
+          ],
+          "correctAnswers": [
+            "זיו טוענת: \"הסכום של α ו-β הוא 2x + 3x\".",
+            "שחר טוענת: \"α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°\"."
+          ],
+          "correctXapiResponsesPattern": [
+            "זיו טוענת: \"הסכום של α ו-β הוא 2x + 3x\".[,]שחר טוענת: \"α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°\"."
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "זיו טוענת: \"הסכום של α ו-β הוא 2x + 3x\".",
+                "description": "זיו טוענת: \"הסכום של α ו-β הוא 2x + 3x\"."
+              },
+              {
+                "id": "עומר טוען: \"α ו-β הן זוויות קודקודיות ושוות, לכן נוכל למצוא את x באמצעות המשוואה 2x = 3x\".",
+                "description": "עומר טוען: \"α ו-β הן זוויות קודקודיות ושוות, לכן נוכל למצוא את x באמצעות המשוואה 2x = 3x\"."
+              },
+              {
+                "id": "שחר טוענת: \"α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°\".",
+                "description": "שחר טוענת: \"α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן נוכל למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°\"."
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/methodica-ar-math-ratio-03-06-001/q2",
+          "questionType": "choice",
+          "questionText": "זיו ושחר הסתכלו על הנתיבים והתווכחו ביניהן. זיו טענה: \"אם היחס בין α ל-β הוא 3 : 2, אז α גדולה מ-β פי 1.5.\" שחר טענה: \"אי אפשר לדעת פי כמה גדולה זווית α מזווית β מבלי לדעת מה גודלן במעלות של כל אחת מהזוויות.\" מי מהן צודקת?",
+          "answers": [
+            "זיו",
+            "שחר",
+            "שתיהן צודקות",
+            "שתיהן טועות"
+          ],
+          "correctAnswers": [
+            "זיו"
+          ],
+          "correctXapiResponsesPattern": [
+            "זיו"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "זיו",
+                "description": "זיו"
+              },
+              {
+                "id": "שחר",
+                "description": "שחר"
+              },
+              {
+                "id": "שתיהן צודקות",
+                "description": "שתיהן צודקות"
+              },
+              {
+                "id": "שתיהן טועות",
+                "description": "שתיהן טועות"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/methodica-ar-math-ratio-03-06-001/q3",
+          "questionType": "performance",
+          "questionText": "היחס בין גודל הזווית α לבין גודל זווית β הוא 3 : 2, וגורם ההרחבה הוא x. גיליתם ש-α ו-β הן זוויות צמודות וסכומן הוא 180°, לכן אפשר למצוא את x על ידי פתרון המשוואה 2x + 3x = 180°. השלימו: α = __° β = __°",
+          "answers": null,
+          "correctAnswers": [
+            {
+              "stepId": "α",
+              "response": "108"
+            },
+            {
+              "stepId": "β",
+              "response": "72"
+            }
+          ],
+          "correctXapiResponsesPattern": [
+            "α[.]108[,]β[.]72"
+          ],
+          "xapiInteractionComponents": {
+            "steps": [
+              {
+                "id": "α",
+                "description": null
+              },
+              {
+                "id": "β",
+                "description": null
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-06/methodica-ar-math-ratio-03-06-001/q4",
+          "questionType": "choice",
+          "questionText": "מטוס נוסף נכנס למרחב! כדי למנוע התנגשות באוויר, עליכם לשנות את זווית המפגש בין המסלולים כך שהיחס בין α ל-β יהיה 1 : 3. עומר טען: \"הביטוי האלגברי שמתאר את החלק של α מתוך סכום הזוויות הוא: 1x/3x כך שלאחר צמצום השבר α שווה ל-1/3 מ-180°. זה אומר שגודלה הוא 60°.\" האם הוא צודק?",
+          "answers": [
+            "כן",
+            "לא",
+            "אי אפשר לדעת"
+          ],
+          "correctAnswers": [
+            "לא"
+          ],
+          "correctXapiResponsesPattern": [
+            "לא"
+          ],
+          "xapiInteractionComponents": {
+            "choices": [
+              {
+                "id": "כן",
+                "description": "כן"
+              },
+              {
+                "id": "לא",
+                "description": "לא"
+              },
+              {
+                "id": "אי אפשר לדעת",
+                "description": "אי אפשר לדעת"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

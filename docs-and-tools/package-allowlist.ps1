@@ -22,7 +22,7 @@
 
 .NOTES
     Ported from methodica-math-ratio-05 (2026-10-01). ratio-03's part layout: each
-    methodica-math-ratio-03-NN ships index.html plus everything under assets/ (images,
+    methodica-ar-math-ratio-03-NN ships index.html plus everything under assets/ (images,
     video, audio, widget pages), js/ (main.js) and css/ (style.css). Its docs/ and tests/
     never ship, nor does the repo's tools/ folder.
 
@@ -59,7 +59,7 @@ $UnitDirs = @{
 # Inside a component folder: these files, plus everything under these folders.
 $ComponentFiles = @('index.html')
 $ComponentDirs  = @('assets', 'js', 'css')
-$ComponentGlob  = 'methodica-math-ratio-03-[0-9][0-9]'
+$ComponentGlob  = 'methodica-ar-math-ratio-03-[0-9][0-9]'
 
 # ── Hygiene: if any of these turn up INSIDE a package, it is unsafe to upload ──
 # '*key*' alone flagged 05's keyboard-step*.jpg (how to type x) — match key FILES instead.

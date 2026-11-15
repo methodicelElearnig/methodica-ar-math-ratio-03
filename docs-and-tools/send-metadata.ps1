@@ -1,7 +1,7 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Send the metadata/ folder (1 unit + 6 components + 19 items, methodica-math-ratio-03) to the Kata
+    Send the metadata/ folder (1 unit + 6 components + 19 items, methodica-ar-math-ratio-03) to the Kata
     (Katalog) catalog API at https://kata.cet.ac.il/api/v1.
 
 .DESCRIPTION
@@ -87,7 +87,7 @@ param(
 # Repo root is one level up: this script lives in docs-and-tools/, while the
 # key file, metadata/, and the log all stay at the repo root.
 $RepoRoot = Split-Path $PSScriptRoot -Parent
-$ApiKeyFile = Join-Path $PSScriptRoot 'kata-api-key.txt'   # methodica-math-ratio-03: the key lives in docs-and-tools/ (git-ignored)
+$ApiKeyFile = Join-Path $PSScriptRoot 'kata-api-key.txt'   # methodica-ar-math-ratio-03: the key lives in docs-and-tools/ (git-ignored)
 # API base URL (override at launch with -BaseUrl).
 if (-not $BaseUrl) { $BaseUrl = 'https://kata.cet.ac.il' }
 # Metadata folder to send (override with -MetadataDir). Defaults to repo root's ./metadata.
@@ -111,7 +111,7 @@ if ($Status -or $Publish) { $LogFile = Join-Path $PSScriptRoot 'publish-metadata
 # one, for every component of this unit.
 #
 # Take this from the unit's own DEPLOY.md deploy target. No trailing slash.
-$ContentBaseUrl = 'https://lomdot.education.gov.il/metodica/720/math/ratio/03'   # methodica-math-ratio-03 — ratio-01/05 convention, confirmed by the owner 2026-10-01; the package must be uploaded here
+$ContentBaseUrl = 'https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03'   # methodica-ar-math-ratio-03 — ratio-01/05 convention, confirmed by the owner 2026-10-01; the package must be uploaded here
 # Title language key: wraps a string title into the API object, e.g.
 #   "מדידת מסה" -> { "Hebrew": "מדידת מסה" }. Change only for non-Hebrew content.
 $TitleLangKey = 'Hebrew'

@@ -1,6 +1,6 @@
 // Scripted behavioural probe over HTTP (/sub/ subpath) in headless Edge.
 // usage: node probe.mjs <repoRoot> <steps.json>
-// steps: [{nav:"methodica-math-ratio-03-02/index.html?dev=1"}, {wait:800},
+// steps: [{nav:"methodica-ar-math-ratio-03-02/index.html?dev=1"}, {wait:800},
 //         {eval:"expr", expect: <json value>, label:"..."}, {eval:"expr", log:true}]
 // Prints PASS/FAIL per expectation; exit 1 on any FAIL. Console errors are listed at the end.
 import { spawn } from 'node:child_process';

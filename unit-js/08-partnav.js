@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   unit-js/08-partnav.js  —  methodica-math-ratio-03 (all parts)
+   unit-js/08-partnav.js  —  methodica-ar-math-ratio-03 (all parts)
    Cross-part navigation trail (PartNav). One shared copy: the engine body
    used to be duplicated, byte-identical, in every part's js/partnav.js.
    Mechanism ported from the approved sibling methodica-math-percent-01
@@ -42,11 +42,11 @@ var PartNav = (function () {
 
   /* Sibling-folder layout — the same relative path every cross-part
      redirect in this project uses literally. */
-  const FOLDER_PREFIX = '../methodica-math-ratio-03-';
+  const FOLDER_PREFIX = '../methodica-ar-math-ratio-03-';
   /* Namespaced like CHARACTER_STORAGE_KEY, for the same reason: an LMS
      may host several lomdot on one origin. */
-  const TRAIL_KEY  = 'methodica_math_ratio_03_navTrail';
-  const RETURN_KEY = 'methodica_math_ratio_03_navReturn';
+  const TRAIL_KEY  = 'methodica_ar_math_ratio_03_navTrail';
+  const RETURN_KEY = 'methodica_ar_math_ratio_03_navReturn';
   /* Defensive cap only. The real trail is at most one entry per part. */
   const MAX_TRAIL  = 16;
 
@@ -118,7 +118,7 @@ var PartNav = (function () {
   }
 
   /* Cross a part boundary forward. Replaces a bare
-     `window.location.href = '../methodica-math-ratio-03-NN/index.html'`
+     `window.location.href = '../methodica-ar-math-ratio-03-NN/index.html'`
      — same navigation, plus the trail entry that makes the
      destination's Back button work. */
   function forward(part) {

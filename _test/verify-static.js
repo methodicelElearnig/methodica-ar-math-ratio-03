@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const ROOT = path.join(__dirname, '..');
-const PARTS = ['01', '02', '03', '04', '05', '06'].map(u => 'methodica-math-ratio-03-' + u);
+const PARTS = ['01', '02', '03', '04', '05', '06'].map(u => 'methodica-ar-math-ratio-03-' + u);
 let failures = 0, checks = 0;
 const ok = (cond, msg) => { checks++; if (!cond) { failures++; console.log('  FAIL ' + msg); } };
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -36,7 +36,7 @@ function existsExact(rel) {
   }
   return true;
 }
-const SHIP = /^(unit-js\/[^/]+\.js|unit-css\/[^/]+\.css|unit-assets\/.+|metadata\/[^/]+\.json|methodica-math-ratio-03-0\d\/(index\.html|js\/main\.js|css\/style\.css|assets\/.+))$/;
+const SHIP = /^(unit-js\/[^/]+\.js|unit-css\/[^/]+\.css|unit-assets\/.+|metadata\/[^/]+\.json|methodica-ar-math-ratio-03-0\d\/(index\.html|js\/main\.js|css\/style\.css|assets\/.+))$/;
 
 function checkRef(fromFile, ref) {
   ref = ref.split(/[?#]/)[0];

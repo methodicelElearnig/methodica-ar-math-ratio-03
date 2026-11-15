@@ -1,6 +1,6 @@
 'use strict';
 /* ═══════════════════════════════════════════════════════════════════
-   RESUME — the per-part payload and the screen painters (methodica-math-ratio-03, all parts)
+   RESUME — the per-part payload and the screen painters (methodica-ar-math-ratio-03, all parts)
    Definition-only. 40-resume.js owns the document, the ledger and the save triggers; this file
    owns WHAT a part saves and HOW a saved screen is drawn again. Guide:
    Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md §8.4 / §8.7 / §8.8.

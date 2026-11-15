@@ -1,0 +1,3645 @@
+/* ═══════════════════════════════════════════════════════
+   css/style.css  —  methodica-ar-math-ratio-03-01
+   Canvas: 1280 × 710 px   (720 reference engine)
+
+   Screens implemented so far:
+     01 — TwoOptionSelection (companion-character selection)
+     02 — TransitionScreen, local variant (hummus-stand briefing)
+     03 — FullImageWithTextOverlay, Variant C (embedded hummus widget)
+     04 — TransitionScreen, local variant (hook closing text)
+     05 — TransitionScreen (centred text + "אביה וגיל" illustration)
+     06 — comic sequence, "מכונת החומוס"
+     07 — TransitionScreen (centred text only, "מה אפשר ללמוד מזה?")
+     08 — FlipCardsReveal, "איך לייצג יחס באמצעות ביטוי אלגברי?" (3 cards)
+   Ported from the approved Math siblings
+   methodica-math-percent-02/methodica-math-percent-02-01 (engine, chrome,
+   TwoOptionSelection) and its S7 character+bubble stage, per
+   720-templates → references/TwoOptionSelection.md,
+   references/TransitionScreen.md + references/_global-components.md.
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Fonts: @font-face lives in ../../unit-css/00-fonts.css (shared by all parts). ─── */
+
+/* ─── Reset, theme tokens, canvas, .screen and .flag-btn base: ../../unit-css/10-base.css ─── */
+/* Hover/focus label — centred EXACTLY under the flag icon at every width:
+   anchored to the button's own centre (left:50% + translateX(-50%)), never
+   shifted sideways. LOCAL DESIGN DECISION for this module only (not a
+   720-templates rule, not to be generalized to other lomdot): in this
+   module, the "מצאתם בעיה?" label is displayed on two lines across ALL
+   screens for visual consistency and to prevent overlap in dense layouts
+   (the comic screen's left-hand photo begins at 82.67px on the 1280
+   canvas, close enough to the icon that a single-line label could run
+   onto it at some widths — always breaking to two lines avoids a
+   width-dependent behavior switch). The opaque white background keeps the
+   words legible should a box edge still touch an image. Same rule for
+   :hover and :focus-visible; the icon is untouched. */
+.flag-btn-label {
+  position: absolute;
+  top: 42px;                            /* icon (38px) + the original 4px gap */
+  left: 50%; transform: translateX(-50%);
+  width: max-content; white-space: nowrap;   /* Arabic build: single line "هل وجدتم مشكلة؟" (Hebrew build forced two lines) */
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 600; font-size: 14px; color: var(--subject-500);
+  text-align: center; line-height: 1.15;
+  direction: rtl; display: none;
+  background: #fff;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+.flag-btn:hover .flag-btn-label,
+.flag-btn:focus-visible .flag-btn-label { display: block; }
+
+/* ─── Back button — white pill, bottom-right of the 74px bar.
+   One shared position rule (not per-screen ids) so every screen's Back
+   sits at the exact same spot, per the same size/position consistency
+   rule as .btn-continue. Never shown on the lomda's first screen, which
+   has no valid predecessor. Class name `.scq-back` is the project's
+   established shared name for this control (ported from the approved
+   sibling), not a SingleChoiceQuestion-only class. ── */
+.scq-back {
+  position: absolute;
+  bottom: 17.5px;
+  right: 24px;
+  z-index: 12;
+  width: auto; min-width: 140px; height: 39px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-700);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-back:hover { font-weight: 600; border-width: 1.5px; }
+
+/* ─── Shared: Continue Button — gradient pill, bottom-left of bar.
+   This is the ONLY consumer of --primary-action-gradient (see the token
+   blocks above for why that property is role-named). ── */
+.btn-continue {
+  position: absolute;
+  bottom: 17.5px; left: 24px;  /* true 39px-pill centering: (74-39)/2 = 17.5px */
+  z-index: 12;                /* above the ::after white bar (z-index 9) */
+  min-width: 140px;
+  height: 39px;
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary-action-gradient);
+  color: #fff;
+  border: none; border-radius: 1000px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+  text-align: center; white-space: nowrap;
+}
+.btn-continue:not(:disabled):hover { font-weight: 600; }
+.btn-continue.hidden { display: none !important; }
+.btn-continue:disabled {
+  background: #AEAEAE;
+  color: #303030;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ─── Nav-button width consistency (Foundation rule):
+   W(label) = max(box floor, intrinsic width of the SAME label at the
+   HOVER weight). Any button whose hover changes font-weight must never
+   resize/reflow between Default and Hover.
+   Mechanism: .nav-label stacks an invisible copy of the label at the
+   hover weight (a ::before fed by attr(data-label)) into the same grid
+   cell as the visible <span>, so the box always reserves the heavier
+   measurement. Not a DOM node (attr()-driven) and visibility:hidden
+   keeps it out of the accessibility tree — data-label always mirrors
+   the visible text, never authored separately from it. ── */
+.nav-label { display: inline-grid; }
+.nav-label::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.nav-label > span { grid-area: 1 / 1; }
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TwoOptionSelection (Screen 01, character selection)
+   Title + two single-select cards. Card states: hover + selected.
+   First screen: no Back button, no subtitle (none in the source script).
+
+   The template's .select-subtitle / .option-card-labels /
+   .option-card-name / .option-card-desc rules are intentionally absent:
+   slide 3 carries no subtitle and no card labels, so nothing on this
+   screen consumes them. They remain available in
+   720-templates → references/TwoOptionSelection.md if a later screen
+   in this part needs them.
+   ═══════════════════════════════════════════════════════ */
+#s0 { background: #fff; }
+
+.select-content {
+  position: absolute;
+  left: 50%; top: calc(50% - 37px);   /* vertically centered above the 74px bar */
+  transform: translate(-50%, -50%);
+  width: 810px;
+  display: flex; flex-direction: column; align-items: center; gap: 40px;
+}
+
+/* Header block is centered as a block, not only as text
+   (_global-components.md → "Page header block alignment"). */
+.select-head {
+  display: flex; flex-direction: column; gap: 8px;
+  align-items: center; width: 100%;
+}
+.select-title {
+  width: 100%; text-align: center;
+  font-size: 40px; font-weight: 700; color: #303030;
+  direction: rtl; line-height: 1.2;
+}
+/* Shared template class (FlipCardsReveal.md), first used on screen 08.
+   Slide 10 authors this run at 20pt regular — the same size/weight as
+   this project's own Body/B-6 token, so it is implemented as that token
+   rather than a new size. */
+.select-subtitle {
+  width: 100%; text-align: center;
+  font-size: 20px; font-weight: 400; color: #303030;
+  direction: rtl; line-height: 1.5;
+}
+
+/* ── Cards row ── */
+.option-cards {
+  display: flex; justify-content: center; gap: 24px;
+  direction: ltr;   /* keep the two cards in a stable left-to-right order */
+}
+
+.option-card {
+  width: 296px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  outline: none;
+}
+.option-card-img {
+  position: relative;
+  width: 220px;
+  border: 3px solid rgba(201, 206, 216, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+  transition: none; /* instant state changes, per 720 CSS conventions */
+}
+/* Hover + keyboard-focus — Figma ImageContainer state=hover: Subject/500 border */
+.option-card:hover .option-card-img,
+.option-card:focus-visible .option-card-img { border-color: var(--subject-500); }
+/* Selected — Figma ImageContainer state=selected: 2px Subject/500 border + Subject/100 fill */
+.option-card.selected .option-card-img {
+  border: 2px solid var(--subject-500);
+  background: var(--subject-100);
+}
+
+/* Screen 01: +10% image window — 238px SQUARE box (explicit height, not
+   just width), reduced padding (4px) and object-fit:contain so the whole
+   character clip shows uncropped inside the frame. Per
+   TwoOptionSelection.md → "Video-variant option cards": size the box as a
+   true square with aspect-ratio:1 + contain, because a video asset can't
+   be regenerated to the static-image 296:278 ratio, and `cover` would
+   crop part of the character. Matches the approved sibling's own
+   238px + 4px + contain treatment for this exact case. */
+#s0 .option-card-img {
+  width: 238px;
+  height: 238px;
+  padding: 4px;
+}
+/* The shared `.option-card-img img` rule doesn't match a <video> tag, so
+   the media properties are declared explicitly here. aspect-ratio:1 (not
+   the media's native ratio) + height:100% is what actually makes the frame
+   square — the container's explicit height only bounds the box, it does
+   not force the video to fill it as a square.
+   pointer-events:none keeps the card the sole click target and suppresses
+   any browser-supplied hover overlay on the <video> itself
+   (_global-components.md → decorative character video). */
+#s0 .option-card-img video {
+  width: 100%; height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  border-radius: 16px;
+  display: block;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen, local variant (Screen 02 / #s1)
+   Hummus-stand briefing. Source: slide 4.
+
+   Per TransitionScreen.md's naming note, `s1-*` is this COMPONENT's own
+   canonical class prefix, not a screen index — it happens to coincide
+   with this screen's index here. Do not rename per instance.
+
+   Deltas from the template's default shape (both documented in the
+   markup): static <img> character instead of the decorative video, and
+   a multi-paragraph authored body block inside .s1-text. The
+   character+bubble stage geometry is ported from the approved sibling
+   methodica-math-percent-02-01's S7 (`.s7-char-stage` / `.s7-bubble`),
+   which is the same shape: bottom-anchored static character with a
+   down-tail bubble above its head.
+   ═══════════════════════════════════════════════════════ */
+#s1 { background: #fff; }
+
+/* Right-aligned content block. Slide 4's own text container is
+   noFill/noLine (a transparent text box, not a visible card), so no card
+   surface, border or shadow is drawn.
+   Geometry derived from slide 4 (EMU / 9525 = design px): the text box's
+   right edge sits at 1245.6px on a 1280 canvas → a 34px right inset; the
+   title starts at y=64px. `left` clears the character stage so the copy
+   can never run under the character. */
+.s1-text {
+  position: absolute;
+  top: 64px;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 20px;
+  direction: rtl; text-align: right;
+}
+/* Horizontal geometry is PER INSTANCE — each slide anchors its own text
+   box — so it is scoped by screen id rather than written on the shared
+   component class. Screen 02: right edge 1245.6px on the 1280 canvas
+   → 34px inset; `left` clears the 24..324px character stage. */
+#s1 .s1-text { right: 34px; left: 348px; }
+/* Heading / H-5 — Assistant 40px Bold. Slide 4 authors this run at 40pt
+   bold, which is also TransitionScreen's established headline role. */
+.s1-title {
+  font-size: 40px; font-weight: 700; color: #303030;
+  line-height: 1.2;
+}
+/* The four authored paragraph groups. A larger gap BETWEEN groups than
+   between lines inside one group reproduces slide 4's blank-line
+   structure (empty paragraphs P2/P6/P10) without shipping empty <p>s. */
+/* ── TransitionScreen HERO TEXT BLOCK ──
+   The two-line headline this part's TransitionScreens use: a 40px Bold
+   line and a 40px Regular continuation, one tight 4px apart, in an
+   812px column centred on the canvas at y 87.
+
+   Proved on #s9 (slide 13) and approved there; extracted here — with its
+   declarations unchanged — when #s20 was corrected onto it (producer,
+   2026-09-13). Scoping it to a modifier rather than to .s1-text keeps
+   screens 02/04/05/07, which use the same base class with their own
+   slide-authored geometry, completely untouched.
+
+   Note the roles: .s1-title-cont is NOT the template's 28px "closing
+   line". It is the same size as the headline and differs only in weight,
+   because on #s9 the two lines are one sentence split by a comma. #s20
+   reuses it as the shared TransitionScreen subtitle treatment. */
+.s1-text--hero {
+  top: 87px;
+  /* Centred with `left: calc(50% - half-width)`, NOT translateX(-50%):
+     this block is a float-in reveal container on #s9 / #s20 and the
+     reveal animates `transform`, so a static centring transform would be
+     overridden for the whole entrance (animation-system pre-flight →
+     transform conflict). Same rest geometry — 50% − 406px = 234px on
+     the 1280 canvas — and it still re-centres on a wider canvas. */
+  left: calc(50% - 406px); right: auto;
+  width: 812px;
+  align-items: center; text-align: center;
+  gap: 4px;
+}
+.s1-title-cont {
+  margin: 0;
+  font-size: 40px; font-weight: 400; color: #303030;
+  line-height: 1.2;
+  direction: rtl; text-align: center;
+}
+
+.s1-body { display: flex; flex-direction: column; gap: 22px; }
+.s1-body-group { display: flex; flex-direction: column; gap: 2px; }
+/* Ordinary canvas text — Assistant 24px Regular (720-design-guidelines → typography.md →
+   Text size by surface). It was 20px under the old Body/B-6 numbering; raised on the
+   producer's instruction, 2026-09-30. */
+.s1-body-group p {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.5;
+}
+/* Assistant 24px Bold. Slide 4 sets b="1" on this run only;
+   preserved as semantic emphasis of the key ratio, realized with the
+   body token's Bold weight rather than a copied source value. */
+.s1-body-group p.s1-emph { font-weight: 700; }
+/* Inline emphasis inside a body paragraph — same Body/B-8 (20px Bold)
+   token as the whole-paragraph variant above, for a source run that sets
+   b="1" on part of a sentence only (slide 6). */
+.s1-body-group strong { font-weight: 700; }
+
+/* ── Companion character + speech bubble, anchored bottom-left,
+   independent of the text block, and sitting ON the 74px bar's top edge.
+   Sizes derived from slide 4's own geometry (EMU ÷ 9525 = design px):
+   its character picture occupies y≈338..637 (~299px tall) at x≈11..185,
+   and its bubble y≈202..323. A 300px image height reproduces that: the
+   taller character's ink renders ≈284px, which lands the image top at
+   710-74-300 = 336px ≈ the deck's 338px. The character column
+   (24..324px) stays clear of .s1-text's 348px left edge, so the copy can
+   never run under the character — matching the deck, where the two sit
+   side by side rather than overlapping. ── */
+.s1-char-stage {
+  position: absolute;
+  left: 24px; bottom: 74px;
+  width: 300px; height: 400px;
+  z-index: 10;   /* above the text block, below the nav chrome (12) */
+  /* The stage's own bottom edge IS the ground line the character stands
+     on (it sits on the 74px bar's top edge). */
+  --char-box: 300px;    /* rendered size of the square PNG canvas */
+  --bubble-gap: 18px;   /* constant clearance between head and bubble */
+}
+
+/* ── Anchor by the CHARACTER, not by the PNG canvas ──
+   Each supplied PNG carries a different amount of transparent padding, so
+   positioning the canvas box leaves the two characters mis-aligned: at a
+   shared 300px box the peach character's feet floated 24.2px above the
+   yellow one's ground line, and its head sat 40px lower, which made the
+   fixed-position bubble read as floating too high above it.
+
+   Fix: JS publishes each character's measured ink bounds (as fractions of
+   its canvas height) onto the stage as --ink-top / --ink-bottom, and both
+   children position themselves off those instead of off the box:
+     • the image slides down so its ink BOTTOM lands on the ground line;
+     • the bubble sits a constant --bubble-gap above its ink TOP.
+   One measured pair per asset fixes both the ground line and the bubble.
+   Values are measured at build time (see js/main.js) — never detected at
+   runtime, per the skill's stance on runtime-detection routines.
+   Defaults (0 / 1) reproduce the plain box behaviour if a value is ever
+   missing, so nothing breaks.
+
+   NOTE: the height difference itself (220px vs 284px of ink) is CORRECT —
+   it is the characters' authored design, confirmed against the deck's own
+   two-character artwork. Never equalize it. */
+.s1-char-img {
+  position: absolute;
+  left: 50%;
+  bottom: calc((var(--ink-bottom, 1) - 1) * var(--char-box));
+  height: var(--char-box); width: auto;
+  display: block;
+  transform: translateX(-50%) translateY(var(--char-shift-y, 0px)) scale(var(--char-scale, 1));
+  transform-origin: center bottom;
+}
+/* Speech bubble — sibling of the character, NOT nested in a clipping
+   layer, so it may extend past the stage box. Outline is Subject/500 via
+   the inline sprite: every speech bubble in the 720 lomdot shares that
+   one semantic role, so it follows the active Subject theme. Slide 4's
+   own outline hex (#00B0F0) is the deck author's generic blue and is
+   deliberately NOT reproduced, exactly as the approved sibling declined
+   to reproduce its own export's legacy #1CB0F6. */
+.s1-bubble {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  /* Bottom-anchored to the character's own head: ink height above the
+     ground line, plus the constant gap. Keeps the tail the same distance
+     from the head for every character (see the anchoring note above). */
+  top: auto;
+  bottom: calc((var(--ink-bottom, 1) - var(--ink-top, 0)) * var(--char-box) + var(--bubble-gap));
+  width: 200px; height: 82px;
+  z-index: 2;
+}
+.s1-bubble-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+/* CHARACTER SPEECH BUBBLE TYPOGRAPHY — Assistant Regular 20px/400,
+   #000, line-height 1.2, centred, RTL.
+
+   CORRECTED 2026-09-10 (producer, Figma-backed). This rule previously
+   read 18px and its own comment claimed that value was "carried over
+   from the sibling's own bubble component" — it was not. Every approved
+   implementation of this component is 20px:
+     methodica-math-percent-02-01  .s1-bubble-text   20px/400 #000
+       ^ the very rule this project's screen 02 states it ported from
+     methodica-math-percent-01-01  .bubble-text      20px/400 #000
+     methodica-math-percent-01-01  .gp-bubble-text   20px/400 #000, lh 1.2
+   So the 18px was a porting error in this project, not a local variant,
+   and the fix belongs on the shared rule rather than per screen.
+
+   Scope check before centralising: .s1-bubble-text is used by exactly
+   three elements in this part — screen 02's companion bubble, screen
+   05's story-character bubble and screen 11's companion bubble. No
+   hint overlay, tooltip, feedback popup, instructional card or
+   image-zoom control inherits it. */
+.s1-bubble-text {
+  position: absolute;
+  left: 3.5%; right: 3.5%; top: 3.79%; bottom: 10.58%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; color: #000;
+  text-align: center; direction: rtl; line-height: 1.2;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — FullImageWithTextOverlay, Variant C (Screen 03 / #s2)
+   Hummus-stand widget. Source: slide 5 + Figma node 4460:21563.
+
+   Variant C is the no-card variant: the node contains only the Report
+   Problem chrome, the FixedNavigationBar and one full-width media band.
+   The template's .fito-text card is therefore intentionally absent — this
+   is a documented shape of the component, not a partial build.
+   ═══════════════════════════════════════════════════════ */
+#s2 { background: #fff; }
+
+/* Media band — Figma: left 0, width 1280, height 541.269, bottom 75,
+   i.e. top edge at y=93.731, full canvas width, sitting directly on the
+   nav bar. Expressed as an INSET against this project's own 74px bar
+   rather than as the copied 541.269px height, per
+   FullImageWithTextOverlay.md → "Band geometry". The project absorbs the
+   1px bar difference here (74 vs Figma's 75) instead of changing the
+   shared bar for one screen.
+   The band's top (93.73px) clears this project's persistent top chrome —
+   the flag button occupies y=16..54 — so that chrome reads against the
+   page background, not against the widget.
+   Figma's band carries no corner radius, so none is applied; overflow is
+   still hidden so the embedded widget can never paint outside the band. */
+.fito-media {
+  position: absolute;
+  left: 0; right: 0;
+  top: 93.73px;
+  bottom: 74px;
+  overflow: hidden;
+  background: #fff;
+  z-index: 1;          /* below the nav chrome (12) — never over it */
+}
+
+/* The widget fills the media region exactly and is the only interactive
+   element on the screen besides the nav chrome. It is deliberately NOT
+   stretched across the canvas and never overlaps the bottom bar: its box
+   is the band, and the band stops at the bar's top edge. */
+.fito-widget {
+  display: block;
+  width: 100%; height: 100%;
+  border: 0;
+}
+
+/* Instruction for the widget (producer, 2026-09-22; centred on X per the
+   producer, same day): 24px Assistant, regular weight. It fills the strip
+   above the media band (0–93.73px) and sits on the strip's bottom edge, so
+   it reads as the caption of what is below it. Centred on the 1280 canvas,
+   which is also the centre of the letterboxed scene the widget draws. */
+#s2 .fito-instruction {
+  position: absolute; top: 0; left: 0; right: 0; height: 93.73px;
+  /* Arabic build: the text is longer than the Hebrew, so it is kept clear of the
+     flag icon + its one-line label (left ~110px) and balanced over two lines. */
+  margin: 0; padding: 0 110px 6px;
+  text-wrap: balance;
+  display: flex; align-items: flex-end; justify-content: center;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #303030;
+  text-align: center; direction: rtl;
+  z-index: 2;            /* above the band (1), below the nav chrome (12) */
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen, local variant (Screen 04 / #s3)
+   Hook closing text. Source: slide 6.
+
+   Same component as Screen 02 (the producer gives both slides the same
+   Figma screen name, HookClosingText), so this block adds ONLY this
+   instance's own geometry — every role style is inherited from the
+   shared .s1-* rules above.
+
+   This instance carries no character and no bubble: slide 6 authors
+   neither. Its geometry comes from slide 6's own EMU values
+   (EMU / 9525 = design px), NOT from Figma — the HookClosingText frame
+   could not be reached through the Figma MCP (see the note in
+   index.html on this screen).
+   ═══════════════════════════════════════════════════════ */
+#s3 { background: #fff; }
+
+/* Both of slide 6's text boxes are right-anchored to the same edge:
+   x+cx = 1238.22px on the 1280 canvas → a 41.78px right inset. The
+   title box starts at x=426.08, so that is the block's left bound.
+   With no character stage on this screen, nothing else competes for the
+   space the copy leaves free on the left. */
+#s3 .s1-text { right: 41.78px; left: 426.08px; }
+
+/* Slide 6 gives the BODY its own narrower box than the title —
+   x=554.41, cx=683.82 (title cx=812.14) — so the body column is capped
+   and pinned to the same right edge, reproducing the authored line
+   breaking. In an RTL flex column the cross-start edge is the right one,
+   so flex-start is what holds the body against the title's right edge. */
+#s3 .s1-body {
+  max-width: 683.82px;
+  align-self: flex-start;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen (Screen 05 / #s4)
+   "מה קרה בחומוסייה?". Source: slide 7.
+
+   Unlike screens 02 and 04, this instance uses the template's CANONICAL
+   composition: the text block and the media box are centred on the
+   canvas rather than anchored to one side. Geometry is slide 7's own
+   (EMU / 9525 = design px); Figma was unreachable for this screen name
+   (see the note in index.html).
+
+   Media holds a static story illustration, so the layer classes are
+   .s1-media-* rather than the template's .s1-video-*; the wrap/clip
+   split and the bubble-as-sibling rule are kept exactly as the template
+   specifies, because that is what lets the bubble overhang the image.
+   ═══════════════════════════════════════════════════════ */
+#s4 { background: #fff; }
+
+/* Both of slide 7's text boxes are the same box: x=29.01, w=1212.29,
+   algn="ctr".
+
+   ONE DELIBERATE 4.85px CORRECTION: that box is not actually symmetric
+   on the canvas — 29.01 left but 38.70 right — so its centre is 635.15,
+   while the illustration below it is centred at exactly 640.00
+   (388.14 + 503.71/2). Both text boxes carry the identical x/w, i.e. one
+   box duplicated, so the asymmetry reads as authoring slop rather than an
+   authored offset. The text is therefore centred on the canvas, on the
+   same axis as the image it introduces. Revisit if the Figma frame ever
+   becomes reachable and shows a genuinely offset text column.
+   Vertical: the title box starts at y=59.42 and the body box at
+   y=151.26; adding PowerPoint's 4.8px top inset puts the rendered title
+   at 64.22 and the rendered body at 156.06. With the 48px title line box
+   that makes the gap between them 43.84px — larger than screens 02/04
+   use, because slide 7 authors it that way. */
+#s4 .s1-text {
+  left: 29.01px; right: 29.01px;
+  top: 64.22px;
+  gap: 43.84px;
+  align-items: center;
+  text-align: center;
+}
+
+/* Media box: 503.71 × 335.81 at x=388.14, i.e. exactly canvas-centred
+   (388.14 + 503.71/2 = 640). Centred with `left: calc(50% - half-width)`
+   rather than a fixed left so it stays centred when the engine's canvas
+   is wider than 1280 at some aspect ratios — and NOT with
+   translateX(-50%): this wrap is a float-in reveal container (slide 7's
+   "תמונה בסוף", the last group) and the reveal animates `transform`, so
+   a static centring transform would be overridden for the whole
+   entrance (animation-system pre-flight → transform conflict). Same rest
+   geometry: 50% − 251.855px = 388.145px on the 1280 canvas.
+   Slide 7's own bottom rule sits at y=638.24 and the image bottom lands
+   on it; this project's bar is 74px (its top edge at 636), so the box is
+   anchored to the bar's top edge — the same reconciliation already
+   applied on screen 03, not a re-measurement of the deck. */
+#s4 .s1-media-wrap {
+  position: absolute;
+  left: calc(50% - 251.855px);
+  bottom: 74px;
+  width: 503.71px; height: 335.81px;
+  z-index: 10;          /* above the text block, below the nav chrome (12) */
+}
+/* Clip layer: owns overflow so nothing inside can paint outside the
+   media box. The bubble is deliberately NOT inside it. */
+#s4 .s1-media-clip { position: absolute; inset: 0; overflow: hidden; }
+/* The PNG is 1536×1024 (3:2) and the box is 503.71×335.81 (3:2), so
+   `contain` is a no-op safeguard rather than a fit correction. */
+#s4 .s1-media-img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+/* ── Side bubble ──
+   Slide 7's wedgeRectCallout has adj1=-60110, adj2=18342, which puts its
+   tail tip at (824.26, 371.96) — left of the bubble and level with
+   אביה's raised hand, i.e. the tail points LEFT at her.
+   The box keeps the symbol's 188:89 aspect (consumer constraint), taking
+   the authored width 163.43 and deriving the height 77.36 from it. The
+   mirrored symbol's tip sits 1.94% in from the left edge (3.17px here),
+   so the box's left edge is 824.26 − 3.17 = 821.09 and its vertical
+   centre is the authored 371.96 → top 333.28. Expressed relative to the
+   media box (388.14, bottom-anchored, 503.71×335.81):
+     left = 821.09 − 388.14 = 432.95 ; top = 333.28 − 302.43 = 30.85 */
+#s4 .s1-bubble {
+  left: 432.95px; top: 30.85px;
+  bottom: auto; transform: none;
+  width: 163.43px; height: 77.36px;
+}
+/* Tail RIGHT -> LEFT. Only the shape is mirrored; the text is a sibling,
+   so the words stay unmirrored (mechanism ported from the approved
+   sibling methodica-math-percent-01-01). */
+.s1-bubble--side .s1-bubble-shape { transform: scaleX(-1); }
+/* The tail occupies 12.75/188 = 6.78% of the width; inset a little past
+   it on the mirrored (left) edge, and centre vertically — this symbol's
+   tail is on the side, not the bottom, so the down-tail's asymmetric
+   bottom inset must not apply. */
+.s1-bubble--side .s1-bubble-text {
+  left: 8.72%; right: 4%;
+  top: 4%; bottom: 4%;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen (Screen 07 / #s6)
+   "מה אפשר ללמוד מזה?". Source: slide 9.
+
+   No character, no bubble, no media — slide 9 authors none of them.
+   Slide 9's title box is IDENTICAL (x/y/w/h) to slide 7's own title box
+   (the same template duplicate), so this reuses screen 05's already-
+   approved centring rule (#s4 .s1-text) verbatim rather than re-deriving
+   it — same asymmetric-duplicate-box reasoning applies.
+   ═══════════════════════════════════════════════════════ */
+#s6 { background: #fff; }
+#s6 .s1-text {
+  left: 29.01px; right: 29.01px;
+  top: 64.22px;
+  gap: 43.84px;
+  align-items: center;
+  text-align: center;
+}
+/* Slide 9's body box IS symmetric on its own — 57.06px both sides of the
+   1280 canvas (1280 - 2*57.06 = 1165.87) — so no centring correction is
+   needed here; it is simply narrower than the title's box, reproducing
+   that composition. */
+#s6 .s1-body { max-width: 1165.87px; }
+
+/* -- APPROVED ACCESSIBILITY/READABILITY DEVIATION FROM THE POWERPOINT --
+   SCOPED TO SCREEN 07 (#s6) ONLY: not a change to the shared Body/B-6
+   token, and not applied to any other screen.
+
+   Source-priority rule this follows: the PowerPoint is the production
+   source for authored content, wording and pedagogical intent, but an
+   explicit producer decision, an approved Figma design, a client-
+   requested typography change, or developer QA aimed at usability/
+   readability may override its VISUAL formatting. Such a deviation must
+   be scoped and documented -- it is not a licence to restyle freely.
+
+   This one: this lomda will ultimately run inside an iframe smaller than
+   the production viewport it was built against; the child audience needs
+   a larger body size for comfortable reading at that smaller effective
+   size. Approved 2026-09-08: body text on screen 07 raised from the
+   shared Body/B-6 20px to 24px. Font family, weight, and the regular/
+   bold hierarchy (Body/B-6 vs Body/B-8) are unchanged -- only the size.
+   line-height is left as the inherited unitless 1.5 (not overridden
+   here), so it recomputes to 36px automatically for the new 24px size,
+   preserving the same relative leading rather than a mismatched fixed
+   value. The inter-GROUP gap is nudged from the shared 22px to 26px in
+   the same proportion (22 * 36/30) to keep the blank-line rhythm
+   visually equal to the smaller size's; the intra-group 2px line gap is
+   untouched -- line-height already supplies the spacing there. Verified
+   at build time this does not overflow: even at the tightest supported
+   canvas (1280x720), the body's rendered height leaves roughly 200px of
+   clear space above the bottom bar. */
+#s6 .s1-body { gap: 26px; }
+#s6 .s1-body-group p { font-size: 24px; }
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 06 (#s5) — comic sequence, "מכונת החומוס"
+   Source: slide 8. No Figma template exists for this screen (the
+   producer says so in the presenter note), so it is assembled from
+   components this project already ships: the 720 speech bubble, the
+   standard nav chrome and the Math tokens.
+
+   Geometry is slide 8's own two-row grid (EMU / 9525 = design px).
+   Units are positioned against the 1280-wide design grid rather than
+   the engine's fluid canvas edges, because this is a composed comic
+   panel: the six cells must hold their relationship to each other,
+   not spread out when the canvas grows.
+   ═══════════════════════════════════════════════════════ */
+#s5 { background: #fff; }
+
+/* The grid is a fixed 1280×710 design-space plane centred in the canvas.
+   Anything anchored to it keeps slide 8's composition exactly, at every
+   viewport, while the nav chrome and flag stay on the fluid canvas. */
+.cmc-grid {
+  position: absolute;
+  left: 50%;
+  width: 1280px; height: 710px;
+  margin-left: -640px;
+  /* Vertically CENTRED in the area above the 74px bar, not pinned to the
+     top: slide 8's drawn content spans y 26.12..607.61 (581.49 tall), so
+     centring that band keeps the comic balanced when the engine's canvas
+     is taller than the 710 design height. At the design height the result
+     lands within ~1px of the authored position. */
+  top: calc((100% - 74px - 581.49px) / 2 - 26.12px);
+}
+.cmc-unit { position: absolute; }
+
+/* Row 1 — y 26.12, h 275.43 · Row 2 — y 332.18, h 275.43 */
+#cmc-1 { left: 939.57px; top: 26.12px;  width: 315.02px; height: 275.43px; }
+/* Unit 2 spans the whole middle cell. Slide 8 leaves 20.34px to the left
+   photo and 17.89px to the right one; the two gutters are equalised to 20px
+   (the row-2 gutter between units 5 and 4 is 21.14px) so the framed cell
+   reads as part of the same grid. Top/height are the row's own. */
+#cmc-2 { left: 355.03px; top: 26.12px;  width: 564.54px; height: 275.43px; }
+#cmc-3 { left: 82.67px;  top: 26.12px;  width: 252.36px; height: 275.43px; }
+#cmc-4 { left: 1000.76px; top: 332.18px; width: 252.36px; height: 275.43px; }
+#cmc-5 { left: 759.16px; top: 332.18px; width: 220.46px; height: 275.43px; }
+#cmc-6 { left: 82.67px;  top: 332.18px; width: 385.14px; height: 275.43px; }
+
+/* Photos fill their cell. Each file is already cropped to slide 8's own
+   srcRect out of the high-quality source PNG, at the cell's aspect, so
+   `contain` never actually letterboxes — it is a safeguard only. */
+.cmc-img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+/* Slide 8 sets flipH on units 3 and 5. Mirroring in CSS keeps the
+   exported crops identical to their source pixels. */
+.cmc-img--flip { transform: scaleX(-1); }
+
+/* ── Speech bubbles ──
+   Same component as the rest of the lomda: white body, 3px
+   var(--subject-500) outline, black text, and the text is a SIBLING of
+   the shape so it is never mirrored or stretched with it.
+   The path in each bubble is drawn at 1:1 with its own viewBox instead
+   of stretching one of the shared symbols — slide 8's four bubbles carry
+   very different amounts of text, and a stretched symbol renders its 3px
+   stroke and corner curves unevenly (the sibling records that as a hard
+   consumer constraint). Corner extents and tail dimensions are the
+   approved symbols' own, so the shape is identical at every size. */
+.cmc-bubble { position: absolute; z-index: 2; }
+.cmc-bubble-shape {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  overflow: visible;
+}
+/* 20px, not 18px — producer typography review 2026-09-10: every readable
+   run in the comic is 20px, the same size as the narration frame and the
+   machine display, and the same size as the companion bubbles elsewhere
+   in this part. Measured before the change (1280x720): the raise keeps
+   every bubble's LINE COUNT (2 / 3 / 2 / 9) and only asks for more
+   height — bubbles 1, 3 and 5 by 3.75 / 7.76 / 17.67px, bubble 4 not at
+   all. Those three grew by the smallest whole amount that restores the
+   original ~2px of slack (see each bubble's box below); nothing else in
+   the composition moved. */
+.cmc-bubble-text {
+  position: absolute;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; direction: rtl;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; color: #000; line-height: 1.35;
+}
+/* Multi-line bubble: paragraphs stack with a small gap instead of being
+   centred as one block, so the worked example reads as steps. */
+.cmc-bubble-text--block { flex-direction: column; justify-content: center; gap: 6px; }
+.cmc-line { display: block; }
+
+/* Per-bubble boxes. `inset` on the text keeps it clear of the tail on
+   whichever edge that bubble's tail sits. */
+/* Units 1 and 3 follow the approved unit-4 bubble: flush with the photo's
+   edge (top / bottom respectively), the same 3.14px side margins, and the
+   tail placed under/over the speaker's head rather than centred or pushed
+   into a corner. Body heights are the text's own line boxes plus 8px
+   padding, so each bubble hides as little of the photo as it can. */
+/* 72.915 -> 79 for 20px (2 lines x 27 + 2 slack + 8/15 insets). Grows
+   DOWN — the bubble is flush with the photo's top edge — so the tail tip
+   lands 6.085px lower on the same speaker. `text-wrap: balance` evens
+   the two lines: at both 18 and 20px the natural break left "בשבילנו!"
+   alone on the second line. */
+.cmc-bubble--1 { left: 3.14px;   top: 0;        width: 308.74px; height: 79px; }
+.cmc-bubble--1 .cmc-bubble-text { inset: 8px 14px 15px; text-wrap: balance; }
+
+/* 95.915 -> 106 for 20px (3 lines x 27 + 2 slack + 15/8 insets). Grows
+   UP — the bubble stays flush with the photo's bottom edge (275.43 - 106),
+   so the tail tip rises 10.085px toward the same speaker. */
+.cmc-bubble--3 { left: 3.14px;   top: 169.43px; width: 246.08px; height: 106px; }
+.cmc-bubble--3 .cmc-bubble-text { inset: 15px 14px 8px; }
+
+.cmc-bubble--4 { left: 3.14px;   top: 196.24px; width: 246.09px; height: 79.915px; }
+.cmc-bubble--4 .cmc-bubble-text { inset: 15px 14px 8px; }
+
+/* Unit 5's bubble hangs to the LEFT of its photo, as slide 8 composes it:
+   the cell starts at x=759.16, so -279.16 puts the bubble's body at
+   x=480 with its tail tip landing on the photo's left edge. */
+/* 287 -> 307 for 20px (9 line boxes 243 + 5 gaps x 6 + 2 slack + 16/16
+   insets). Grown 10px up AND 10px down, with the tail redrawn 10px lower
+   in the path, so the tail tip stays on exactly the same canvas point on
+   the photo's left edge. Clearances at 1280x720: 14.9px to row 1 above,
+   16.5px to the bar below. */
+.cmc-bubble--5 { left: -279.16px; top: -15.78px; width: 279.745px; height: 307px; }
+.cmc-bubble--5 .cmc-bubble-text { inset: 16px 16px 16px 29px; }
+
+/* ── Unit 2 — narration, live text, no image ──
+   Vertically centred in its cell, matching slide 8's anchor="ctr". */
+/* Framed like the bubbles (same 3px var(--subject-500) outline and the
+   same elliptical corner extents, 9.529 × 3.787), but with no tail: this is
+   narration, not speech. The box wraps the text with balanced padding and
+   stays vertically centred in its cell, where it was. */
+.cmc-narration {
+  position: relative;
+  width: 100%; height: 100%;     /* the frame IS the cell: same top and bottom as the row's photos */
+  padding: 23px 27px;            /* 20/24 of clear space inside the 3px outline */
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 10px;
+  direction: rtl; text-align: center;
+}
+/* The outline is an SVG rect, not a CSS border: inside the scaled canvas a
+   CSS border snaps to whole device pixels and renders thinner/thicker than
+   the bubbles' 3px SVG stroke, while an SVG stroke matches them exactly.
+   Sized with CSS geometry so nothing is stretched — same 3px, same colour,
+   same corner extents as the bubble paths, no tail. */
+.cmc-narration-frame {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+  z-index: 0;
+}
+.cmc-narration-frame rect { width: calc(100% - 3px); height: calc(100% - 3px); }
+.cmc-narration p { position: relative; z-index: 1; }
+/* Ordinary canvas text — 24px Regular (was 20px; producer instruction 2026-09-30) */
+.cmc-narration p { font-size: 24px; font-weight: 400; color: #303030; line-height: 1.4; }
+/* Body/B-8 in the Math subject colour — this is the rule the whole unit
+   exists to deliver, and it replaces the slide's own cyan-on-black. */
+.cmc-narration-emph { font-weight: 700 !important; color: var(--subject-500) !important; }
+
+/* ── Unit 6 — the machine's own display ──
+   Live text over the panel's screen area, never baked into the image.
+   Box from slide 8's grouped TextBox (group-local x 138.72, y 75.85). */
+.cmc-machine-ratio {
+  position: absolute;
+  left: 138.72px; top: 75.85px;
+  width: 106.29px; height: 42.01px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 700; color: #303030;
+  direction: rtl;
+  z-index: 2;
+}
+
+/* ── Staged reveal (FUNCTIONAL — not the screen-reveal system) ──
+   Six units enter in the producer's 1..6 order ("להעלות את התמונות
+   בהדרגה לפי המספור", slide 8). The animation-system engine IS wired in
+   this project (css/motion.css + js/motion.js), but this sequence stays
+   screen-local on purpose: it is the component's own functional /
+   pedagogical animation — js-timed per unit's reading time
+   (cmcStartSequence) and gating Continue on the last unit's animationend
+   — not a screen entrance, so #s5 carries no data-reveal (DECISIONS.md →
+   Rule precedence #2, functional animation wins).
+   Keyframes: the engine's global m-float-in (defined once in
+   css/motion.css: opacity + translateY(var(--m-distance)) = 16px). The
+   former local duplicate of those keyframes was removed; the 600ms/ease
+   timing below is this sequence's own and is unchanged.
+   The animation goes on the UNIT container, never on a leaf: units 3 and
+   5 carry their own scaleX(-1), and animating the same element would
+   fight that transform. */
+#s5 .cmc-unit { opacity: 0; }
+#s5 .cmc-unit.is-in { animation: m-float-in 600ms ease both; }
+#s5.cmc-all-shown .cmc-unit { opacity: 1; animation: none; }
+
+/* Reduced motion: everything is present immediately and Continue opens at
+   once (js/main.js reads the same query and skips scheduling). */
+@media (prefers-reduced-motion: reduce) {
+  #s5 .cmc-unit { opacity: 1; animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — FlipCardsReveal (Screen 08 / #s7)
+   "איך לייצג יחס באמצעות ביטוי אלגברי?" — 3 cards. Source: slides 10
+   (front state) + 11 (revealed state).
+
+   REBUILT against the canonical Figma node (720 - UI Templates,
+   node 4504:21693, states "State 01 - Before interaction" /
+   "State 02 - Revealed"), inspected directly via get_design_context —
+   NOT copied from a sibling project. Every dimension, radius, border,
+   padding, gap and colour below is that node's own literal value unless
+   a comment says otherwise. See the audit delivered with this revision
+   for the full Template-MD / Figma / PPTX reconciliation.
+
+   REUSES .select-title / .option-cards from screen 01, per the MD's own
+   "Reuses the TwoOptionSelection composition" instruction.
+   ═══════════════════════════════════════════════════════ */
+#s7 { background: #fff; }
+
+/* Canonical composition: a single 1280px-wide column, VERTICALLY
+   CENTRED on the canvas (not top-anchored, unlike screens 05/07/09) —
+   Figma's own outer wrapper is 'top: calc(50% - 50.25px)' +
+   'translate(-50%, -50%)' on the 710px reference canvas. Reproduced
+   verbatim as a formula (not a resolved pixel value) so it keeps
+   centring correctly if the fluid canvas grows taller than 710px.
+   gap: 56px between the text block and the card row — Figma's own
+   value, replacing an earlier draft's guess derived from screen 05/07's
+   unrelated title-to-body rhythm. */
+#s7 .select-content {
+  position: absolute;
+  left: 50%; top: calc(50% - 50.25px);
+  transform: translate(-50%, -50%);
+  width: 1280px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 56px;
+}
+/* Text column: 810px wide (Figma's own value — NOT the 1212px raw PPTX
+   title-box width, which both screens 05/07/09 already read as
+   authoring slop on an asymmetric duplicated box). gap: 8px between
+   title and subtitle is Figma's own line-gap for this whole text block,
+   replacing an earlier 43.84px guess borrowed from the unrelated
+   TransitionScreen rhythm. Title stays centred: Figma's own generic
+   placeholder for this role renders right-aligned, but this project's
+   shared '.select-title' (which the MD explicitly says to reuse
+   verbatim) is centred, and this exact title's own PPTX run sets
+   algn="ctr" — two independent, on-point pieces of evidence outweigh one
+   generic library instance's own placeholder alignment. Flagged in the
+   audit rather than silently resolved. */
+#s7 .select-head {
+  width: 810px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px;
+}
+/* Subtitle: 28px Bold, per the canonical Figma node for this screen
+   (producer-confirmed). The earlier draft read this slot as 20px
+   regular. Note that the shared token table lists 28px only as
+   Body/B-1 (Regular) and Body/B-2 (SemiBold) — there is no 28px Bold
+   entry — so the weight is authored explicitly here rather than
+   through a token. Scoped to #s7: the shared .select-subtitle rule is
+   left at its template value so no other screen is affected. */
+#s7 .select-subtitle {
+  width: 100%;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Card row: Figma's own values — gap 22px (an earlier draft used
+   16.7px, derived from the raw PPTX card spacing on 4 DIFFERENT cards
+   than ours), 40px side padding, full canvas width so the row is free
+   to centre 3 cards instead of Figma's generic 4. */
+#s7 .option-cards {
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* Caption above each card — see the audit: Figma's canonical component
+   has NO such element, but slides 10 AND 11 both author the identical
+   heading above every card (same text before and after the flip), which
+   is real content the card would otherwise lose — the front image alone
+   never states "לקיר המושלם" or "בורה בורה" as text. Kept as a documented,
+   minimal ADDITION outside the canonical 283×283 card box, not as part
+   of the reusable component. Sized as Body/B-7 (20px/SemiBold — the
+   nearest actual named role in this Figma library to a short bold
+   caption), in var(--subject-500): the source's own #00B0F0 is a
+   Science-family accent with no Math token, the same substitution
+   already applied to every other instance of that exact colour
+   elsewhere in this build. 8px gap to the card below reuses the same
+   text-column line-gap Figma uses elsewhere in this node. */
+.frc-card-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+/* Bold (700), not SemiBold: the caption must read as a heading above its
+   card. Assistant-Bold.ttf is one of the seven weights this component ships
+   locally via @font-face, so 700 resolves to a real file, not a synthesised
+   face — verified in-browser (computed family + weight). */
+.frc-card-caption {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);   /* was 20px; producer instruction 2026-09-30 */
+  text-align: center; direction: rtl;
+}
+
+/* The card — CANONICAL 283×283 SQUARE (Figma: front face height 283px +
+   a 251px square image slot inside 16px padding on every side, giving
+   251 + 2×16 = 283 both ways). An earlier draft used a 393×316
+   rectangle sized off the raw PPTX card shapes; that geometry is
+   discarded in favour of the canonical square. */
+/* Width 298px, height 283px (canonical Figma card is 283x283).
+   Documented local size variant, measured rather than guessed. At the
+   canonical 283px width the usable inner column is 245.7px, and two of the
+   revealed faces wrapped their concluding sentence so that the ratio
+   expression stood alone on the last line, while all three wrapped
+   "כשנרצה להגדיל את הכמויות פי x:" so that "פי x:" stood alone.
+   Intrinsic single-line widths were measured in Edge under file://:
+     כשנרצה להגדיל את הכמויות פי x:        258.2px  (widest line)
+     לכן הכמויות יהיו ביחס של 3x : 2x / 5x  252.5px
+     לכן שטח ABC הוא x + 4x = 50           230.6px
+   The inner column is the card width less 2x3px border and 2x16px padding,
+   so the smallest width that clears the widest line is 258.2 + 38 = 296.2px.
+   298px is the smallest whole-pixel width that clears it with a real (if
+   small) margin: inner 260.7px, i.e. 2.5px over the widest line — 290-297px
+   would either still orphan "פי x:" or leave sub-pixel margin on the
+   conclusion, and 283-289px orphaned two conclusions outright.
+   Height is unchanged: with those lines unwrapped the tallest revealed face
+   leaves ~40px of vertical slack at 283px, so no height adjustment is
+   needed. The canonical 22px inter-card gap, equal card sizes, the centred
+   row and the 40px row padding are preserved; the row measures 938px inside
+   the 1200px safe width of the 1280px design canvas. */
+/* Widened 298→384 and shortened 283→270 (producer, 2026-09-22: the
+   front images were being cropped). The three fronts are 710x469, 710x469
+   and 710x465 — a 3:2 landscape in a 260.7x245.7 slot, which object-fit:
+   cover was trimming by ~30% of the width (the B vertex and the 1:4 legend
+   were the visible casualties). 384 is the widest the row allows while the
+   gaps stay equal: 3×384 + 2×22 = 1196 inside .option-cards' 1200px content
+   box. At that width the slot is 346x232 and the image lands 346x228.6,
+   i.e. it fills the slot and is the same width on all three cards. The
+   height cut keeps the letterboxing near zero and still leaves the back
+   face 216px of content box for its 171px of text. */
+.frc-card {
+  width: 384px; height: 270px;
+  background: transparent;
+  border: none; padding: 0;
+  cursor: pointer; outline: none;
+  position: relative;
+  perspective: 900px;
+}
+.frc-card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.frc-card.is-flipped .frc-card-inner { transform: rotateY(-180deg); }
+
+.frc-card-front, .frc-card-back {
+  position: absolute; inset: 0;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* Front face — Figma's own literal values (this is the canonical
+   design, not an override of it): white, 3px Natural/Alpha/200 border,
+   16px radius, 16px padding on every side. */
+.frc-card-front {
+  border: 3px solid rgba(201, 206, 216, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+  background: #fff;
+}
+/* Image slot: Figma's 16px radius, but CONTAIN rather than the canonical
+   cover — these three fronts are landscape artwork whose whole content is
+   the point (a labelled diagram, a ratio legend), so cropping to fill is
+   wrong for them even though cover is right for a photographic slot. With
+   the card box above, contain crops nothing and renders all three at the
+   same width. */
+.frc-card-front img {
+  width: 100%; height: 100%;
+  object-fit: contain; object-position: center;
+  border-radius: 16px;
+  display: block;
+}
+.frc-card:not(.is-flipped):hover .frc-card-front,
+.frc-card:not(.is-flipped):focus-visible .frc-card-front { border-color: var(--subject-500); }
+
+/* Live-text patch over a label baked into a front image (client correction,
+   2026-09-29). It sits inside .frc-card-front, so it scales and flips with
+   the card; its geometry is in canvas px because the card box is fixed.
+   Card 1 (flip-card-3-triangle-trapezoid.jpg, 710x469): contained in the
+   ~346.7x232.7 content box at s ~ 0.488, 1.8px from the top. Baked badge:
+   image px x164-481, y387-452, fill rgb(87,186,254). The B/C vertex letters
+   (x88-110, x520-536) sit outside the patch horizontally. Centre x = 16 +
+   322.5*s = 173.4; top 206 -> image y385.4; height 34 -> y455, past the
+   badge edge. Measured in the browser on 2026-09-29: the patch spans image
+   px x146-499, y385-455. Re-derive if the card box or the artwork changes. */
+/* Block, not flex: as flex items, the text runs either side of the <bdi>
+   would lose their edge spaces ("משולשABC="). Centred by text-align and a
+   line-height equal to the patch height instead. */
+.frc-img-patch {
+  position: absolute;
+  display: block; text-align: center;
+  box-sizing: border-box;
+  padding: 0 12px;
+  white-space: nowrap;
+  direction: rtl;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 700;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+.frc-img-patch--abc {
+  left: 173.4px; top: 206px; transform: translateX(-50%);
+  min-width: 157px; height: 34px; line-height: 34px;
+  border-radius: 6px;
+  background: rgb(87, 186, 254);
+  font-size: 18px;
+}
+
+/* Revealed face — Figma's own literal values: Subject/100 fill,
+   3px Subject/500 border, 24px radius (NOT the front face's 16px),
+   16px horizontal / 24px vertical padding (NOT a uniform 16px). */
+.frc-card-back {
+  transform: rotateY(180deg);
+  border: 3px solid var(--subject-500);
+  border-radius: 24px;
+  padding: 24px 16px;
+  background: var(--subject-100);
+  display: flex; align-items: center; justify-content: center;
+}
+.frc-card-back-content {
+  width: 100%;
+  display: flex; flex-direction: column; gap: 0;
+  text-align: right; direction: rtl;
+}
+/* gap: 0 plus a per-group margin, rather than a uniform gap. Figma does
+   not specify an inter-line gap at all (its revealed card shows ONE
+   continuous paragraph), so this is free to serve the authored content:
+   the PPTX's own blank lines are restored as a small margin on just the
+   two lines that open a new group, which reproduces the authored
+   grouping while spending the least vertical space. */
+.frc-card-back-content p.frc-group { margin-block-start: 4px; }
+/* Keeps the "פי x:" tail from being orphaned onto its own line. Wording
+   is untouched — this only forbids a line break inside the phrase. */
+.frc-nobreak { white-space: nowrap; }
+
+/* ── Quantity rows: fixed icon slot + separate text column ──
+   Each symbol sits centred inside an identical slot as wide as the WIDEST
+   symbol (the trapezoid, 41.8px), so every quantity line's text starts on
+   the same vertical axis no matter which symbol precedes it. The shapes
+   keep their authentic proportions — only the slot is equalised, never the
+   glyph. Applied identically to the fixed and the multiplied quantities. */
+.frc-card-back-content p.frc-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.frc-slot {
+  flex: 0 0 42px; width: 42px;
+  display: flex; align-items: center; justify-content: center;
+}
+.frc-slot .frc-shape { margin-inline-end: 0; vertical-align: middle; }
+.frc-txt { flex: 1 1 auto; min-width: 0; }
+
+/* A complete mathematical expression is one unbreakable LTR unit, so a
+   token such as 5x or 2x can never be orphaned onto its own line and the
+   ratio's internal order is isolated from the surrounding RTL text. */
+.frc-expr { white-space: nowrap; unicode-bidi: isolate; }
+/* Body text. Colour, family and weight are Figma's own literal values
+   (Assistant Regular, Natural/800 #303030). Genuine authored bold lines
+   (the source's own b="1" runs) keep this same role and add weight only.
+
+   THE ONE MEASURED DEVIATION ON THIS SCREEN — size 20px, not Figma's 24px.
+   Figma's revealed card carries ONE placeholder paragraph; this screen's
+   authored content is seven paragraphs, and at 24px it does not fit the
+   canonical card. Measured in the real browser at the canonical
+   283x283 box (229.7px of usable height inside the 24px/16px padding and
+   3px border), worst card of the three:
+       24px / 1.2   -> 271.1px content   OVERFLOWS by 41.5px
+       22px / 1.25  -> 259.5px content   OVERFLOWS by 29.8px
+       21px / 1.25  -> 248.3px content   OVERFLOWS by 18.6px
+       20px / 1.25  -> 237.0px content   OVERFLOWS by  7.3px
+       20px / 1.15  -> 219.0px content   FITS, 10.7px to spare  <= chosen
+   The wrapping is inherent, not icon-driven: at 24px a line such as
+   "כשנרצה להגדיל את הכמויות פי x:" is ~330px wide against a 251px column,
+   so it must wrap however the symbols are drawn.
+   20px is not an arbitrary number — it is this project's Body/B-6 token
+   AND the size the PowerPoint itself authors for this very text (20pt).
+   Every other property of the card stays canonical: box, fills, borders,
+   radii, padding, the front face and the row are untouched. */
+.frc-card-back-content p {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; line-height: 1.15;
+  color: #303030;
+}
+.frc-card-back-content p.is-bold { font-weight: 700; }
+
+/* ── Inline instructional symbols on the revealed faces ──
+   NO Unicode emoji. Assistant carries no colour-emoji glyphs, so an emoji
+   in this text falls back to the OS emoji font and renders differently on
+   Windows / macOS / other browsers — unacceptable for a symbol that
+   identifies a quantity. Each symbol is therefore either committed local
+   artwork or deterministic geometry:
+     • fruit  — transparent PNGs exported at 2x from the exact glyph the
+                PowerPoint itself renders (the deck holds no fruit image;
+                its run text carries U+1F96D / U+1F353). alt="" because the
+                adjacent live text already says מנגו / תות.
+     • paint  — SVG squares. Colours are sampled from THIS card's own front
+                artwork (blue #0187EE, yellow #FDC301) rather than from the
+                source's 🟨 glyph, which Windows renders amber (#FFB351)
+                and would contradict the yellow paint in the image.
+     • shapes — SVG rebuilt from the slide's own DrawingML preset geometry
+                (triangle: prst="triangle", default adjust; trapezoid:
+                prst="trapezoid", adj=54376 => top edge inset 5.98px per
+                side), at the authored 19.01x22.01 and 46.00x22.01 ratios
+                and the authored fills 00B0F0 / FF9E59. A stable viewBox
+                plus explicit width/height keeps them sharp at any canvas
+                scale.
+   All are aria-hidden / alt="" — the neighbouring text names each one. */
+.frc-shape {
+  flex: none;
+  display: inline-block;
+  vertical-align: -3px;
+  margin-inline-end: 6px;
+}
+.frc-shape--fruit { width: 20px; height: 20px; }
+.frc-shape--swatch { width: 20px; height: 20px; }
+.frc-shape--tri { width: 17.3px; height: 20px; }
+/* Trapezoid = lower band of the triangle above it: its sides lie on the
+   triangle's extended sides (slope 9.505/22.01), carried across the 6px
+   inter-row gap (23px pitch, both symbols centred in their rows), height 14
+   → 34.55×14 (top edge 22.46). Both symbols are centred in the same
+   42px slot, so their centres share one vertical axis and the trapezoid's
+   sloping sides continue the triangle's diagonals into one implied larger
+   triangle (see the screen-08 note in index.html). The slot stays 42px so
+   the text column does not move. */
+.frc-shape--trap { width: 34.55px; height: 14px; }
+
+.frc-card:focus-visible { outline: none; }
+
+/* ── Screen 08 gesture hint (rightmost card only) — tap/click demo,
+   top-right corner. Reuses the validated methodica-science-mass-measure-01-01
+   S6 flip-card implementation verbatim (which itself reuses S2 / part-04 S1):
+   same hand asset, same ripple geometry, colours and per-keyframe easing,
+   same corner anchor — 13px in from the card's right edge, 16px down from
+   its top — recomputed for THIS card's 298px width (anchor x = 298 − 13 =
+   285; S6's card was 283 wide → 270). Click-only per 720-templates →
+   references/_gesture-hints.md: one fixed anchor, only opacity/scale
+   animate, no position change, no particles. The loop is a class-gated CSS
+   animation; JS owns start/stop (frcGhStart / frcGhStop in js/main.js). */
+.frc-gh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.frc-gh.frc-gh-stopped { opacity: 0; }
+
+.frc-gh-hand {
+  position: absolute;
+  width: 28px; height: 33px;
+  left: 271px; top: 14px; /* fingertip on the anchor: top-right corner of the 298×283 card */
+  pointer-events: none;
+}
+
+.frc-gh-ring {
+  position: absolute;
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.frc-gh-ring1 {
+  left: 264px; top: -5.5px; width: 42px; height: 43px;   /* centred on (285, 16) */
+  background: #B9ECFF; border: 2.5px solid #00BAFF;
+  animation: frc-gh-ring1 2s linear infinite;
+}
+.frc-gh-ring2 {
+  left: 281px; top: 12px; width: 8px; height: 8px;       /* centred on (285, 16) */
+  background: transparent; border: 1.5px solid #B9ECFF;
+  animation: frc-gh-ring2 2s linear infinite;
+}
+.frc-gh.frc-gh-stopped .frc-gh-ring1,
+.frc-gh.frc-gh-stopped .frc-gh-ring2 { animation-play-state: paused; }
+
+@keyframes frc-gh-ring1 {
+  0%   { animation-timing-function: cubic-bezier(0.2, 0.4, 0.4, 1); opacity: 0;    scale: 0.05; }
+  5%   { animation-timing-function: ease-out;                      opacity: 0.85; scale: 0.22; }
+  35%  { animation-timing-function: ease-out;                      opacity: 0.65; scale: 0.6;  }
+  45%  { animation-timing-function: cubic-bezier(0.6, 0, 1, 1);    opacity: 0.35; scale: 0.85; }
+  50%  { opacity: 0; scale: 1; }
+  100% { opacity: 0; scale: 1; }
+}
+@keyframes frc-gh-ring2 {
+  0%   { animation-timing-function: cubic-bezier(0.05, 0.9, 0.1, 1); opacity: 0;    scale: 0.2; }
+  3%   { animation-timing-function: cubic-bezier(0.4, 0, 1, 1);      opacity: 0.75; scale: 1;   }
+  10%  { opacity: 0; scale: 1.1; }
+  100% { opacity: 0; scale: 1.1; }
+}
+/* Reduced motion: skip the whole hint (JS no-ops too) — never a slowed-down
+   version of it. */
+@media (prefers-reduced-motion: reduce) {
+  .frc-gh { display: none !important; }
+}
+.frc-card.is-flipped:focus-visible .frc-card-back { box-shadow: 0 0 0 2px var(--subject-700); }
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — SingleChoiceQuestionImage (Screen 09 / #s8)
+   Source: slide 12 (presentation position). Contract:
+   720-templates → SingleChoiceQuestion.md (+ its own
+   "SingleChoiceQuestionImage" section) + _question-template-defaults.md
+   + _global-components.md → Feedback popup system / Image zoom.
+
+   The shared chrome below — hint button, feedback popup, hint overlay,
+   answer capsules, radio — is ported from the same-lomda sibling
+   methodica-ar-math-ratio-03-02 (its Screen 02 is the same template with
+   the same Math theme), so both parts of this lomda present one
+   consistent question UI. The image frame and the image-zoom component
+   are ported from the approved methodica-math-percent-01-01, which is
+   where the canonical clone-based zoom already ships.
+   ═══════════════════════════════════════════════════════ */
+#s8 { background: #fff; }
+
+/* Container — canonical Figma geometry for this template
+   (top 121, right 40, width 1188). */
+#s8 .scq-question {
+  position: absolute; top: 121px; right: 40px;
+  width: 1188px; height: auto;
+}
+
+/* Image column — LANDSCAPE frame on the LEFT (RTL reading-end),
+   at this screen's own authored image ratio rather than the template's
+   generic 380×380 square.
+
+   WHY THIS SCREEN OVERRIDES THE SQUARE. The template describes a
+   380×380 placeholder with object-fit: contain, which is right for an
+   unknown-ratio placeholder but wrong here: slide 12's picture is a
+   LANDSCAPE 397×327.58 frame (ratio 1.2119) and the asset cropped from
+   the producer's source with the slide's own srcRect is 1242×1024
+   (ratio 1.21289) — the two agree to within 0.08%. Forcing that into a
+   square left ~31.8px of empty #f2f2f2 above and below the photo, which
+   the PowerPoint composition does not have. The slide's own frame
+   geometry and the real asset are the stronger evidence for this
+   instance, so the frame follows them. Approved 2026-09-09.
+
+   HOW. The width stays the intended 380px and the height is DERIVED —
+   aspect-ratio is set from the asset's own pixel dimensions, so the box
+   is exactly 380 × 380·(1024/1242) ≈ 313.3px and no ground can show
+   through on any axis. object-fit: cover rather than contain for the
+   same reason: with the box ratio and the image ratio equal the two are
+   identical up to sub-pixel rounding, and cover guarantees no hairline
+   of background survives a rounding difference. Nothing is stretched —
+   width and height both come from one ratio.
+
+   The 8px inset the square version carried is dropped so the visible
+   frame really is 380px wide; the rounded corners, hairline border and
+   the zoom button (anchored to this same box) are unchanged. Vertical
+   position stays top-aligned with the text column: measured against the
+   slide, the photo's centre sits at 41.5% of the content height above
+   the bottom bar, top-alignment here puts it at 43.7%, and centring it
+   in the text column would put it at 51.1% — so top-alignment is the
+   PowerPoint-faithful placement, not an unconsidered default. */
+#s8 .scq-img {
+  position: absolute; left: 0; top: 0;
+  width: 380px; height: auto; padding: 0;
+  box-sizing: border-box;
+}
+#s8 .scq-img-inner {
+  width: 100%; height: auto;
+  aspect-ratio: 1242 / 1024;   /* the cropped asset's own pixel ratio */
+  position: relative;
+  background: #f2f2f2; border: 0.5px solid rgba(174, 174, 174, 0.5);
+  border-radius: 16px; overflow: hidden;
+  box-sizing: border-box;
+}
+#s8 .scq-img-inner img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
+}
+
+/* Text column — right of the image, inside the same 1188px container:
+   380 (frame) + 48 (gutter) + 760 (text) = 1188. */
+#s8 .scq-right-col {
+  position: absolute; right: 0; top: 0;
+  width: 760px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+
+/* ¶1 — the source's bold lead line. Body colour, not Subject/500: the
+   actual question (¶6, .scq-qtext) owns the accent role, and giving
+   both the same treatment would flatten the hierarchy the source
+   authored by bolding exactly these two lines. */
+#s8 .scq-lead {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* ¶2-¶5 — Body/B-3 (24px Regular). Consecutive source paragraphs get
+   the template's own line-height and nothing else — no invented gap
+   (_question-template-defaults.md → "Paragraph structure maps to
+   line-height, not invented spacing"); slide 12 authors no empty
+   paragraph anywhere in this text. */
+#s8 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s8 .scq-intro strong { font-weight: 700; }
+/* ¶6 — the question itself, in the template's canonical question role
+   (Assistant Bold 24 / Subject/500). */
+#s8 .scq-qtext {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: normal;
+  margin: 16px 0 0;
+}
+/* A complete mathematical expression is one unbreakable LTR unit, so no
+   operator, operand or ratio term can be split across lines or
+   reordered by the surrounding RTL prose. */
+#s8 .scq-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s8 .scq-nobreak { white-space: nowrap; }
+
+/* Answer capsules — content-driven width (SingleChoiceQuestion.md →
+   "Answer-capsule width"): fit-content up to the approved 604px ceiling
+   this lomda already uses in part 02, with align-items: stretch so all
+   three capsules resolve to the widest one's width. align-self:
+   flex-start is physically RIGHT under this column's direction: rtl. */
+#s8 .scq-answers {
+  width: fit-content; max-width: 604px;
+  align-self: flex-start;
+  margin-top: 24px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+#s8 .scq-opt {
+  width: auto; min-height: 46px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  overflow: visible;
+}
+#s8 .scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.15;
+}
+#s8 .scq-opt:disabled { cursor: default; }
+#s8 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s8 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+#s8 .scq-opt:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* Radio (22px) — RTL: sits at the capsule's RIGHT (reading start) via
+   order:-1, exactly as the source's own ellipses do. The green/red
+   feedback colours are theme-independent and deliberately NOT subject
+   tokens. */
+#s8 .scq-radio {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  position: relative; box-sizing: border-box;
+  order: -1;
+}
+#s8 .scq-opt.selected .scq-radio { background: var(--subject-500); }
+#s8 .scq-opt.correct  .scq-radio { background: #609e12; border-color: #609e12; }
+#s8 .scq-opt.wrong    .scq-radio { background: #b20010; border-color: #b20010; }
+#s8 .scq-opt.correct .scq-radio::after,
+#s8 .scq-opt.wrong .scq-radio::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+#s8 .scq-opt.correct .scq-radio::after {
+  width: 13px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s8 .scq-opt.wrong .scq-radio::after {
+  width: 11px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ── Hint button — bottom bar, immediately left of the check button.
+   left = 24 (.btn-continue's own left) + 140 (its min-width) + 16. ── */
+.scq-hint {
+  position: absolute;
+  bottom: 17.5px; left: 268px;  /* Arabic build: clear of the wider check button (was 180px) */
+  z-index: 12;
+  min-width: 140px; height: 39px;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-500);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-hint:hover:not(:disabled) { font-weight: 600; }
+.scq-hint:disabled { border-color: #aeaeae; color: #aeaeae; cursor: default; }
+.scq-hint.hidden { display: none !important; }
+.scq-hint-ico { width: 26px; height: 22.3px; flex: 0 0 26px; display: block; }
+
+.scq-hint:focus-visible,
+.img-zoom-btn:focus-visible {
+  outline: 3px solid var(--subject-500);
+  outline-offset: 2px;
+}
+
+/* ── Feedback popup — draggable, and with NO close control of any kind
+   (_global-components.md → Feedback popup system → "No manual close").
+   ── */
+.scq-popup {
+  position: absolute;
+  left: 2px; bottom: 76px;
+  width: 426px; height: auto;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  display: flex; flex-direction: column; gap: 4px;
+  direction: rtl; z-index: 50;
+  cursor: move;
+  touch-action: none;   /* drag surface claims touch gestures: no pointercancel mid-drag (_global-components.md, drag rule 5) */
+}
+.scq-popup.hidden { display: none !important; }
+.scq-popup-header {
+  display: flex; align-items: flex-start; gap: 8px;
+  direction: ltr; width: 100%;
+}
+.scq-popup-title {
+  flex: 1;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 700;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0;
+  padding-top: 4px;
+}
+.scq-popup-body { direction: rtl; }
+.scq-popup-body p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0 0 4px;
+}
+.scq-popup-body p:last-child { margin-bottom: 0; }
+.scq-popup .scq-expr { white-space: nowrap; unicode-bidi: isolate; }
+.scq-popup-actions { margin-top: 20px; }
+.popup-action {
+  height: 39px; padding: 0 20px;
+  border: 1px solid #484848; border-radius: 1000px; background: #fff;
+  color: #222222;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.popup-action:hover { font-weight: 600; }
+
+/* ── Hint overlay — full-canvas centred modal on a translucent white
+   scrim, Subject/500 card. Unlike the feedback popup this component
+   legitimately keeps its own dismissal paths (the authored "חזרה
+   לשאלה" button, backdrop click, Escape). ── */
+.scq-hint-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.78);
+  display: flex; align-items: center; justify-content: center;
+}
+.scq-hint-overlay.hidden { display: none !important; }
+.scq-hint-popup {
+  background: var(--subject-500); border-radius: 48px;
+  padding: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  width: 546px; max-width: 92%;
+}
+.scq-hint-content {
+  display: flex; flex-direction: column; gap: 24px;
+  width: 462px; max-width: 100%; direction: rtl;
+  color: #fff;
+}
+.scq-hint-title {
+  width: 100%; text-align: right; position: relative;
+  padding-right: 56px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 700; font-size: 32px;
+  color: #fff; line-height: normal; margin: 0;
+}
+.scq-hint-title-ico {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 34.3px; display: block; color: #fff;
+}
+.scq-hint-body {
+  width: 100%; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 400; font-size: 24px;
+  color: #fff; line-height: normal;
+}
+.scq-hint-body p { margin: 0; }
+.scq-hint-body strong { font-weight: 700; }
+.scq-hint-close {
+  min-width: 196px; width: fit-content; align-self: center; padding: 16px 40px;  /* Arabic build: grows with the label, never stretches */
+  border: none; border-radius: 1000px; background: #fff;
+  color: #303030;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 400;
+  cursor: pointer; white-space: nowrap;
+}
+.scq-hint-close:hover { font-weight: 600; }
+.scq-hint-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* ── Image zoom — canonical clone-based shared modal
+   (_global-components.md → "Image zoom"), required on any question
+   template that presents a content image. ── */
+.img-zoom-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--subject-500);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; color: var(--subject-500);
+}
+.img-zoom-btn:hover { background: var(--subject-500); color: #fff; }
+.img-zoom-btn__icon { width: 20px; height: 20px; display: block; }
+
+/* The landscape `--wide` panel variant is gone: it was a second FIXED
+   geometry (1180x620), which the canonical zoom rule rules out just as it
+   rules out the 660x660 square. The panel below now derives its shape from
+   the content, so a landscape source needs no opt-in. js/main.js may still
+   toggle the class; nothing styles it, which is the intended end state. */
+
+.img-zoom-modal {
+  position: absolute; inset: 0;
+  z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+}
+.img-zoom-modal.hidden { display: none !important; }
+.img-zoom-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(255, 255, 255, 0.78);
+}
+.img-zoom-panel {
+  position: relative; z-index: 1;
+  /* NO FIXED STAGE. 720-templates → _global-components.md → "Image zoom":
+     the historical 660x660 square is retired; the surface derives its
+     geometry from the content's own aspect ratio and is capped by the
+     envelope, with no letterbox slack and no upscaling of a small source.
+     The panel therefore shrink-wraps whatever the stage renders — the
+     image caps below are what actually bound it, so a portrait, square or
+     landscape source each produce a panel of its own shape. */
+  width: auto; height: auto;
+  max-width: 1148px; max-height: 568px;
+  background: #fff; border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.img-zoom-close-btn {
+  position: absolute; top: 16px; left: 16px;   /* top-left per spec, regardless of RTL */
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--subject-500);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; cursor: pointer; color: var(--subject-500);
+  z-index: 2;
+}
+.img-zoom-close-btn:hover { background: var(--subject-500); color: #fff; }
+.img-zoom-close-btn:focus-visible { outline: 2px solid var(--subject-700); outline-offset: 2px; }
+.img-zoom-close-btn svg { width: 15px; height: 15px; display: block; }
+/* The panel's own align-items: center means a flex ITEM never
+   auto-stretches to the content box, so the stage needs an explicit
+   height for the cloned wrapper's height:100% to resolve against. */
+#img-zoom-stage {
+  /* Content-sized, not 100% of the panel — the panel now shrink-wraps the
+     stage, so a percentage here would be circular. */
+  display: flex; align-items: center; justify-content: center;
+}
+/* The envelope is enforced HERE, on the content itself: the image keeps its
+   natural aspect ratio (width/height auto), is never stretched to fill a
+   box, and is never upscaled past its natural size — a source smaller than
+   the cap simply renders at its own size and the panel wraps it. */
+#img-zoom-stage img {
+  max-width: 1100px; max-height: 520px;
+  width: auto; height: auto;
+  display: block;
+}
+/* The in-page frame's grey ground and hairline border are right at
+   380×380 but read as an unwanted frame at 612×612 — dropped on the
+   clone. position: static keeps the clone out of the close button's
+   stacking bucket, so it can never paint over it. */
+#img-zoom-stage .scq-img-inner {
+  position: static;
+  display: flex; align-items: center; justify-content: center;
+  border: 0;
+  background: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — ImageHotspotQuestion, REGION/OBJECT variant (Screen 22 / #s21)
+   Source: slide 25. Contract: 720-templates → ImageHotspotQuestion.md.
+   Practice question 1 of 3.
+   ═══════════════════════════════════════════════════════ */
+
+/* Text block — slide 25's own box [256.55,121.75 957.89 wide], kept at
+   its authored position and width; only the type scale is the
+   template's. */
+#s21 .hsq-question {
+  position: absolute; right: 65.56px; top: 121px;
+  width: 957.89px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+#s21 .hsq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s21 .hsq-intro strong { font-weight: 700; }
+/* ¶4's bold first run is the question itself, in the template's
+   canonical question role (Assistant Bold 24 / Subject/500). Its
+   trailing instruction run is authored REGULAR inside the same
+   paragraph, so it stays in the same paragraph and only drops the
+   weight — it is not promoted to a line of its own. */
+#s21 .hsq-qtext {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s21 .hsq-qtext-cont { font-weight: 400; color: #222; }
+#s21 .scq-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+/* ── The answer surface — four FlipCardStates cards ──
+   Rebuilt 2026-09-22 on the producer's direction: one single-bucket asset
+   (פופקורן-1.png, 398x497, transparent background) used four times, one
+   per card, instead of the slide's shared 4-bucket photo. The wrap now
+   spans the question text block edge to edge (left 256.55 = 1280 - 65.56
+   - 957.89, right 65.56), so the row is as wide as the copy above it; the
+   cards are flex children with a 12px gap and are centred vertically in
+   the slide's own 362.21px picture band (top 274.63) — the band is kept so
+   nothing below it moves.
+
+   Card = 720 UI Templates "FlipCardStates" (Math mode: --subject-500
+   #3b2fc2, --subject-100 #ead9ff): 3px border, 24px radius in Hover /
+   Selected, 16px in Correct / Incorrect, Selected fills subject/100,
+   Correct / Incorrect fill white. The button is the card, so border and
+   fill are its own properties — no ::before, no separate fill layer. The
+   image is an in-flow child, so it paints over the card's own background
+   by ordinary order, and its transparent surround lets the fill show only
+   around the bucket. Card content box = 230.47 - 2*12 padding - 2*3
+   border = 200.47px wide → bucket 250.3px tall, card ≈ 280px. */
+#s21 .hsq-img-wrap {
+  /* Anchored to the SAME right edge and width as the question text above
+     (.hsq-question), not stretched between a left and a right inset: on a
+     canvas wider than 1280 the row would otherwise grow with the viewport
+     and the buckets (sized by card width) would cover the question and run
+     under the bottom bar. At 1280 the numbers are identical to before
+     (1280 - 65.56 - 957.89 = 256.55). */
+  position: absolute; right: 65.56px; width: 957.89px; top: 274.63px;
+  height: 362.21px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  /* The slide authors the four containers left-to-right: x:6, 1:6x, x:6x,
+     6:x. The page is RTL, which would reverse a flex row, so the row is
+     pinned LTR to keep the authored order. Text inside stays as authored
+     (the labels are bdi dir=ltr expressions). */
+  direction: ltr;
+}
+#s21 .hsq-hotspot {
+  flex: 0 0 calc((100% - 36px) / 4);
+  box-sizing: border-box;
+  padding: 12px; margin: 0;
+  border: 3px solid transparent; border-radius: 24px;
+  background: transparent;
+  display: flex; flex-direction: column; align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease, border-radius 120ms ease;
+}
+#s21 .hsq-hotspot:disabled { cursor: default; }
+#s21 .hsq-hotspot:hover:not(:disabled) { border-color: var(--subject-500); }
+#s21 .hsq-hotspot.selected { border-color: var(--subject-500); background: var(--subject-100); }
+#s21 .hsq-hotspot.correct  { border-color: #609e12; background: #fff; border-radius: 16px; }
+#s21 .hsq-hotspot.wrong    { border-color: #b20010; background: #fff; border-radius: 16px; }
+#s21 .hsq-hotspot:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* The slot: the bucket image and, over it, the live label. The label is
+   centred on the asset's white tag, measured on the file itself: tag rows
+   198–370 of 497 → centre at 57.1% of the image height; horizontally the
+   tag is centred on the bucket, i.e. 50%. */
+#s21 .hsq-slot {
+  position: relative; display: block; width: 100%;
+  pointer-events: none;
+}
+#s21 .hsq-slot > img { display: block; width: 100%; height: auto; }
+#s21 .hsq-label {
+  position: absolute; left: 50%; top: 57.1%;
+  transform: translate(-50%, -50%);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 32px; font-weight: 700; color: #000;   /* 24pt, as before */
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Feedback badge — 32px filled circle straddling the card's TOP-RIGHT
+   corner, per the FlipCardStates component (producer, 2026-09-22, with the
+   Figma frames): Correct places it at left 261 / top -16 on a 283px card,
+   i.e. centred 6px inside the right edge and exactly on the top edge;
+   Incorrect is the same to within 3px. right:-10 / top:-16 reproduces that
+   on any card width. It deliberately sits OUTSIDE the card on two sides,
+   so nothing clips it (neither the card nor .hsq-img-wrap sets overflow)
+   and z-index keeps it over the neighbouring card it overlaps.
+   It was previously centred at the card's bottom, where the feedback
+   popup covered it on the first wrong attempt — that is the badge the
+   producer reported missing. */
+#s21 .hsq-badge {
+  /* Offsets are resolved against the PADDING box, which the card's 3px
+     border insets — so -19/-13 here lands the 32px circle's centre on
+     Figma's -6 / 0 relative to the BORDER box (measured: dx -6, dy 0). */
+  position: absolute; top: -19px; right: -13px;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: none;
+  z-index: 2;
+  background-repeat: no-repeat; background-position: center;
+}
+#s21 .hsq-hotspot.correct .hsq-badge,
+#s21 .hsq-hotspot.wrong .hsq-badge { display: block; }
+#s21 .hsq-hotspot.correct .hsq-badge {
+  background-color: #609e12;
+  background-size: 17px 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s21 .hsq-hotspot.wrong .hsq-badge {
+  background-color: #b20010;
+  background-size: 14px 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — ValueInputQuestion, VARIANT A (Screen 23 / #s22)
+   Source: slide 26. Contract: 720-templates → ValueInputQuestion.md.
+   Section ב of the one popcorn question.
+   ═══════════════════════════════════════════════════════ */
+
+/* Text block — slide 26's own box [270.67,121.44 943.77 wide], kept at
+   its authored position and width; only the type scale is the
+   template's. Shares #s21's paragraph roles. */
+#s22 .s22-question {
+  position: absolute; right: 65.56px; top: 121px;
+  width: 943.77px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+#s22 .hsq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s22 .hsq-intro strong { font-weight: 700; }
+#s22 .hsq-qtext {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s22 .scq-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+/* The equation row. align-self: flex-start is physically RIGHT under
+   this column's direction: rtl, which is where slide 26 sets the line —
+   its own run is flush to the text box's right edge, with the input
+   sitting in the authored run of spaces. The top margin reproduces ¶5,
+   an authored EMPTY paragraph, at the body's own line height
+   (24 x 1.45) rather than as an invented gap. */
+#s22 .viq-eq-row {
+  align-self: flex-start;
+  margin-top: 35px;
+  display: flex; align-items: center; gap: 10px;
+  direction: ltr;
+}
+.viq-expr {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1;
+}
+
+/* ── The input field ──
+   .viq-field owns the visual box; the input itself stays borderless and
+   intrinsically sized, never stretched to fill it
+   (ValueInputQuestion.md → "Markup contract — Variant A"). The verdict
+   icon is a SIBLING of the input inside the same bordered box, which is
+   why the border lives here and not on the input. */
+.viq-field {
+  width: 92px; height: 48px;
+  box-sizing: border-box;
+  border: 1.5px solid rgba(174, 174, 174, 0.5);
+  border-radius: 10px;
+  background: #fff;
+  /* Required by 720-templates → ValueInputQuestion.md → "Field direction —
+     value and feedback icon as one LTR unit": the field wrapper owns its
+     own direction so the value and its verdict icon resolve as one atomic
+     LTR unit. */
+  direction: ltr;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px;
+}
+.viq-field:focus-within { border-color: var(--subject-500); }
+.viq-input {
+  border: none; background: transparent; outline: none;
+  flex: 0 0 auto; width: 2.2ch;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 700;
+  color: #303030; text-align: center; direction: ltr;
+  padding: 0;
+}
+.viq-input:disabled { color: #303030; -webkit-text-fill-color: #303030; opacity: 1; }
+.viq-field.viq-correct { border-color: #609e12; }
+.viq-field.viq-wrong   { border-color: #b20010; }
+/* The icon's slot is ZERO-width until a verdict exists, so the value and
+   caret are truly centred in the default/typing state and only shift
+   once feedback actually appears — the behaviour the template calls out
+   explicitly. The 6px gap is the Figma spacing between value and icon. */
+.viq-ico { width: 0; flex: 0 0 0; display: flex; align-items: center; overflow: hidden; }
+.viq-field.viq-has-icon { gap: 6px; }
+.viq-field.viq-has-icon .viq-ico { width: 16px; flex: 0 0 16px; overflow: visible; }
+
+/* ── Speech bubble ──
+   Slide 26's authored callout box, drawn with this project's own
+   down-tail symbol. z-index 9 keeps it above the character (8) while the
+   bottom bar (9, painted later) still wins where they would meet — they
+   do not overlap, the bubble ending at y 302. */
+#s22 .s22-bubble {
+  position: absolute;
+  left: 21.51px;
+  width: 237.54px; height: var(--bubble-h);
+  z-index: 9;
+  /* ── CHARACTER-RELATIVE PLACEMENT ──
+     The two companions are NOT the same height — character-2 stands
+     0.9264 of the frame tall against character-1's 0.7736 — so one
+     absolute y cannot serve both: it would leave a gap over the short
+     one and crowd the tall one. The bubble is therefore anchored to the
+     character's OWN ink top, the same rule .s1-bubble uses, with one
+     constant gap:
+
+         bubble bottom = ground - visible height - gap
+
+     The gap is the authored composition's own value, taken once: slide
+     26 puts the bubble's bottom edge at y 302.49 with the drawn
+     character's ink top at 363.03, i.e. 60.54px of clear air under the
+     tail. That relationship — not the absolute y — is what is
+     reproduced for each character.
+
+     Resulting placement, both standing on the same ground line at
+     629.40 and neither scaled:
+       character-1  ink top 406.97  ->  bubble 238.60 .. 346.43
+       character-2  ink top 363.03  ->  bubble 194.66 .. 302.49
+     Character-2's lands exactly on the authored y, which is the check
+     that the rule reproduces the slide rather than merely approximating
+     it; character-1's sits 43.94px lower, as its shorter head requires. */
+  top: calc(var(--s22-ground)
+            - (var(--ink-b) - var(--ink-t)) * var(--wrap-h)
+            - var(--bubble-gap)
+            - var(--bubble-h));
+}
+
+/* ── Character clip ──
+   Geometry derived from the placeholder's OWN measured ink (see the
+   source-evidence comment in index.html):
+     ground  629.40   centre x 128.49   drawn ink height 266.37
+   Box sized so character-2's visible height is that 266.37:
+     H = 266.37 / 0.9264 = 287.53 ; W = H x 16/9 = 511.17
+     top = 629.40 - 0.9569 x H = 354.25, so character-2 needs no vertical
+           correction and 629.40 stays this screen's ground line.
+   Character-1 then renders 222.43px of visible height against
+   character-2's 266.37 — the clips' own proportion, deliberately not
+   normalised.
+   z-index 8 puts the clip BELOW the 74px bottom bar (9): the box's own
+   white extends a few px past the bar's top edge, and letting the bar
+   paint over it is cleaner than moving the character off the line the
+   slide drew. Nothing on this screen needs to sit above the bar. */
+/* Screen-level geometry. The ink fractions live HERE, not on the media
+   wrap, because two siblings need them: the clip's own fit shim and the
+   speech bubble's character-relative placement. s22MountClip() publishes
+   the selected character's values on this element; the defaults are
+   character-2's, so the composition is correct even if the script never
+   runs.
+
+   Ink measured from the CORRECTED production clips, every one of the 96
+   frames, union across the timeline (the pose moves):
+     character-1  x 0.3297..0.6695  y 0.1528..0.9264  (visible h 0.7736)
+     character-2  x 0.4094..0.5938  y 0.0306..0.9569  (visible h 0.9264)
+   Ground line stable to ~1px in both, so it is safe to stand them on
+   one line. */
+#s22 {
+  --s22-ground: 629.40px;   /* the slide's own drawn ground line */
+  --wrap-w: 511.17px;
+  --wrap-h: 287.53px;
+  --centre: 128.49px;       /* the slide's own drawn centre */
+  --bubble-gap: 60.54px;
+  --bubble-h: 107.83px;
+  --ink-l: 0.4094; --ink-r: 0.5938; --ink-t: 0.0306; --ink-b: 0.9569;
+}
+#s22 .s1-video-wrap {
+  position: absolute;
+  left: 0; top: 354.25px;
+  right: auto; bottom: auto; transform: none;
+  width: var(--wrap-w); height: var(--wrap-h);
+  z-index: 8;
+  --ground: 275.15px;   /* 629.40 - 354.25 */
+}
+#s22 .s1-char-media {
+  --char-shift-x: calc(var(--centre) - (var(--ink-l) + var(--ink-r)) / 2 * var(--wrap-w));
+  --char-shift-y: calc(var(--ground) - var(--ink-b) * var(--wrap-h));
+  transform: translate(var(--char-shift-x), var(--char-shift-y)) scale(var(--char-scale, 1));
+  transform-origin: center center;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — ValueInputQuestion, VARIANT A (Screen 24 / #s23)
+   Source: slide 27. Section ג — the last section of the one popcorn
+   question, and the screen on which that question resolves.
+   ═══════════════════════════════════════════════════════ */
+
+/* The interaction group's single horizontal offset. The wrapper is the
+   screen box shifted 28.20px to the right: its LEFT inset is the shift,
+   so the wrapper spans [28.20 .. 1280] and every child, positioned from
+   the wrapper's left edge with the slide's own left/top, renders 28.20px
+   right of where the slide draws it — the whole group moves as one.
+   28.20px = the question paragraph's right edge (1214.45) minus the
+   group's own VISIBLE right edge (1186.25, the corn annotation — the
+   picture's ink stops earlier still, at 1175.64). Measured from rendered
+   content, not from the image element's box, which the asset's white
+   padding makes misleading.
+   This used to be `inset: 0 28.20px 0 0` + `transform: translateX(28.20px)`
+   — the same box. It is expressed through the inset alone because the
+   wrapper is a float-in reveal container and the reveal animates
+   `transform`, which would have overridden the static offset for the
+   whole entrance (animation-system pre-flight → transform conflict). */
+#s23 .s23-stage {
+  position: absolute; inset: 0 0 0 28.20px;
+}
+
+#s23 .s23-question {
+  position: absolute; right: 65.56px; top: 121px;
+  width: 943.77px;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+#s23 .hsq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s23 .hsq-intro strong { font-weight: 700; }
+#s23 .hsq-qtext {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--subject-500);
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s23 .scq-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+/* ── Photo + annotations ──
+   The slide's own picture frame [613.12,272.38 601.32x400.88]. The asset
+   is 1536x1024, exactly this 1.5 ratio, so object-fit has nothing to
+   correct. No overflow clipping: one label is authored a little past the
+   picture's left edge. container-type lets the labels' type scale with
+   the frame, so the same markup reads correctly in the zoom modal. */
+#s23 .s23-img-frame {
+  position: absolute;
+  left: 613.12px; top: 272.38px;
+  width: 601.32px; height: 400.88px;
+}
+.s23-img-frame {
+  position: relative;
+  container-type: inline-size;
+  box-sizing: border-box;
+}
+.s23-img-frame > img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+/* Annotations, centred on the slide's own label centres, expressed as a
+   fraction of the frame so they stay on their objects at any rendered
+   size. 24px at the authored width = 3.9912cqw. Subject/500 rather than
+   the deck's 00B0F0 placeholder accent. */
+.s23-label {
+  position: absolute; top: 40.800%;
+  transform: translate(-50%, -50%);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 3.9912cqw; font-weight: 700; color: var(--subject-500);
+  line-height: 1.2; white-space: nowrap;
+  direction: rtl;
+  pointer-events: none;
+}
+.s23-label--oil  { left: 4.910%; }    /* centre x 642.65 */
+.s23-label--corn { left: 82.100%; }   /* centre x 1106.79 */
+
+/* The field sits between the two annotations, on the slide's own centre
+   (751.54, 432.80). Outside the zoomable frame, and above it. */
+#s23 #s23viq-field {
+  position: absolute;
+  left: 705.54px; top: 408.80px;
+  z-index: 5;
+}
+
+/* An authored EMPTY paragraph inside a feedback body — slide 27 has two —
+   is real authored spacing, reproduced as a spacer rather than as an
+   invented margin. */
+.popup-para-gap { height: 18px; }
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen, TWO-CHARACTER variant (Screen 10 / #s9)
+   Source: slide 13 (presentation position). Contract:
+   720-templates → TransitionScreen.md.
+
+   Reuses this part's established .s1-text / .s1-title stack unchanged.
+   Two local additions, both authored by the slide:
+
+   1. A 40px REGULAR continuation line (.s1-title-cont) instead of the
+      template's 28px "closing line" role. Slide 13 authors both of its
+      paragraphs at 40pt and bolds only the first, and the two are ONE
+      sentence — the first clause ends in a comma and the second
+      completes it. Dropping the second half to 28px would split a single
+      sentence across two type sizes, so the pair is kept at one size and
+      distinguished by weight, exactly as the source does.
+
+   2. The producer-supplied two-character clip in the template's own
+      video layering (.s1-video-wrap / .s1-video-clip / .s1-char-media)
+      rather than the single companion .s1-char-stage, and played for
+      every learner regardless of the Screen 01 choice. See the note
+      above #s9 in index.html for the producer decision and the measured
+      clip facts behind the geometry below.
+   ═══════════════════════════════════════════════════════ */
+#s9 { background: #fff; }
+
+/* Slide 13's text box — x 233.93, width 812.14 (centred on the canvas),
+   top 87.47, centred paragraphs — is now the shared .s1-text--hero rule,
+   with .s1-title-cont beside it. Both moved verbatim; this screen's
+   rendering is unchanged. */
+
+/* ── Companion-character clip box ──
+   Canonical 640×360 wrap (TransitionScreen.md → A), which is an exact 1:2
+   of the clip's own 1280×720, so object-fit: contain letterboxes nothing.
+
+   SIZE CHECK against the slide: at rest the characters occupy 83.2% of
+   the frame's height (measured, ink vs background), so a 360px box
+   renders them 299.5px tall — the slide's own cropped character is
+   299.39px. The canonical box reproduces the authored character size
+   without being forced to.
+
+   VERTICAL ANCHOR. Anchored to the bottom bar, not to a fixed canvas
+   height, so a taller viewport never moves the characters off their
+   ground line. Slide 13 stands its characters 59.6px above the bar
+   (feet at y 578.65, bar at 638.24). The clip's own characters stand on
+   the frame's bottom edge — ink bottom at 99.3% of frame height — which
+   at a 360px box leaves 2.5px between the ink and the box bottom, so the
+   box sits 59.6 − 2.5 = 57.1px above the bar for the feet to land on the
+   slide's own ground line.
+
+   The clip's background is rgb(254,254,254) against a #fff screen, so no
+   frame edge is visible and none is drawn. ── */
+.s1-video-wrap {
+  position: absolute;
+  left: 50%; bottom: calc(74px + 57.1px);
+  transform: translateX(-50%);
+  width: 640px; height: 360px;
+  z-index: 10;   /* above the text block, below the nav chrome (12) */
+}
+/* Dedicated clipping layer — present unconditionally, even with no fit
+   shim and no bubble on this instance, so an overlay added later stays
+   an unclipped sibling of it rather than forcing a restructure. */
+.s1-video-clip { position: absolute; inset: 0; overflow: hidden; }
+.s1-char-media {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  /* Fit shim: both properties default to a no-op, so an instance with no
+     override renders identically to a build with no shim at all. */
+  transform: translateY(var(--char-shift-y, 0px)) scale(var(--char-scale, 1));
+  transform-origin: center center;
+  pointer-events: none;   /* decorative — nothing here is interactive */
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — GuidedMathPracticeScreen, step 1 (Screen 11 / #s10)
+   Source: slide 14 (presentation position). Contract:
+   720-templates → GuidedMathPracticeScreen.md; visual values from
+   720-design-guidelines → components-icons-states.md and from the
+   published "Guided Math Instruction Flow" states, sampled directly
+   (headline #3B2FC2 = --subject-500, body #303030, Guided Step card
+   #5749C4 = Purple/900).
+
+   This step is variant B1 — explanatory. It has no answer capsules, so
+   nothing from the capsule specification applies to it, and no Guided
+   Step card is drawn either: slide 14's own left column is the
+   character and the speech bubble, not the purple step card that later
+   steps in this run use.
+   ═══════════════════════════════════════════════════════ */
+#s10 { background: #fff; }
+
+/* ── Canonical Instruction Math Section ──
+   Measured from the published component (Figma node 4384:35454, the
+   "Guided Instruction Flow-State-01-Text" state, and its sibling
+   4384:35464 Instruction state), and cross-checked against the approved
+   guided practice in methodica-math-percent-01-01 (.gp-*), which runs
+   the same one-column structure.
+
+   Figma's own values, used here:
+     top inset            64px
+     side padding         40px
+     title band           30px tall, title vertically centred in it
+     title                Assistant Bold 40px / Purple-500 #3B2FC2,
+                          RIGHT-aligned (not centred — the PPT centres
+                          it, Figma does not, and Figma owns this role)
+     title → content      40px
+     instruction          Assistant Bold 24px / Natural-800 #303030
+     instruction → card   24px
+     card                 white, 2px Subject/500, radius 24px,
+                          padding 20px 32px
+   The PPT's own alignment and generic geometry are deliberately NOT
+   used: it centred the title at x681, put the instruction at 20pt, and
+   drew a 974.67px card with a 14.65px radius. */
+#s10 .gmp-section {
+  position: absolute;
+  top: 20px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 40px;
+  direction: rtl;
+}
+#s10 .gmp-title-band {
+  width: 100%; height: 30px;
+  display: flex; align-items: center;
+}
+#s10 .gmp-title {
+  margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 40px; font-weight: 700; line-height: 1;
+  color: var(--subject-500);
+  text-align: right; direction: rtl;
+}
+/* The content column. Its width is the ONE documented deviation from
+   the component — see the note on --gmp-card-w below. */
+#s10 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 24px;
+  /* The instruction is allowed to be wider than this column (see its own
+     rule); nothing here may clip it. */
+  overflow: visible;
+}
+/* The instruction is NOT capped to the card's column. At 762px the
+   sentence wrapped and left "לפתרון." alone on a second line, and a
+   single word does not justify a line break (producer, 2026-09-09). No
+   manual <br> is used — the source authors none, and the rule is that an
+   automatic wrap is not an authored instruction. Instead the block is
+   allowed its own intrinsic width, still flush to the same right edge as
+   the title and the card, capped at the section's own content width so
+   it can never reach past the 40px canvas margin. It extends LEFT into
+   empty space above the character, which is exactly what slide 14 does
+   too (its instruction box is 1061px wide against a 974px card). */
+#s10 .gmp-instruction {
+  width: max-content;
+  max-width: 1200px;   /* the section's own content width (1280 - 2x40) */
+  margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; line-height: 1.3;
+  color: #303030;
+  text-align: right; direction: rtl;
+}
+
+/* ── The exercise card: this run's persistent context ──
+   Canonical surface: white, 2px Subject/500, 24px radius, 20px/32px
+   padding — all from the component, none from the PPT.
+
+   WIDTH — a measured local exception. The component's own content
+   column is 683px (max 687). This slide's authored content is far
+   denser than the component's placeholder: ten authored blocks
+   including four lettered lines, at the canonical 24px.
+
+   MEASURED, not guessed, against TWO constraints — vertical fit and no
+   orphaned line — at 1280x720 with the canonical 24px type untouched.
+
+   Vertical fit alone would allow 733px (card 418.4h, bottom 607.6,
+   clearing the bar by 38.4; at 683..732 the card is 449.6h and clears by
+   only 7.2). But at 733px the ratio paragraph wraps and leaves the
+   expression "1 : 5." ALONE on a second line — the same single-token
+   orphan the producer rejected on the instruction line, and worse here
+   because the orphan is a mathematical expression.
+
+   So the width is driven by the widest paragraph instead, measured
+   directly: the ratio sentence needs 693.55px on one line. The card's
+   inner width is W - 64 (padding) - 4 (border), so W >= 693.55 + 68 =
+   761.55 -> 762px. At 762 every paragraph and every option is on one
+   line, the card is 387.2h, and it clears the bar by 38.4.
+
+   762px is +79px (11.6%) over the component and well under the PPT's
+   own 974.67px, and it leaves 231px between the card and the character.
+   The 24px type was never reduced to make any of this fit. */
+#s10 { --gmp-card-w: 762px; }
+#s10 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  /* NO inter-paragraph gap: the source authors these as consecutive
+     paragraphs in one flow, and consecutive non-blank PPTX paragraphs
+     take the template line-height and nothing more
+     (_question-template-defaults.md -> "Paragraph structure maps to
+     line-height, not invented spacing"). Only the ONE authored empty
+     paragraph becomes a real gap, below. */
+  gap: 0;
+}
+#s10 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s10 .gmp-exercise strong { font-weight: 700; }
+/* The source's one authored EMPTY paragraph (P5) is a real group break.
+   The component puts 32px between paragraph groups and 16px inside one,
+   and one 24px line-height is 31.2px — the two agree, so the group break
+   is the component's 32px rather than an invented margin. */
+/* The source's one authored EMPTY paragraph (P5) is a real group break,
+   reproduced as exactly one line-height of space (24px x 1.3 = 31.2px) —
+   the size the rule prescribes, and the same value the component uses
+   between its own paragraph groups (32px). Never an invented margin. */
+#s10 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s10 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s10 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s10 .gmp-opt-letter { unicode-bidi: isolate; }
+/* Each complete expression is one unbreakable LTR unit, so the browser
+   cannot reorder a pure-digit equation the way an unisolated RTL
+   paragraph would (measured: "1 + 5 = 6" would render "6 = 5 + 1"). */
+#s10 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+/* Authored entrance — the exercise "appearing" is the condition the
+   producer note gates Continue on. Kept deliberately small: this is a
+   reveal, not a performance. */
+#s10 .gmp-exercise {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+#s10 .gmp-exercise.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  #s10 .gmp-exercise { transition: none; }
+}
+
+/* ── Character stage + speech bubble as ONE anchored unit ──
+   The bubble is anchored to the CHARACTER's visible ink, never to its
+   transparent PNG canvas, on three axes:
+
+   1. VERTICAL. The sprite's tail tip sits at 98.2% of its own height —
+      effectively its bottom edge — so the bubble's bottom edge is placed
+      one small optical gap above the head's ink top. Same rule the
+      approved methodica-math-percent-01-01 uses after its own producer
+      correction ("lowered so the tail reaches the character").
+   2. HORIZONTAL. The tail tip sits at 50.22% of the sprite's width
+      (measured from the symbol's own path — its lowest point is
+      x=108.468 of the 216-unit viewBox). The bubble is therefore offset
+      so that point lands on the character's own head-centre x, which is
+      published per character rather than assumed.
+   3. ASPECT. Height follows the 216:89 viewBox exactly (w x 89/216).
+      A box whose aspect differs from the viewBox renders the 3px stroke
+      unevenly — the constraint already recorded for this symbol.
+
+   PER-CHARACTER VARIABLES. --head-x and --head-top are published by
+   applyStandingCharacter() from CHARACTER_ASSETS.standingHead, so the
+   two characters can be positioned independently; their ink widths
+   differ by 64% of the box. The current values are derived from the
+   TEMPORARY artwork's measured ink, and are deliberately expressed as
+   fractions of the PNG canvas so they can be recalibrated by
+   re-measuring when the final per-character art is supplied — nothing
+   here is hand-fitted to the placeholder images. ── */
+#s10 .s1-char-stage {
+  /* Slide 14 draws its character 299.39px of INK tall. Asking for the ink
+     height rather than a box size is what lets the two poses share this
+     rule despite sitting on different canvases (ticket: 911x911 for
+     character-1, 979x979 for character-2, against 1254x1254 for the
+     standing pair) and despite being cropped to different margins.
+       box = target ink height x this character's height relationship
+             / this pose's own ink-height fraction
+     --height-rel keeps the authored size difference between the two
+     companions intact (the round one is 0.7744 of the tall one, the
+     deck's own ratio) — without it, a tighter crop would silently
+     stretch the shorter character to the taller one's height.
+     For the standing pair this resolves to 316px for both, i.e. exactly
+     the value this screen used before poses existed. */
+  --char-ink-h: 299.39px;
+  --char-box: calc(var(--char-ink-h) * var(--height-rel, 1) / var(--ink-h, 1));
+  --bubble-w: 300px;   /* Arabic build: wider bubble (was 237.54px) so the 3-line text clears the border */
+  --bubble-gap: 8px;      /* optical gap between the tail tip and the head */
+  --tail-x: 0.5022;       /* tail tip's x within the sprite's own viewBox */
+  --canvas-margin: 8px;   /* smallest gap the bubble may leave at the canvas edge */
+
+  /* Slide 14 starts its character at x 46. That works while the bubble
+     centred on the head still fits on the canvas — it does for
+     character-1, whose head sits 100px in from its ink edge. It does NOT
+     for character-2: its head is only 61px in, so a bubble centred on it
+     would start at x -12 and be clipped by the canvas.
+     Rather than sliding the tail off the head (the sprite's tail is
+     fixed at 50.22% of its width and cannot move), the STAGE shifts
+     right by exactly as much as is needed, and only when needed. Both
+     characters therefore keep the tail dead on the head, and neither
+     bubble crosses the canvas edge. character-1 resolves to 46px — the
+     authored value, untouched — and character-2 to ~66px. */
+  left: max(46px, calc(var(--canvas-margin)
+        + var(--tail-x) * var(--bubble-w)
+        - (var(--head-x, 0.5) - var(--ink-left, 0)) * var(--char-box)));
+}
+/* Anchor the character by its INK LEFT edge, not by the centre of its
+   PNG canvas: the exercise card sits to its right, and the two
+   characters' ink widths differ by 64% of the box, so centring the
+   canvas would place them very differently against the card. */
+#s10 .s1-char-img {
+  left: calc(-1 * var(--ink-left, 0) * var(--char-box));
+  transform: translateX(0) translateY(var(--char-shift-y, 0px)) scale(var(--char-scale, 1));
+}
+#s10 .s1-bubble {
+  width: var(--bubble-w);
+  height: calc(var(--bubble-w) * 89 / 216);
+  /* tail tip lands on the head's centre */
+  left: calc((var(--head-x, 0.5) - var(--ink-left, 0)) * var(--char-box) - var(--tail-x) * var(--bubble-w));
+  transform: none;
+  /* bubble bottom = one gap above the head's ink top */
+  bottom: calc((var(--ink-bottom, 1) - var(--head-top, 0)) * var(--char-box) + var(--bubble-gap));
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — GuidedMathPracticeScreen, step 2 (Screen 12 / #s11)
+   Source: slide 15. Variant B2, option-based.
+   Values from the published component (Figma 4384:35464, "Guided
+   Instruction Flow-State-02-Instruction") and from
+   720-design-guidelines → components-icons-states.md, cross-checked
+   against methodica-math-percent-01-01's approved .gp-* build.
+   ═══════════════════════════════════════════════════════ */
+#s11 { background: #fff; }
+
+/* The step's row. Slide 15 authors NO title and NO instruction, so the
+   canonical section would start its content at the 64px inset — which
+   would jerk the persistent exercise card 55px up between step 1 and
+   step 2. The deck does not do that either: it holds the card at
+   y 243.88 on slide 15 against 234.67 on slide 14. So the row is pinned
+   at the y the card already occupies on screen 11 (189.2px), and the
+   context stays put across the run. */
+#s11 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s11 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+/* The exercise column keeps screen 11's measured width exactly. */
+#s11 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s11 { --gmp-card-w: 762px; }
+
+/* ── Guided Step card ──
+   Component: Purple/900 fill, 24px radius, 26px padding, 20px gap
+   between its slot rows. Width is the one measured deviation: the
+   component's own card is 459px, but this run's exercise card is 762px
+   (measured on screen 11), and 459 + 762 exceeds the 1200px content
+   width. The card therefore takes the space the row actually leaves at
+   the component's own 58px inter-column gap: 1200 - 762 - 58 = 380px —
+   wider than slide 15's own 328.17px card and narrower than the
+   component's 459px. */
+#s11 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+/* Body/B-3 — Assistant Regular 24px, white. Slide 15's run carries no
+   bold, so this is the component's plain text row, not its title row. */
+#s11 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+
+/* ── Answer capsules — "Guided Instruction-Answer Option" ──
+   MEASURED FROM THE PUBLISHED COMPONENT SET, node 4548:21713 in
+   eSbp4bKHgBky0rakDb8l9N (library "720 - UI Templates", updated
+   2026-09-03). Its eight variants read:
+
+     type=Default    h 38, r 100, pad 12/30/12/30, gap 10, #FFFFFF,
+                     Assistant Regular 22 / #303030
+     type=Selected   identical box, #E1D9FF, Assistant SemiBold 22
+     type=Correct    pad 8/14/8/24, gap 6, #E1D9FF, SemiBold,
+                     + 18x18 badge #609E12 AFTER the label
+     type=Inorrect   same box as Correct, badge #B20010
+
+   The child order inside type=Correct is text -> badge, and the trimmed
+   padding is on the RIGHT (pr 14 against pl 24), so the badge sits on
+   the capsule's PHYSICAL RIGHT. Our first pass laid the badge out in
+   flow inside a direction:rtl button, which put it left of the label —
+   the defect the producer reported. Fixed below by taking the badge out
+   of flow and pinning it to the component's own 14px right inset.
+
+   The component set's own "State 06/07/08 - MultipleChoice*" frames
+   (4384:35465 / 4384:35467 / 4384:35469) were checked as instructed and
+   carry NO capsules — all three render the same placeholder Guided Step
+   ("טקסט טקסט…"). They are unpopulated, so the component set above is
+   the only Figma evidence for this control.
+
+   THREE PRODUCER-INSTRUCTED DEVIATIONS from the component (2026-09-10),
+   all in service of "the capsule must not move or resize when it is
+   answered":
+     1. Padding stays symmetric in every state. The component trims to
+        24/14 when the badge appears, which grows the short capsule from
+        76 to 78; that 2px is exactly what the instruction forbids.
+     2. The badge is positioned, not laid out, so revealing it cannot
+        add width or push the label off centre.
+     3. The reserved zone is mirrored: 14 (right inset) + 18 (badge) +
+        6 (the component's own gap) = 38px on BOTH sides, so the label
+        lands on the capsule's geometric centre while the badge still
+        clears it by the component's 6px. Capsule width is therefore
+        label + 76 rather than the component's label + 60.
+   Laid out as a ROW with the component's 12px gap; direction: rtl makes
+   DOM order 5·6·10 render physically 10 · 6 · 5, slide 15's own order. */
+#s11 .gmp-options-row {
+  display: flex; flex-direction: row; align-items: center;
+  /* Alignment is NOT set here — it belongs to the one family rule
+     ".gmp-step-card .gmp-options-row" below, so every guided step gets
+     it from a single place. An id-scoped justify-content here would
+     out-specify that rule and silently reintroduce a per-screen offset. */
+  width: 100%;
+  gap: 12px;
+  direction: rtl;
+}
+#s11 .gmp-opt {
+  /* Containing block for the badge — see deviation 2 above. */
+  position: relative;
+  height: 38px; box-sizing: border-box;
+  padding: 12px 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  border: none; border-radius: 100px;
+  cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  direction: rtl;
+}
+/* The label is the ONLY thing in flow, so with symmetric padding its
+   centre is the capsule's geometric centre in every state.
+   Answering switches the weight to SemiBold, which is wider — so the
+   box reserves the heavier measurement up front using the same
+   attr(data-label) mechanism already approved for .nav-label. Without
+   it, picking a capsule would widen it and shift the whole row. */
+#s11 .gmp-opt-text {
+  display: inline-grid;
+  font-size: 22px; font-weight: 400;
+  /* Natural/800 in EVERY state — the ground carries the state, never the
+     label. A state rule that returns this to a subject purple is the
+     documented failure this note exists to prevent. */
+  color: #303030;
+  line-height: 1; white-space: nowrap;
+}
+#s11 .gmp-opt-text::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#s11 .gmp-opt-text > span { grid-area: 1 / 1; }
+#s11 .gmp-opt:disabled { cursor: default; }
+#s11 .gmp-opt:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* SELECTION — keyed on the learner's own pick, never on correctness.
+   After a wrong answer the correct capsule is revealed with its badge
+   but must NOT wear this ground, or two capsules read as chosen. */
+#s11 .gmp-opt.picked {
+  background: #e1d9ff;                 /* Purple/300 */
+}
+#s11 .gmp-opt.picked .gmp-opt-text > span { font-weight: 600; }
+
+/* CORRECTNESS — the badge, and only the badge. Out of flow, on the
+   component's own 14px right inset, reserved in every state so
+   revealing it cannot move or resize the capsule under the cursor. */
+#s11 .gmp-opt-badge {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  visibility: hidden;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s11 .gmp-opt.correct .gmp-opt-badge { visibility: visible; }
+
+/* The exercise card reuses screen 11's rules verbatim — same selectors,
+   scoped to this screen so the persistent context cannot drift. */
+#s11 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s11 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s11 .gmp-exercise strong { font-weight: 700; }
+#s11 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s11 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s11 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s11 .gmp-opt-letter { unicode-bidi: isolate; }
+#s11 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 13 (#s12) — GuidedMathPracticeScreen, step 3, variant B1
+   Source: slide 16. Same section geometry, step card and persistent
+   exercise as screen 12 — the rules below are that screen's, re-scoped
+   to #s12 so the persistent context cannot drift between steps (the
+   same convention screen 12 used against screen 11). No capsules: this
+   is an explanatory step and the answer-capsule rules do not apply
+   (GuidedMathPracticeScreen.md → F).
+   ═══════════════════════════════════════════════════════ */
+#s12 { background: #fff; }
+#s12 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s12 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s12 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s12 { --gmp-card-w: 762px; }
+#s12 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s12 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s12 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s12 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s12 .gmp-exercise strong { font-weight: 700; }
+#s12 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s12 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s12 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s12 .gmp-opt-letter { unicode-bidi: isolate; }
+#s12 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+/* Step text: four authored paragraphs. ¶3 is EMPTY in the source — a
+   real group break — reproduced as one line-height of the 24px text
+   (24 x 1.3 = 31.2px), the same way the exercise card reproduces its
+   own authored empty paragraph. The card's slot gap is zeroed so
+   consecutive paragraphs flow at their own line-height. */
+#s12 .gmp-step-card { gap: 0; }
+#s12 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+
+/* ── The authored correctness mark on option א ──
+   Slide 16 paints ¶8 with a green highlight and the note says "להדגיש
+   את א' כתשובה נכונה". The highlight is authoring shorthand, so the
+   emphasis is realised with the family's own correctness vocabulary —
+   exactly what the B2 reveal on screen 12 does to the correct capsule:
+   SemiBold on the marked line and the Feedback/Correct/300 badge (18px,
+   white glyph). Colour stays Natural/800: the badge carries the state.
+   The badge follows the expression in reading order (its physical LEFT
+   in this RTL list) so the letters א–ד stay aligned on the right edge. */
+#s12 .gmp-line-correct .gmp-opt-letter,
+#s12 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s12 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 14 (#s13) — GuidedMathPracticeScreen, step 4, variant B1
+   Source: slide 17. Screen 13's rules re-scoped to #s13, unchanged —
+   the persistent exercise (with its mark on option א), the step card
+   and the section geometry are the same; only the step text differs.
+   Slide 17 has no authored empty paragraph, so the .gmp-step-group
+   rule is carried but unused here. The bold "x" in ¶3 renders through
+   the step text's own <strong> (700), the same weight the exercise
+   card gives its authored bold runs.
+   ═══════════════════════════════════════════════════════ */
+#s13 { background: #fff; }
+#s13 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s13 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s13 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s13 { --gmp-card-w: 762px; }
+#s13 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s13 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s13 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s13 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s13 .gmp-exercise strong { font-weight: 700; }
+#s13 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s13 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s13 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s13 .gmp-opt-letter { unicode-bidi: isolate; }
+#s13 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s13 .gmp-step-card { gap: 0; }
+#s13 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s13 .gmp-line-correct .gmp-opt-letter,
+#s13 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s13 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s13 .gmp-step-text strong { font-weight: 700; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 15 (#s14) — GuidedMathPracticeScreen, step 5, variant B1
+   Source: slide 18. Screen 14's rules re-scoped to #s14, unchanged.
+   Two exercise lines carry the correctness mark now (א and ב); the
+   .gmp-line-correct / .gmp-line-badge rules apply per line and need
+   nothing new. The step card's authored empty paragraph (¶4) uses the
+   same .gmp-step-group break screen 13 introduced.
+   ═══════════════════════════════════════════════════════ */
+#s14 { background: #fff; }
+#s14 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s14 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s14 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s14 { --gmp-card-w: 762px; }
+#s14 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s14 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s14 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s14 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s14 .gmp-exercise strong { font-weight: 700; }
+#s14 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s14 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s14 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s14 .gmp-opt-letter { unicode-bidi: isolate; }
+#s14 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s14 .gmp-step-card { gap: 0; }
+#s14 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s14 .gmp-line-correct .gmp-opt-letter,
+#s14 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s14 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s14 .gmp-step-text strong { font-weight: 700; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 16 (#s15) — GuidedMathPracticeScreen, step 6, variant B2
+   Source: slide 19. Two sets of rules, both lifted unchanged:
+     · the section geometry, step card and persistent exercise (with its
+       marks on א and ב) — screen 15's, re-scoped;
+     · the answer capsules — screen 12's, re-scoped. That is the version
+       corrected against the published component on 2026-09-10: badge on
+       the physical right in a reserved slot, label on the capsule's
+       geometric centre, and the SemiBold measurement reserved up front
+       so answering never moves or resizes a capsule.
+   The capsule row is the card's second slot, so it takes the component's
+   own 20px slot gap below the question text; the text paragraphs
+   themselves still flow at their own line-height (card gap 0).
+   ═══════════════════════════════════════════════════════ */
+#s15 { background: #fff; }
+#s15 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s15 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s15 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s15 { --gmp-card-w: 762px; }
+#s15 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s15 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s15 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s15 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s15 .gmp-exercise strong { font-weight: 700; }
+#s15 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s15 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s15 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s15 .gmp-opt-letter { unicode-bidi: isolate; }
+#s15 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s15 .gmp-step-card { gap: 0; }
+#s15 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s15 .gmp-line-correct .gmp-opt-letter,
+#s15 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s15 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s15 .gmp-step-text strong { font-weight: 700; }
+#s15 .gmp-options-row {
+  display: flex; flex-direction: row; align-items: center;
+  /* Alignment is NOT set here — it belongs to the one family rule
+     ".gmp-step-card .gmp-options-row" below, so every guided step gets
+     it from a single place. An id-scoped justify-content here would
+     out-specify that rule and silently reintroduce a per-screen offset. */
+  width: 100%;
+  gap: 12px;
+  direction: rtl;
+}
+#s15 .gmp-opt {
+  /* Containing block for the badge — see deviation 2 above. */
+  position: relative;
+  height: 38px; box-sizing: border-box;
+  padding: 12px 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  border: none; border-radius: 100px;
+  cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  direction: rtl;
+}
+#s15 .gmp-opt-text {
+  display: inline-grid;
+  font-size: 22px; font-weight: 400;
+  /* Natural/800 in EVERY state — the ground carries the state, never the
+     label. A state rule that returns this to a subject purple is the
+     documented failure this note exists to prevent. */
+  color: #303030;
+  line-height: 1; white-space: nowrap;
+}
+#s15 .gmp-opt-text::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#s15 .gmp-opt-text > span { grid-area: 1 / 1; }
+#s15 .gmp-opt:disabled { cursor: default; }
+#s15 .gmp-opt:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#s15 .gmp-opt.picked {
+  background: #e1d9ff;                 /* Purple/300 */
+}
+#s15 .gmp-opt.picked .gmp-opt-text > span { font-weight: 600; }
+#s15 .gmp-opt-badge {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  visibility: hidden;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s15 .gmp-opt.correct .gmp-opt-badge { visibility: visible; }
+#s15 .gmp-options-row { margin-top: 20px; }
+
+
+/* ═══════════════════════════════════════════════════════
+   GUIDED PRACTICE — answer-capsule row alignment (family rule)
+   Producer correction, 2026-09-11: the capsule row is aligned to the
+   PHYSICAL RIGHT edge of the text content above it, not centred in the
+   purple card.
+
+   One rule for the whole family rather than a per-screen offset. It is
+   scoped to ".gmp-step-card" — the Guided Step card itself — so it can
+   only ever reach capsule rows inside a guided step. Nothing else in
+   this part uses .gmp-options-row, and the other answer controls are a
+   different component entirely (screen 09's .scq-answers / .scq-opt),
+   which this selector cannot match.
+
+   Mechanism: the row is a full-width flex row with direction: rtl, so
+   flex-start IS the physical right edge — the same content-box edge the
+   right-aligned .gmp-step-text paragraphs end on. Nothing else changes:
+   the 12px inter-capsule gap, the capsule boxes, the label centring,
+   the reserved badge slot and the row's vertical position are all
+   untouched, and the row is identical before and after answering. */
+.gmp-step-card .gmp-options-row { justify-content: flex-start; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 17 (#s16) — GuidedMathPracticeScreen, step 7, variant B1
+   Source: slide 20. Screen 15's rules re-scoped to #s16, unchanged.
+   Three exercise lines carry the correctness mark now (א, ב, ג); the
+   per-line .gmp-line-correct / .gmp-line-badge rules need nothing new.
+
+   NOT REPRODUCED — slide 20's shape #20, a full-width bold textbox
+   reading "התבוננו בתרגיל הבא. אל תפתרו אותו. רק הסתכלו על הנתונים
+   וחשבו על כיוון לפתרון." It is slide 14's own instruction shape
+   duplicated onto this slide: identical name ("תיבת טקסט 4"), identical
+   offset [195.00,179.74], identical extent 1061.33x42.01 and identical
+   text. It appears on exactly two slides in the ten-slide guided run —
+   14 and 20 — and on none of the steps between them, and its content
+   ("do not solve it, just look") contradicts step 7, by which point the
+   learner has been solving since slide 15 and three answers are already
+   confirmed. Reported to the producer as authoring residue rather than
+   shipped; one line of markup restores it if that reading is wrong.
+   ═══════════════════════════════════════════════════════ */
+#s16 { background: #fff; }
+#s16 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s16 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s16 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s16 { --gmp-card-w: 762px; }
+#s16 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s16 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s16 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s16 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s16 .gmp-exercise strong { font-weight: 700; }
+#s16 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s16 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s16 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s16 .gmp-opt-letter { unicode-bidi: isolate; }
+#s16 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s16 .gmp-step-card { gap: 0; }
+#s16 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s16 .gmp-line-correct .gmp-opt-letter,
+#s16 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s16 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s16 .gmp-step-text strong { font-weight: 700; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 18 (#s17) — GuidedMathPracticeScreen, step 8, variant B2
+   Source: slide 21. Two sets of rules, both lifted unchanged:
+     · the section geometry, step card and persistent exercise (with its
+       marks on א, ב and ג) — screen 17's, re-scoped;
+     · the answer capsules — screen 16's, re-scoped. Those are screen
+       12's component-corrected rules, so the right-hand badge slot, the
+       reserved SemiBold width and the family's right-aligned row all
+       come along unchanged.
+   The capsule labels are ratios, so each one carries .gmp-expr — the
+   same isolate + nowrap the exercise uses. Without it the RTL button
+   would reorder "5 : 1" into "1 : 5", which is another option on this
+   very screen.
+   ═══════════════════════════════════════════════════════ */
+#s17 { background: #fff; }
+#s17 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s17 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s17 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s17 { --gmp-card-w: 762px; }
+#s17 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s17 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s17 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s17 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s17 .gmp-exercise strong { font-weight: 700; }
+#s17 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s17 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s17 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s17 .gmp-opt-letter { unicode-bidi: isolate; }
+#s17 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s17 .gmp-step-card { gap: 0; }
+#s17 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s17 .gmp-line-correct .gmp-opt-letter,
+#s17 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s17 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s17 .gmp-step-text strong { font-weight: 700; }
+#s17 .gmp-options-row {
+  display: flex; flex-direction: row; align-items: center;
+  /* Alignment is NOT set here — it belongs to the one family rule
+     ".gmp-step-card .gmp-options-row" below, so every guided step gets
+     it from a single place. An id-scoped justify-content here would
+     out-specify that rule and silently reintroduce a per-screen offset. */
+  width: 100%;
+  gap: 12px;
+  direction: rtl;
+}
+#s17 .gmp-opt {
+  /* Containing block for the badge — see deviation 2 above. */
+  position: relative;
+  height: 38px; box-sizing: border-box;
+  padding: 12px 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  border: none; border-radius: 100px;
+  cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  direction: rtl;
+}
+#s17 .gmp-opt-text {
+  display: inline-grid;
+  font-size: 22px; font-weight: 400;
+  /* Natural/800 in EVERY state — the ground carries the state, never the
+     label. A state rule that returns this to a subject purple is the
+     documented failure this note exists to prevent. */
+  color: #303030;
+  line-height: 1; white-space: nowrap;
+}
+#s17 .gmp-opt-text::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#s17 .gmp-opt-text > span { grid-area: 1 / 1; }
+#s17 .gmp-opt:disabled { cursor: default; }
+#s17 .gmp-opt:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+#s17 .gmp-opt.picked {
+  background: #e1d9ff;                 /* Purple/300 */
+}
+#s17 .gmp-opt.picked .gmp-opt-text > span { font-weight: 600; }
+#s17 .gmp-opt-badge {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  visibility: hidden;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s17 .gmp-opt.correct .gmp-opt-badge { visibility: visible; }
+#s17 .gmp-options-row { margin-top: 20px; }
+
+/* ── Step card width: a measured local exception on this screen ──
+   Three RATIO capsules do not fit the family's 380px card. Measured at
+   1280x720 (identical at every viewport, the canvas being fixed):
+
+     "5 : 1" 111.94 + 12 + "2 : 5" 112.89 + 12 + "1 : 5" 111.94
+       = 360.77px of row, against 380 - 52 padding = 328px of content.
+
+   The overflow is a consequence of the approved capsule rule, not of
+   this slide: the badge slot is reserved as 14 + 18 + 6 = 38px and
+   MIRRORED so the label lands on the capsule's geometric centre, which
+   makes every capsule 76px wider than its label. Slide 21's own capsules
+   are 91.83px because the slide reserves nothing.
+
+   Nothing approved is given up to fix it. The exercise column keeps its
+   762px and — because .gmp-row is space-between in RTL — keeps its exact
+   position (x 478) too, so the persistent context does not move by a
+   pixel between steps. Only the blue card grows, into the inter-column
+   gap: 416 - 52 = 364px of content for a 360.77px row (3.23px slack),
+   and the gap becomes 1200 - 762 - 416 = 22px instead of 58px.
+   The row's right edge still lands on the card's content edge, which is
+   still where the step text ends. */
+#s17 .gmp-step-card { width: 416px; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 19 (#s18) — GuidedMathPracticeScreen, step 9, variant B1
+   Source: slide 22. Screen 17's rules re-scoped to #s18 — deliberately
+   screen 17's and not screen 18's, so the step card returns to the
+   family's 380px; screen 18's 416px was a local exception for its three
+   ratio capsules and there are none here.
+
+   NEW: the INCORRECT line mark. Slide 22 paints option ד with a RED
+   highlight (FF0000) where every earlier mark in this run was green, so
+   the last unmarked option is being ruled out rather than confirmed.
+   It is realised as the exact mirror of the correct mark already in use:
+   identical 18px badge, identical position and reserved space, only the
+   fill and the glyph change — Feedback/Incorrect/300 (#B20010) with the
+   canonical white ✕ from 720-design-guidelines →
+   components-icons-states.md. The published Guided Instruction-Answer
+   Option component set carries this same pair (type=Correct #609E12,
+   type=Inorrect #B20010) on otherwise identical badge geometry, so the
+   two verdicts differ only in colour and glyph — never in size, place
+   or weight. Text colour stays Natural/800 in both, per that file's
+   standing rule that the indicator carries the state, never the label.
+   ═══════════════════════════════════════════════════════ */
+#s18 { background: #fff; }
+#s18 .gmp-section--step {
+  position: absolute;
+  top: 145.2px; left: 0; right: 0;
+  padding: 0 40px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+#s18 .gmp-row {
+  width: 100%; max-width: 1200px; margin: 0 auto;   /* design content width, centred on a wider canvas */
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+#s18 .gmp-col {
+  width: var(--gmp-card-w);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+#s18 { --gmp-card-w: 762px; }
+#s18 .gmp-step-card {
+  width: 380px; box-sizing: border-box;
+  background: #5749c4;                 /* Purple/900, per the component */
+  border-radius: 24px;
+  padding: 26px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 20px;
+  direction: rtl;
+}
+#s18 .gmp-step-text {
+  width: 100%; margin: 0;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; line-height: 1.3;
+  color: #fff;
+  text-align: right; direction: rtl;
+}
+#s18 .gmp-exercise {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 32px;
+  background: #fff;
+  border: 2px solid var(--subject-500);
+  border-radius: 24px;
+  direction: rtl; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 0;
+}
+#s18 .gmp-exercise p {
+  margin: 0;
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s18 .gmp-exercise strong { font-weight: 700; }
+#s18 .gmp-exercise p.gmp-group { margin-top: 31.2px; }
+#s18 .gmp-options {
+  margin: 0; padding: 0; list-style: none;
+  direction: rtl; text-align: right;
+  display: flex; flex-direction: column; gap: 0;
+}
+#s18 .gmp-options li {
+  font-size: 24px; font-weight: 400; color: #303030;
+  line-height: 1.3;
+}
+#s18 .gmp-opt-letter { unicode-bidi: isolate; }
+#s18 .gmp-expr { white-space: nowrap; unicode-bidi: isolate; }
+#s18 .gmp-step-card { gap: 0; }
+#s18 .gmp-step-text.gmp-step-group { margin-top: 31.2px; }
+#s18 .gmp-line-correct .gmp-opt-letter,
+#s18 .gmp-line-correct .gmp-expr { font-weight: 600; }
+#s18 .gmp-line-badge {
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
+  margin-inline-start: 8px;
+  border-radius: 1000px;
+  box-sizing: border-box;
+  background: #609e12; border: 2px solid #609e12;   /* Feedback/Correct/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+  background-size: 10px 9px;
+}
+#s18 .gmp-step-text strong { font-weight: 700; }
+#s18 .gmp-line-incorrect .gmp-opt-letter,
+#s18 .gmp-line-incorrect .gmp-expr { font-weight: 600; }
+#s18 .gmp-line-incorrect .gmp-line-badge {
+  background-color: #b20010; border-color: #b20010;  /* Feedback/Incorrect/300 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+  background-size: 9px 9px;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 20 (#s19) — TransitionScreen, the winning beat. Source: slide 23.
+
+   Slide 23 draws a still ("דמות זוכה.png") and a wedgeRectCallout. The
+   still was an instructional-designer placeholder (producer, 2026-09-11)
+   and is replaced by the per-character clips Character_1_sign.mp4 /
+   Character_2_sign.mp4 — so the layering is the template's canonical
+   .s1-video-wrap / .s1-video-clip / .s1-char-media, as on screen 10,
+   with the bubble as a sibling of the clip so it can overhang.
+
+   MEASURED CLIP FACTS (both 1280x720, 16:9, 4.01s, play once and hold).
+   Ink = non-white bounds of the HELD FINAL FRAME, by column/row
+   histogram so edge compression noise cannot widen the box:
+     character-1  x 0.1781..0.8187   y 0.1000..1.0000   (close-up,
+                  cropped at the frame's bottom edge)
+     character-2  x 0.3937..0.6133   y 0.0000..0.9778   (full body)
+
+   BOX. Sized 16:9 and placed so character-2 — the companion the
+   placeholder still actually depicted — lands exactly where that still
+   put it: ink 572.86..729.29 across and 159.81..551.61 down, against the
+   still's own measured 568.48..733.65 / 159.81..551.59. Character-1's
+   close-up then reads larger in frame, which is the producer's own
+   framing and not something to normalise away.
+     H = 391.80 / (0.9778 - 0) = 400.70 ; W = H x 16/9 = 712.35
+     Y = 551.61 - 0.9778 x 400.70 = 159.81
+     X = 651.08 - 0.5035 x 712.35 = 292.41
+   ═══════════════════════════════════════════════════════ */
+#s19 { background: #fff; }
+
+#s19 .s1-video-wrap {
+  position: absolute;
+  /* 292.41px at the 1280 design canvas (640 - 347.59); centre-anchored so a
+     wider canvas keeps the composition centred. No transform: this block
+     may be driven by the reveal animation. */
+  left: calc(50% - 347.59px); top: 159.81px;
+  right: auto; bottom: auto; transform: none;
+  width: var(--wrap-w); height: var(--wrap-h);
+  z-index: 10;          /* above the page, below the nav chrome (12) */
+  /* Box geometry as variables so the bubble can be computed from it. */
+  --wrap-w: 712.35px;
+  --wrap-h: 400.70px;
+  /* Ink fractions of the held final frame — published per character by
+     s19MountClip(). The defaults are character-2's, so the composition is
+     correct even if the script never runs. */
+  --ink-l: 0.3937; --ink-t: 0; --ink-b: 0.9778;
+  /* Bubble sprite box, keeping #bubble-tail-right's 188:89 aspect. */
+  --bw: 340px;   /* Arabic build: wider so "هي... أنا!" stays on one line (was 283.63px) */
+  --bh: 134.26px;
+  /* The clip's own gap between the callout tip and the figure on slide
+     23 (532.47 vs the still's ink at 568.48). Kept for both characters. */
+  --tail-gap: 36px;
+  /* Where the tail meets the figure, as a fraction of ITS ink height.
+     Slide 23 puts the tip at (249.55 - 159.81) / 391.80 = 0.229 down the
+     figure — head height — so both characters get it at head height
+     rather than at one fixed y. */
+  --tail-band: 0.229;
+}
+#s19 .s1-video-clip { position: absolute; inset: 0; overflow: hidden; }
+
+/* ── Side bubble, tail RIGHT, anchored to the clip's measured ink ──
+   In the UNMIRRORED #bubble-tail-right the tip is at (184.354, 44.292)
+   of its 188x89 viewBox — 98.06% across, 49.77% down — so the box is
+   placed by subtracting that offset from the tip position. All of it is
+   relative to the wrap, which is the bubble's containing block. */
+#s19 .s1-bubble {
+  left: calc(var(--ink-l) * var(--wrap-w) - var(--tail-gap) - 0.9806 * var(--bw));
+  top: calc(var(--ink-t) * var(--wrap-h)
+            + var(--tail-band) * ((var(--ink-b) - var(--ink-t)) * var(--wrap-h))
+            - 0.4977 * var(--bh));
+  right: auto; bottom: auto; transform: none;
+  width: var(--bw); height: var(--bh);
+  z-index: 11;          /* above the clip */
+}
+/* Tail is on the RIGHT here, so the asymmetric inset mirrors screen 05's:
+   the tail occupies 12.75/188 = 6.78% of the width on the RIGHT edge, so
+   the text is inset past it there and only lightly on the left. */
+#s19 .s1-bubble-text {
+  left: 4%; right: 8.72%;
+  top: 4%; bottom: 4%;
+}
+/* .s1-bubble-text is a FLEX box (it centres the words in the sprite), so
+   every run between <br>s would become its own flex ITEM and the three
+   authored lines would be laid out as three side-by-side columns. One
+   block child restores normal inline flow — the <br>s break lines and the
+   isolated ratio stays inline — while the flex parent still does the
+   vertical centring. The shared .s1-bubble-text rule is untouched, so
+   screens 02, 05 and 11 are unaffected. */
+#s19 .s1-bubble-lines { display: block; width: 100%; }
+/* The ratio is an isolated LTR run, like every other expression in this
+   part: unisolated in an RTL line "1 : 5" renders "5 : 1". */
+#s19 .s1-expr { white-space: nowrap; unicode-bidi: isolate; }
+
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 21 (#s20) — TransitionScreen, section kickoff. Source: slide 24.
+
+   Reuses this part's established .s1-text / .s1-title / .s1-body stack
+   and its .s1-char-stage, both unchanged. No bubble, no media box.
+   ═══════════════════════════════════════════════════════ */
+#s20 { background: #fff; }
+
+/* Text block: the shared .s1-text--hero rule, same as #s9. Slide 24's own
+   box (x 233.93, w 812.14, top 87.47) is the same 812px column centred on
+   the canvas that #s9 measured off slide 13, so nothing is given up by
+   taking the shared value — only the 20pt subtitle and the wide
+   title-to-subtitle gap were PPT-derived, and both are replaced by the
+   template's own treatment. */
+
+/* ── Warm-up clip, sized and aligned from its own measured content ──
+   Slide 24's character was a placeholder crop; the real assets are the
+   producer's per-character warm-up clips. Layering is the template's
+   canonical .s1-video-wrap / .s1-video-clip / .s1-char-media, as on
+   screen 20.
+
+   MEASURED BOUNDS — the union across five samples of each clip, because
+   the pose moves. The feet are stable to within 0.3% of frame height, so
+   the ground line is trustworthy; the arms are what widen the union.
+     character-1  x 0.2930..0.6836   y 0.1264..0.8986   (visible h 0.7722)
+     character-2  x 0.3328..0.6578   y 0.0333..0.9417   (visible h 0.9084)
+
+   BOX. Sized so character-2's visible height is the 299.39px slide 24
+   drew for its character — the same figure height screens 11 and 21 have
+   used all along:
+     H = 299.39 / 0.9084 = 329.58 ; W = H x 16/9 = 585.92
+     X = 640 - W/2 = 347.04  (canvas-centred)
+     Y = 578.71 - 0.9417 x H = 268.34, so character-2 needs no vertical
+         correction and 578.71 stays the ground line this screen already
+         used.
+
+   ALIGNMENT is a TRANSLATION only — never a scale, never a crop. Each
+   clip is nudged so its own content stands on that ground line with its
+   own horizontal centre on the canvas centre. Character-1 therefore
+   renders 254.50px tall against character-2's 299.39 (ratio 0.850): that
+   is the clips' own framing and is deliberately preserved rather than
+   normalised. The shifts are small enough that the clip's white margin
+   absorbs them — character-1 moves 14.21px down into a 10.1% bottom
+   margin, so .s1-video-clip's overflow never cuts visible content. */
+#s20 .s1-video-wrap {
+  /* Geometry is the SHARED .s1-video-wrap box — the canonical 640x360 at
+     the bar-anchored offset, exactly what #s9 renders. Nothing is
+     overridden here any more; only this screen's own clip data is. The
+     640x360 box is an exact 1:2 of the clips' 1280x720, so object-fit
+     letterboxes nothing and no resampling artefact is introduced.
+     Adopting it makes the text-block-to-media spacing identical to #s9's
+     by construction rather than by a second set of numbers. */
+  /* Where this screen's content has to land, relative to that box:
+       ground  578.65 - 228.91 = 349.74   (#s9's own ground line)
+       centre  640.00 - 320.00 = 320.00   (canvas centre) */
+  --wrap-w: 640px;
+  --wrap-h: 360px;
+  --ground: 349.74px;
+  --centre: 320px;
+  /* Published per character by s20MountClip(). Defaults are character-2's,
+     so the composition is correct even if the script never runs. */
+  --ink-l: 0.3328; --ink-r: 0.6578; --ink-b: 0.9417;
+}
+#s20 .s1-video-clip { position: absolute; inset: 0; overflow: hidden; }
+#s20 .s1-char-media {
+  --char-shift-x: calc(var(--centre) - (var(--ink-l) + var(--ink-r)) / 2 * var(--wrap-w));
+  --char-shift-y: calc(var(--ground) - var(--ink-b) * var(--wrap-h));
+  transform: translate(var(--char-shift-x), var(--char-shift-y)) scale(var(--char-scale, 1));
+  transform-origin: center center;
+}

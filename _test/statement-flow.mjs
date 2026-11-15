@@ -54,8 +54,8 @@ await send('Runtime.enable'); await send('Page.enable'); await send('Network.set
    (success, scaled score rounded to 3 places, result.response — the string MOE compares; before
    2026-11-11 the line showed student_answer, the only answer this unit sent). */
 const short = u => !u ? '-' : String(u).replace(/\/+$/, '').split('/').slice(-2).join('/')
-  .replace(/^methodica-math-ratio-03-0\d$/, 'COMP').replace(/^methodica-math-ratio-03-0\d\/methodica-math-ratio-03-0\d-(\d{3})$/, '$1')
-  .replace(/^methodica-math-ratio-03-0\d-(\d{3})\/(q\d+)$/, '$1/$2');
+  .replace(/^methodica-ar-math-ratio-03-0\d$/, 'COMP').replace(/^methodica-ar-math-ratio-03-0\d\/methodica-ar-math-ratio-03-0\d-(\d{3})$/, '$1')
+  .replace(/^methodica-ar-math-ratio-03-0\d-(\d{3})\/(q\d+)$/, '$1/$2');
 const fmt = s => {
   const o = s.opts || {}, r = s.result;
   const res = r ? ` ${r.success}` + (r.score ? ` ${Math.round(r.score.scaled * 1000) / 1000}` : '') +
@@ -86,11 +86,11 @@ for (const name of names) {
   const lines = (await readFile(join(SCN, name + '.txt'), 'utf8')).split(/\r?\n/);
   const [, part, query = ''] = lines[0].match(/^# part (\d\d)(?:\s+query=(\S+))?/) || [];
   const steps = lines.slice(1).filter(l => l.trim() && !l.startsWith('#'));
-  const base = `http://127.0.0.1:${HP}/sub/methodica-math-ratio-03-${part}/index.html?xapiLib=../_test/xapi-720-${process.env.XAPI_STUB || 'l'}.js${query}`;   /* -l = production (2026-11-14); XAPI_STUB=k runs the rollback library */
+  const base = `http://127.0.0.1:${HP}/sub/methodica-ar-math-ratio-03-${part}/index.html?xapiLib=../_test/xapi-720-${process.env.XAPI_STUB || 'l'}.js${query}`;   /* -l = production (2026-11-14); XAPI_STUB=k runs the rollback library */
   /* Reset from a same-origin page that is NOT the lomda: with resume on, a lomda page writes its
      restored document back on pagehide, which undid a reset taken on the lomda itself and leaked
      one scenario's state and ledger into the next (README → Notes). */
-  await send('Page.navigate', { url: `http://127.0.0.1:${HP}/sub/metadata/methodica-math-ratio-03_unit.json` }); await sleep(500);
+  await send('Page.navigate', { url: `http://127.0.0.1:${HP}/sub/metadata/methodica-ar-math-ratio-03_unit.json` }); await sleep(500);
   await ev('sessionStorage.clear(); localStorage.clear(); true');
   evs = [];
   await send('Page.navigate', { url: base }); await sleep(3000);

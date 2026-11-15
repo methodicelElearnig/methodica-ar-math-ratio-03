@@ -1,0 +1,2017 @@
+/* ═══════════════════════════════════════════════════════
+   css/style.css  —  methodica-ar-math-ratio-03-05
+   Canvas: 1280 × 710 px   (720 reference engine)
+
+   Part 05 = "רכיב 5 / שאלת שיא א" (Peak Question A). Its boundary was
+   established from the deck's own component-divider slides, not from
+   numbering: the divider at presentation order 63 opens it and the next
+   divider (order 73, "רכיב 6 / שאלת שיא ב") closes it, so the part
+   spans slides 64-72. Slide 63 is production-only and is NOT built.
+
+   Screens implemented so far:
+     00 — TransitionScreen (Peak Question A launch), source slide 64.
+     01 — FullImageWithTextOverlay (bakery set-up), source slide 65.
+     02 — ValueInputQuestion Variant C (peak sub-part 1), source slide 66.
+     03 — FullImageWithTextOverlay (influencer clip), source slide 67.
+     04 — SingleChoiceQuestion (peak sub-part 2), source slide 68.
+     05 — FullImageWithTextOverlay (festival order), source slide 69.
+
+   Global chrome (fonts, subject tokens, canvas, bottom bar, flag
+   button, Continue / Back pills, nav-label width reservation, focus
+   rings) ported VERBATIM from the same-lomda sibling
+   methodica-ar-math-ratio-03-04, which took it from -03 / -02 / -01 — so
+   all five parts render identical chrome. Question-template rules are
+   added screen by screen rather than up front (720-templates →
+   _common-pitfalls.md warns against carrying an incomplete CSS
+   dependency closure): no question block exists in this file yet
+   because no question screen in this part is built.
+
+   TransitionScreen composition/geometry ported verbatim from
+   methodica-ar-math-ratio-03-04's own S0 (identical screen role — a
+   component kickoff transition), per 720-templates →
+   references/TransitionScreen.md + references/_global-components.md.
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Fonts: @font-face lives in ../../unit-css/00-fonts.css (shared by all parts). ─── */
+
+/* ─── Reset, theme tokens, canvas, .screen and .flag-btn base: ../../unit-css/10-base.css ─── */
+.flag-btn-label {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 600; font-size: 14px; color: var(--subject-500);
+  text-align: center; width: max-content; white-space: nowrap; line-height: normal; /* Arabic build: one line */
+  direction: rtl; display: none;
+}
+.flag-btn:hover .flag-btn-label,
+.flag-btn:focus-visible .flag-btn-label { display: block; }
+
+/* ─── Back button — white pill, bottom-right of the 74px bar.
+   Class name `.scq-back` is this lomda's established shared name for
+   this control (methodica-ar-math-ratio-03-01 → -02 → -03 → -04), ported
+   verbatim rather than renamed per part.
+   Slide 64 mocks it as a LIVE shape (id=3, roundRect, text "חזרה",
+   #019DE5 stroke, adj=50000 → full pill radius) with its right edge
+   15.6px from the slide's right edge — corroborating both the control's
+   presence and its bottom-right placement. Canonical geometry (24px
+   inset, 39px height, --subject-700) is used; the mock's #019DE5 is the
+   deck's stock Science-blue furniture colour, not a Math theme
+   instruction. ── */
+.scq-back {
+  position: absolute;
+  bottom: 17.5px;
+  right: 24px;
+  z-index: 12;
+  width: auto; min-width: 140px; height: 39px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-700);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-back:hover { font-weight: 600; border-width: 1.5px; }
+
+/* ─── Shared: Continue Button — gradient pill, bottom-left of bar.
+   Ported verbatim from methodica-ar-math-ratio-03-04 / -03 / -02 / -01.
+   LABEL: "המשך" — DIRECT source evidence, not a silent fallback. Slide
+   64 mocks the button as picture id=4 (rId4 → ppt/media/image18.png, a
+   140×39 px blue pill) and the decoded image reads "המשך". Unlike
+   slides 29 and 39 — which author an explicit "אפשר להתחיל!" text
+   overlay for their own kickoff transitions — slide 64 carries no such
+   override, so the stock progression label the image itself shows is
+   what ships. Deliberately NOT copied from those siblings' overrides. ── */
+.btn-continue {
+  position: absolute;
+  bottom: 17.5px; left: 24px;  /* true 39px-pill centering: (74-39)/2 = 17.5px */
+  z-index: 12;                /* above the ::after white bar (z-index 9) */
+  min-width: 140px;
+  height: 39px;
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary-action-gradient);
+  color: #fff;
+  border: none; border-radius: 1000px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+  text-align: center; white-space: nowrap;
+}
+.btn-continue:not(:disabled):hover { font-weight: 600; }
+.btn-continue.hidden { display: none !important; }
+.btn-continue:disabled {
+  background: #AEAEAE;
+  color: #303030;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ─── Nav-button width consistency (Foundation rule) — ported verbatim.
+   HOVER STABILITY: the pill's hover state bumps the label to weight 600,
+   which would otherwise widen the button mid-hover. `.nav-label`
+   reserves the bold width up front via an invisible ::before carrying
+   the same string, so the box never reflows. Every runtime label change
+   must go through main.js → setNavLabel(), never textContent, or this
+   reservation is destroyed. ── */
+.nav-label { display: inline-grid; }
+.nav-label::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.nav-label > span { grid-area: 1 / 1; }
+
+/* ─── Visible focus (keyboard) — ported verbatim from
+   methodica-ar-math-ratio-03-04. Every interactive control on this screen
+   is covered: there are only three (flag, Continue, Back). ── */
+.btn-continue:focus-visible,
+.scq-back:focus-visible,
+.flag-btn:focus-visible {
+  outline: 3px solid var(--subject-500);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — TransitionScreen (Screen 00 / #s0)
+   Peak Question A launch screen. Source: slide 64 (presentation order
+   64 → ppt/slides/slide64.xml, resolved through presentation.xml's
+   <p:sldIdLst> r:id → ppt/_rels/presentation.xml.rels; the mapping is
+   1:1 with no offset across all 83 slides, DERIVED from a fresh
+   extraction this session rather than assumed).
+
+   Presenter note resolved through slide64's OWN .rels
+   (rId3 → ppt/notesSlides/notesSlide58.xml — part-name numbering is NOT
+   slide numbering, and 64 ≠ 58). Its cached <a:fld type="slidenum">
+   reads "64", corroborating the identification:
+       הנחיות הפקה:
+       מסך הזנקה שאלת שיא
+       שם המסך בפיגמה: TransitionScreen
+       הדמות נראית בתחילת מרוץ
+
+   Composition ported verbatim from the same-lomda sibling
+   methodica-ar-math-ratio-03-04's own S0 (identical screen role — a
+   component kickoff transition), which took it from -03 and -02 —
+   720-templates → references/TransitionScreen.md, canonical composition
+   (text block + character media centred as one unit above the bar).
+
+   720-templates → TransitionScreen.md → "B. Video clipping / overflow
+   structure" requires a dedicated `.s1-video-clip` inner layer even on
+   an instance with no active fit shim and no speech-bubble overlay
+   (slide 64 authors neither) — kept here for contract compliance and so
+   a later bubble addition never needs to restructure this screen.
+
+   The `.s1-*` prefix is this COMPONENT's own historical prefix, not a
+   claim that this is "screen 1" (TransitionScreen.md → "Naming note");
+   it is deliberately not renamed to match the hosting screen index.
+   ═══════════════════════════════════════════════════════ */
+#s0 { background: #fff; }
+
+/* The whole stack — text block + character media — is centred as ONE
+   unit in the content zone above the bar, so the surplus a taller
+   viewport introduces splits evenly above/below rather than pinning
+   either element to a raw deck coordinate. Slide 64's own layout agrees:
+   the character picture is centred on the slide's horizontal midline
+   (x 5268676 + cx 1654648/2 = 6096000 EMU = exactly half of 12192000),
+   and the text box is centred to within 2px of it
+   (3151158 + 6400799/2 = 6351558 EMU ≈ 0.5209 of slide width — the box
+   itself sits slightly right of centre, but every one of its paragraphs
+   carries algn="ctr", so the rendered text block reads as centred; the
+   fresh PowerPoint render confirms it). */
+.s1-content {
+  position: absolute;
+  inset: 0 0 74px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* One rhythm for every line in the stack — a single `gap` (not
+   per-paragraph margins) keeps the rhythm even regardless of how many
+   lead-in lines a given instance has (720-templates →
+   TransitionScreen.md → "Text roles"). Slide 64 centres every rendered
+   paragraph (algn="ctr" on all five), which this matches.
+
+   THIS INSTANCE HAS THREE LEAD-IN LINES — the most of any transition
+   screen in this lomda so far (03-02 and 03-03 ship one each, 03-04
+   ships none). TransitionScreen.md → "Text roles" states the lead-in
+   count is explicitly not fixed, so three is a normal shape of the
+   component, not an overflow risk to design around. */
+.s1-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+/* Headline — Assistant 40px/700 (Heading / H-5). Slide 64's own run is
+   40pt Bold in "Assistant"; TransitionScreen.md → "Headline type-size
+   mapping" is explicit that this role snaps to 40px/700 regardless of
+   the authored run's point size (its two references cite 54pt and 44pt
+   sources doing exactly this, and the approved siblings in this lomda
+   ship 40/700 from 54pt and 48pt sources). Here the source point value
+   and the role value coincide at 40 — that is a coincidence, not a new
+   rule: the mapping is still role-driven. */
+.s1-title {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #303030;
+  margin: 0;
+}
+
+/* Closing line under the headline — 28px/400 (Body / B-1). Slide 64
+   authors this run at 20pt with b="1". The approved sibling
+   methodica-ar-math-ratio-03-03 ships the IDENTICAL source shape from
+   slide 39 — a 20pt b="1" mastery-threshold sentence in the closing
+   slot ("ענו נכון על 2 שאלות ומעלה כדי להתקדם.") — as 28px/400, so this
+   is the established mapping for this role in this lomda, applied
+   again rather than re-decided. The source bold is authored emphasis on
+   the run, not a weight instruction for the role (pptx-script-extraction
+   → "Bold is not color"); the role's own 400 weight wins, exactly as it
+   does on 03-03. */
+.s1-subtitle {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #303030;
+  margin: 0;
+}
+/* Lead-in line above the headline — 24px/400 (Body / B-3). Slide 64
+   authors all three of these runs at 20pt regular; ported at 24px to
+   match the established TransitionScreen lead-in role already shipped
+   by the approved siblings for the same 20pt source. */
+.s1-subtitle--regular { font-size: 24px; font-weight: 400; }
+
+/* Companion-character video stage. Fixed 640×360 box with
+   object-fit: contain — the established box for this template's video
+   variant in all four approved siblings. `.s1-video-clip` is the
+   dedicated clipping inner layer (template contract "B"); it is a
+   no-op today (no fit shim, no bubble) and is kept unconditionally.
+
+   ASPECT MATCH: both supplied clips are 1280×720 (16:9) and this box is
+   640×360 (16:9), so `contain` fits exactly with no letterboxing and no
+   crop — the full authored frame of each clip is shown, which is what
+   preserves each character's own framing. Neither clip is cropped,
+   stretched, or normalised against the other. */
+.s1-video-wrap {
+  position: relative;
+  width: 640px;
+  height: 360px;
+  flex-shrink: 0;
+}
+.s1-video-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* PER-CHARACTER FIT SHIM — `--char-scale` / `--char-shift-y`, both
+   defaulting to a no-op, and both written unconditionally by
+   js/main.js on every character switch so a previous character's scale
+   can never persist on the element.
+
+   THIS INSTANCE SHIPS NO `fit` VALUES — measured, not assumed. The
+   derivation and the evidence live in the S0_CHARACTER block in
+   js/main.js. TransitionScreen.md → "C" forbids deriving a shim by
+   analogy to another clip pair, so 03-01's / 03-04's decisions were not
+   copied here; this pair was measured on its own. ── */
+.s1-char-media {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  transform: translateY(var(--char-shift-y, 0px)) scale(var(--char-scale, 1));
+  transform-origin: center center;
+  /* Decorative only: some browsers surface their own hover overlay on a
+     <video> regardless of controlsList, and nothing on this screen
+     should be interactive except the nav buttons. */
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — FullImageWithTextOverlay (Screen 01 / #s1)
+   Bakery set-up. Source: slide 65 (presentation order 65 →
+   ppt/slides/slide65.xml). Presenter note, resolved through slide65's
+   OWN .rels (rId2 → notesSlides/notesSlide59.xml, cached slidenum
+   "65"):
+       שם המסך בפגימה: FullImageWithTextOverlay
+       שם התמונה:<מאפייה>
+
+   720-templates → references/FullImageWithTextOverlay.md. First
+   card-bearing instance in this lomda: the only existing .fito-* code
+   here is methodica-ar-math-ratio-03-01's Screen 03, which is Variant C
+   (a widget band with NO card), so its .fito-media band is reused as
+   the band precedent and the card is built fresh to this file's
+   contract.
+   ═══════════════════════════════════════════════════════ */
+#s1 { background: #fff; }
+
+/* Photo band — expressed as an INSET against this project's own 74px
+   bar, never a copied absolute height (FullImageWithTextOverlay.md →
+   "Band geometry").
+
+   TOP EDGE — DELIBERATE DEVIATION FROM THE SLIDE, flagged for approval.
+   Slide 65 runs its photo from y=-35820 EMU (≈ -3.7px, i.e. above the
+   canvas top) down to exactly the bottom rule. Built literally, the
+   persistent flag button — global chrome at y=16..54 on every screen of
+   this lomda — would sit ON the photograph. The template requires the
+   band's top edge to clear the persistent top chrome so that chrome
+   reads against the page background, and the approved sibling
+   methodica-ar-math-ratio-03-01's own .fito-media resolves that at
+   top: 93.73px. That value is reused here, so the two
+   FullImageWithTextOverlay bands in this lomda are identical.
+   The slide is silent rather than contradictory on this point: it mocks
+   no flag button at all, so it never shows the collision. PowerPoint
+   visual formatting is the lowest rung of the source hierarchy, and the
+   template states outright that lomda-wide consistency outranks one
+   screen matching its own source exactly.
+
+   CROP CONSEQUENCE, measured. The producer's own crop on this photo is
+   srcRect t=12383 b=12383 — symmetric, 12.383% off the top and 12.383%
+   off the bottom, which turns the 3:2 source into the ~1.994:1 band
+   they drew. This band is 1280 × 535.7 (2.389:1), so centred `cover`
+   keeps the middle 62.8% of the scaled height, i.e. it cuts ~18.6% off
+   each edge. That is MORE than the producer cut, never less, so the
+   visible region sits strictly INSIDE the region their own crop kept —
+   nothing they chose to remove is reintroduced. `object-position` is
+   therefore left centred, which is the alignment their symmetric crop
+   itself implies. Re-check this reasoning if the asset is swapped. */
+.fito-img {
+  position: absolute;
+  left: 0; right: 0;
+  top: 93.73px;
+  bottom: 74px;
+  overflow: hidden;
+  background: #fff;
+  z-index: 1;          /* below the nav chrome (12) — never over it */
+}
+.fito-img img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;   /* decorative/contextual, never interactive */
+}
+
+/* Floating white card, anchored at the RTL reading start (lower-right).
+
+   POSITION from slide 65's own EMU (shape id=8), converted against this
+   canvas: x 3746501 → right edge 1248.0px → 32px from the right; the
+   card's bottom edge 4485377+1364278 = 5849655 → 605.6px → 104px up
+   from the canvas bottom (30px clear of the 74px bar).
+
+   WIDTH HUGS — `fit-content` with a `max-width` guard, per the
+   template's "B. Card sizing". Measured on the deck's own render, its
+   fixed 855px box leaves the short first line a 560px gap on the
+   physical left against a 15px gap on the right; hugging the longest
+   line is the only width that equalises them. The guard is the usable
+   canvas width minus this card's own right inset and a matching left
+   margin — nothing in the authored copy comes close to it.
+
+   HEIGHT FOLLOWS CONTENT — never fixed. The 42px vertical padding
+   reproduces the deck's rendered card height (141px for these two
+   24px/1.2 lines) while leaving the box free to grow if the copy is
+   revised. The deck's own box is a fixed slab with vertically centred
+   text, which is a PowerPoint authoring artifact, not a height
+   instruction.
+
+   PADDING/RADIUS/FILL are under-specified by this project's approved
+   visual source — the Figma MCP connector is unauthenticated in this
+   session and the template file explicitly does not own these values —
+   so they are taken from the slide's own rendered geometry, which is
+   the same fallback the approved sibling methodica-ar-math-ratio-03-01
+   used for its own HookClosingText instance. Radius: the shape's
+   adj=8509 against its 141px short side → 12px. Fill: schemeClr bg1 →
+   #fff, no stroke. */
+.fito-text {
+  position: absolute;
+  right: 32px;
+  bottom: 104px;
+  z-index: 2;          /* above the band, below the nav chrome */
+  width: fit-content;
+  max-width: 1216px;   /* guard only — 1280 − 32 right − 32 left */
+  box-sizing: border-box;
+  /* Both values measured off the deck's own render, which is the
+     available approved evidence here (Figma unreachable this session).
+     HORIZONTAL 15px: on slide 65's render the text ink sits exactly 15px
+     inside the card's right edge on both lines. VERTICAL 42px: the
+     deck's card is 141px tall around two 24px/1.2 lines (57.6px), so
+     (141 − 57.6)/2 ≈ 42 — applied as padding rather than as a fixed
+     height, so the box still grows if the copy is revised. */
+  padding: 42px 15px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  /* `align-items: stretch` (the default), NOT `flex-end`. In a COLUMN
+     flex container the cross axis is the inline axis, so under
+     `direction: rtl` flex-start resolves to the physical RIGHT and
+     flex-end to the physical LEFT — `flex-end` pushed the short first
+     line to the left edge of the card, the opposite of the RTL reading
+     start the deck authors. Stretching each paragraph to the content
+     width and letting `text-align: right` place the text avoids the
+     RTL/flex axis question entirely and right-aligns both lines on the
+     same edge, which is what slide 65 renders (both its paragraphs
+     carry algn="r"). Verified by measuring both paragraphs' rendered
+     boxes, not by reading the rule. */
+  align-items: stretch;
+  direction: rtl;
+}
+/* Body / B-3 — 24px/400. Slide 65 authors both runs at 18pt regular in
+   Assistant; 18pt on this deck's 13.333in slide width maps to exactly
+   24px on the 1280px canvas, and 24px/400 is the role this lomda
+   already uses for the same 18-20pt body source elsewhere. */
+.fito-text p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #303030;
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;   /* the card hugs, so each authored paragraph is
+                            one line by construction; this makes that
+                            explicit and stops a sub-pixel width
+                            rounding from wrapping a line that the
+                            producer authored unbroken */
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHARED QUESTION CHROME — ported VERBATIM from the approved sibling
+   methodica-ar-math-ratio-03-04 (its own port from -03 / -02). Part 05's
+   first question screen (S2, slide 66) is the first user of any of it,
+   so the whole closure lands in one go rather than screen by screen:
+   hint button, feedback popup, hint overlay, Progress Question nav and
+   the ValueInputQuestion field/input rules.
+   ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   Hint button (.scq-hint) — shared chrome, ported VERBATIM from the
+   approved sibling methodica-ar-math-ratio-03-02 (720-templates →
+   _global-components.md → "Nav bar button geometry"). Slide 52 mocks
+   this control in the bar at its own x=229 / 261×53; the sibling's
+   canonical geometry is used instead, as with every other nav pill in
+   this lomda.
+   ═══════════════════════════════════════════════════════ */
+.scq-hint {
+  position: absolute;
+  bottom: 17.5px; left: 268px;  /* Arabic build: clear of the wider check button (was 180px) */   /* 24 (.btn-continue's own left) + 140 (its min-width) + 16 (same-side gap) */
+  z-index: 12;
+  min-width: 140px; height: 39px;
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-500);
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.scq-hint:hover:not(:disabled) { font-weight: 600; }
+.scq-hint:disabled { border-color: #aeaeae; color: #aeaeae; cursor: default; }
+.scq-hint.hidden { display: none !important; }
+.scq-hint-ico { width: 26px; height: 22.3px; flex: 0 0 26px; display: block; }
+.scq-hint:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* ═══════════════════════════════════════════════════════
+   Feedback popup — draggable, NO close button of any kind
+   (720-templates → _global-components.md → Feedback popup system →
+   "No manual close"). Ported verbatim from the approved sibling
+   methodica-ar-math-ratio-03-02.
+
+   Slide 52's own two feedback mock-ups are light green and #FFE5E5;
+   the design-system tokens Green/5 #edf8ed and Red/10 #ffdbdc are used
+   instead, exactly as both approved siblings do — popup chrome colour
+   is design-system role styling, not authored content
+   (_question-template-defaults.md → "Source formatting is evidence of
+   intent, not automatic visual authority").
+   ═══════════════════════════════════════════════════════ */
+.scq-popup {
+  position: absolute;
+  left: 2px; bottom: 76px;
+  width: 426px; height: auto;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  display: flex; flex-direction: column; gap: 4px;
+  direction: rtl; z-index: 50;
+  cursor: move;
+  touch-action: none;   /* drag surface claims touch gestures: no pointercancel mid-drag (_global-components.md, drag rule 5) */
+}
+.scq-popup.hidden { display: none !important; }
+.scq-popup-header {
+  display: flex; align-items: flex-start; gap: 8px;
+  direction: ltr; width: 100%;
+}
+.scq-popup-title {
+  flex: 1;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 700;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0;
+  padding-top: 4px;
+}
+/* The title+body column. Without `.is-scroll` it is a plain flex column
+   carrying the popup's own 4px title/body rhythm, so the short retry
+   popup renders exactly as it did before this wrapper existed; the
+   scroll-gated variant re-declares it below with Figma's own 24px gap
+   and turns it into the scroll container. */
+.scq-popup-scroll { display: flex; flex-direction: column; gap: 4px; }
+.scq-popup-body { direction: rtl; }
+.scq-popup-body p {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 20px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0 0 4px;
+}
+.scq-popup-body p:last-child { margin-bottom: 0; }
+
+/* A genuinely empty source paragraph is an intentional group break and
+   is preserved as one line-height of space, not an invented pixel gap
+   (_question-template-defaults.md → "Paragraph structure maps to
+   line-height, not invented spacing"). Slide 52's correct-feedback body
+   carries six of them. */
+.scq-popup-body p.scq-gap { height: 1em; margin: 0; }
+
+/* Display equations — standalone worked-calculation lines, each one
+   isolated LTR so no operator, operand or ratio term can be reordered
+   by the surrounding RTL paragraph (figma-lomda-builder → patterns.md
+   → "RTL flex alignment and embedded LTR content").
+
+   ALIGNED RIGHT, on the producer's instruction of 2026-09-14: "Align
+   the feedback text to the right." The source authors these paragraphs
+   centred (algn="ctr"), which is how they were first built; the ruling
+   overrides that so the whole feedback column shares one edge.
+   `direction: ltr` stays — it is what keeps each expression reading
+   left-to-right internally; only the line's placement changes.
+
+   In this part only S7 emits `.scq-math` (one `@math:` branch, in
+   s7viqShowPopup), so this rule reaches no other screen. */
+.scq-popup-body p.scq-math {
+  text-align: right; direction: ltr;
+  margin: 2px 0 6px;
+}
+/* Inline mathematical expression inside RTL prose — one isolated LTR
+   unit that can never be split across lines or reordered by the
+   surrounding paragraph. `white-space: nowrap` is the load-bearing
+   half: `dir="ltr"` alone still lets a line break fall inside
+   "BD = x" or "1 : 3". Same role as the approved sibling
+   methodica-ar-math-ratio-03-01's `.scq-expr`. */
+.scq-expr {
+  direction: ltr; unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+/* ── Long-feedback variant — scroll-gated popup ──
+   720-templates → _global-components.md → "Long-feedback variant —
+   scroll-gated popup", with GEOMETRY taken from the canonical Figma
+   component inspected 2026-09-09: file eSbp4bKHgBky0rakDb8l9N, node
+   217:4135 "Popup Feedback", variant 2287:21169
+   "state=Scrolling, size=Bottom, type=Correct, Table=False".
+
+   Activated for THIS question's correct and final-incorrect feedback
+   only (never the short retry popup), because slide 52's presenter
+   note asks for it in as many words ("שימו לב שבמשוב ארוך, לאפשר
+   גלילה") and its two feedback shapes are 438×935 px — taller than the
+   whole 710px canvas.
+
+   CANONICAL BOX (Figma): 426 × 474, radius 12, padding 24px top and
+   bottom, 24px physical-LEFT, 8px physical-RIGHT, and a 12px gap
+   between the text column and the scrollbar. Physically, right to
+   left: 8 padding | 10 scrollbar | 12 gap | 372 text column | 24
+   padding. The width stays this template's approved 426px, which is
+   also Figma's own.
+
+   ONE CONTENT COLUMN. The title and the body are BOTH children of the
+   scroll container (Figma's `2287:21170`, a single flex column with a
+   24px gap, sitting to the left of the scrollbar), so the scrollbar
+   runs the full height of title + body rather than starting below the
+   title. This supersedes _global-components.md's "only the body
+   scrolls / the header stays fixed" wording for this component —
+/* ═══════════════════════════════════════════════════════
+   Hint overlay — full-canvas centred modal on a translucent white
+   scrim, Subject/500 card. Ported verbatim from the approved sibling
+   methodica-ar-math-ratio-03-02. Unlike the feedback popup, this
+   component legitimately keeps its own dismissal paths (the authored
+   "חזרה לשאלה" button, backdrop click, Esc) — slide 52 authors that
+   same button inside its own off-canvas hint group.
+   ═══════════════════════════════════════════════════════ */
+.scq-hint-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.78);
+  display: flex; align-items: center; justify-content: center;
+}
+.scq-hint-overlay.hidden { display: none !important; }
+.scq-hint-popup {
+  background: var(--subject-500); border-radius: 48px;
+  padding: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  width: 546px; max-width: 92%;
+}
+.scq-hint-content {
+  display: flex; flex-direction: column; gap: 24px;
+  width: 462px; max-width: 100%; direction: rtl;
+  color: #fff;
+}
+.scq-hint-title {
+  width: 100%; text-align: right; position: relative;
+  padding-right: 56px;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 700; font-size: 32px;
+  color: #fff; line-height: normal; margin: 0;
+}
+.scq-hint-title-ico {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 34.3px; display: block; color: #fff;
+}
+.scq-hint-body {
+  width: 100%; text-align: right;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 400; font-size: 24px;
+  color: #fff; line-height: normal;
+}
+.scq-hint-body p { margin: 0; }
+.scq-hint-close {
+  min-width: 196px; width: fit-content; align-self: center; padding: 16px 40px;  /* Arabic build: grows with the label, never stretches */
+  border: none; border-radius: 1000px; background: #fff;
+  color: #303030;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 400;
+  cursor: pointer; white-space: nowrap;
+}
+.scq-hint-close:hover { font-weight: 600; }
+.scq-hint-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL COMPONENT — Progress Question nav
+   720-templates → _global-components.md → "Progress Question".
+   FOUR positions, one per authored question: slide 52 = question 1,
+   slide 53 = question 2, slides 54-56 = question 3 (sections א/ב/ג),
+   slide 57 = question 4. Question 3's dot spans three screens and
+   resolves only after section ג. The model and its evidence live in
+   the PROGRESS + SCORING MODEL block in js/main.js.
+
+   The bar renders on every question screen of the series — #s1, #s2,
+   #s3, #s4, #s5 and #s6 — from one shared component with identical
+   markup. Only slides 54-56 carry its raster mock; that the other
+   three slides do not is a gap in the deck's mock-ups, not a reason
+   for the live component to disappear (producer ruling, 2026-09-14).
+
+   FOUR positions, NOT the six drawn in slide 54's own image22.png mock.
+   That PNG is 618×44 — pixel-for-pixel the canonical Figma instance
+   (1045:13076, 618×43, six sample items) exported and then stretched
+   to 824×59 on the slide. It is stock component art, not this
+   series' length; the length is 4, from the corrected presenter notes
+   "שאלה 1 / 2 / 3 / 4 מתוך 4" on slides 52-57.
+
+   GEOMETRY is the Figma instance's own: 618 = 6×43 items + 5×64
+   connectors + 10×4 gaps, so item 43, connector 64, gap 4; four items
+   therefore measure 4×43 + 3×64 + 6×4 = 388px, centred.
+
+   TOP = 48px, DELIBERATELY DIFFERENT FROM THE TWO APPROVED SIBLINGS.
+   methodica-ar-math-ratio-03-02 and -03 both ship this component at
+   top: 16px. Figma's instance sits at y=48 inside the 1280×710
+   template frame, and slide 54's own mock sits at y=43.9 — the two
+   independent sources agree with each other and not with 16. Figma
+   outranks a sibling implementation in this project's source order, so
+   48 is used here and the 32px difference is reported for a producer
+   decision: if the lomda should stay internally consistent at 16, this
+   is a one-value change here rather than in two approved parts.
+   ═══════════════════════════════════════════════════════ */
+.progress-question {
+  position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 4px; direction: rtl; z-index: 20;
+}
+.progress-question__item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; width: 43px; flex: 0 0 auto;
+}
+.progress-question__connector {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 11.5px; width: 64px; flex: 0 0 auto;
+}
+.progress-question__connector-line {
+  width: 100%; height: 1.5px; border-radius: 2px;
+  background: #ececec;
+}
+.progress-question__connector--visited .progress-question__connector-line {
+  background: rgba(0, 0, 0, 0.6);
+}
+.progress-question__icon {
+  position: relative;
+  width: 24px; height: 24px; flex: 0 0 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px #ececec;
+}
+.progress-question__icon::after {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 7.2px; height: 7.2px; border-radius: 50%;
+  background: #d9d9d9; box-shadow: 0 0 0 1px #ececec;
+}
+.progress-question__icon-check,
+.progress-question__icon-x {
+  display: none;
+  position: absolute; inset: 0; margin: auto;
+  color: #fff;
+}
+.progress-question__icon-check { width: 12.7px; height: 9.2px; }
+.progress-question__icon-x { width: 10px; height: 10px; }
+.progress-question__icon--current {
+  background: var(--subject-300); box-shadow: none;
+}
+.progress-question__icon--current::before {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 19.2px; height: 19.2px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 0 2px var(--subject-500);
+}
+.progress-question__icon--current::after {
+  background: var(--subject-500); box-shadow: none;
+  z-index: 1;
+}
+.progress-question__icon--correct,
+.progress-question__icon--incorrect {
+  background: var(--subject-500); box-shadow: none;
+}
+.progress-question__icon--correct::after,
+.progress-question__icon--incorrect::after { content: none; }
+.progress-question__icon--correct .progress-question__icon-check { display: block; }
+.progress-question__icon--incorrect .progress-question__icon-x { display: block; }
+.progress-question__label {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 15px; font-weight: 400; color: #ececec;
+  text-align: right; white-space: nowrap; line-height: normal;
+}
+/* 15px is this component's own documented typography, deliberately
+   unbound to the approved token table (720-design-guidelines →
+   typography.md → "Component-specific typography exceptions"). Not a
+   minimum-size violation. */
+.progress-question__label--visited { color: #222; text-align: center; }
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — ValueInputQuestion, Variant C (Screen 02 / #s2)
+   Peak question A, sub-part 1 of 4. Source: slide 66.
+   Presenter note (via slide66's own .rels → notesSlide60.xml, cached
+   slidenum "66"): "שם המסך בפיגמה: ValueInputQuestion", "שאלה 1 מתוך 4".
+   ═══════════════════════════════════════════════════════ */
+#s2 { background: #fff; }
+
+/* Stem container — the canonical question box this lomda ships on every
+   question screen (top 121 / right 40 / width 1188), not slide 66's own
+   box (top 128.6 / right 65.6 / width 812.1). The same ±25px drift the
+   approved sibling 03-04 documents for its own stems; the shared
+   container wins for cross-screen consistency. */
+.scq-question {
+  position: absolute; top: 121px; right: 40px;
+  width: 1188px; height: auto;
+}
+#s2 .scq-right-col {
+  width: 100%;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+/* ¶1-¶2 — Body/B-3, 24px Regular. Slide 66's runs are 20pt, which maps
+   to 24px on this canvas; 1.45 is this lomda's own body line-height,
+   already shipped on every sibling. Three consecutive source paragraphs,
+   so line-height alone separates them and no extra spacing is invented. */
+#s2 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* ¶3 — WEIGHT-ONLY emphasis, plain body colour. Audited: slide 66's stem
+   textbox (id=6) carries no <a:solidFill> on any run, paragraph default
+   or shape fill, and the fresh render shows the line black. Bold is
+   preserved; no accent colour is invented. */
+#s2 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* The ratio's numeral group, isolated LTR so it renders in the physical
+   order PowerPoint shows. See the block comment on this screen in
+   index.html for the glyph-by-glyph verification. */
+#s2 .scq-expr {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 400;
+  unicode-bidi: isolate;
+}
+
+/* Figure block — the flour photo with its two answer fields beneath it.
+   Geometry from slide 66's own EMU: photo id=10 at x 931.5 y 244.8,
+   317.7 × 208.9 (right inset 1280 − 1249.2 = 30.8). The photo carries no
+   <a:srcRect>, so it is shown uncropped; its 3:2 source matches the
+   box's 1.52 to within 1.4%, and `contain` guarantees nothing is cut. */
+.viq-figure {
+  position: absolute;
+  right: 30.8px; top: 244.8px;
+  width: 317.7px;
+  z-index: 2;
+}
+.viq-figure-img {
+  display: block;
+  width: 317.7px; height: 208.9px;
+  object-fit: contain;
+  pointer-events: none;   /* contextual image, never interactive */
+}
+/* The two fields, centred under the photo. Slide 66 places its own boxes
+   at x 982.7 and x 1103 (97.8 × 60.5, 22.5px apart), i.e. centred on the
+   photo's midline at x 1090.35. The canonical .viq-field box (103 × 55,
+   already shipped by 03-04) is used instead of this slide's own 97.8 ×
+   60.5 so every ValueInputQuestion field in the lomda matches; the pair
+   is then re-centred on that same midline.
+   `dir="ltr"` on the row makes DOM order map physically LEFT→RIGHT, so
+   the spelt field (3x) sits left and the wheat field (7x) right, exactly
+   as the slide mocks them. */
+.viq-fields {
+  position: absolute;
+  top: 201.9px;            /* 446.7 − 244.8, i.e. the slide's own y */
+  left: 50%; transform: translateX(-50%);
+  display: flex; gap: 22.5px;
+}
+/* Canonical ValueInputQuestion field + input — ported VERBATIM from
+   methodica-ar-math-ratio-03-04 (its box measured from slide 54). Used
+   unchanged so every ValueInputQuestion field in the lomda matches;
+   slide 66 draws its own boxes at 97.8 x 60.5, ~5px from this. */
+.viq-field {
+  width: 103px; height: 55px;   /* slide 54's own box: 984580×526581 EMU */
+  box-sizing: border-box;
+  border: 1.5px solid rgba(174, 174, 174, 0.5);
+  border-radius: 10px;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 8px;
+  /* THE FIELD'S INTERIOR IS LTR, EXPLICITLY — fixed 2026-09-15 after a
+     live audit of every .viq-field in the part.
+
+     The box is a flex row of [input, icon] and the icon must sit to the
+     RIGHT of the value. S2 got that by luck: its fields hang off a
+     wrapper that carries dir="ltr". S7's are inline in an RTL sentence
+     (`#s7 .viq-line`), so they INHERITED rtl, the flex main axis ran
+     right-to-left, and the verdict icon rendered on the LEFT of the
+     value — measured, not guessed: field direction `rtl`, icon at
+     x 820.9–836.9 against an input ending at 883.1.
+
+     `direction` here governs only this box's own flex flow and inline
+     content. The parent stays RTL, so the field's PLACE in the Hebrew
+     sentence and the expression's semantic order are untouched — only
+     the value/icon pair inside the box is ordered. It also makes
+     `margin-inline-start` on the icon resolve to the left edge, which is
+     the gap the icon was designed with. Verified on both screens. */
+  direction: ltr;
+}
+.viq-field:focus-within { border-color: var(--subject-500); }
+.viq-input {
+  border: none; background: transparent; outline: none;
+  flex: 0 0 auto; width: 2.2ch;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 24px; font-weight: 700;
+  color: #303030; text-align: center; direction: ltr;
+}
+/* Field surface invariant: Natural/100 in EVERY state, locked included —
+   only the border and the icon carry outcome colour
+   (ValueInputQuestion.md → "Field surface invariant"), so a locked value
+   keeps its own colour instead of greying out. */
+.viq-input:disabled { color: #303030; -webkit-text-fill-color: #303030; opacity: 1; }
+.viq-field.viq-correct { border-color: #609e12; }
+.viq-field.viq-wrong   { border-color: #b20010; }
+
+/* Per-field verdict icon (Case A — every field reflects its OWN result).
+   The 16px slot is reserved UNCONDITIONALLY so a field never reflows
+   when its verdict appears. */
+.viq-field-ico {
+  width: 16px; flex: 0 0 16px; height: 16px;
+  /* 6px, not 2px: the ANSWER view can display a 3-character raw string
+     ("9*x"), which fills the input's own 3.2ch and left the verdict icon
+     touching the last glyph. The field has slack to spare — 3.2ch (~38px)
+     + 16px icon + 16px padding against a 103px box — so the gap costs
+     nothing and keeps both views legible. Caught on the toggle's
+     my-answer view, not on the solution view, where 3x/7x are both two
+     characters. */
+  display: block; overflow: visible; margin-inline-start: 6px;
+}
+.viq-field-ico svg { display: block; }
+/* The answers are algebraic ("3x"/"7x"), not numeric, so the input is
+   wider than 03-04's 2.2ch numeric field and keeps a text inputmode. */
+#s2 .viq-input { width: 3.2ch; }
+
+/* ═══════════════════════════════════════════════════════════
+   RecallPopup — "how to type x" keyboard guide (S2 trigger, part-wide
+   overlay). Contract: 720-templates → _global-components.md →
+   RecallPopup. Visual: 720-design-guidelines → shared-visual-vocabulary
+   (RecallPopup, shared popup backdrop) + components-icons-states
+   (ContentPopup, General Popup Close Btn).
+   ═══════════════════════════════════════════════════════════ */
+
+/* Trigger — the hint pill's own look, anchored to the flour photo:
+   UNDER the two answer fields (fields top 201.9 + height 55 + 16 gap),
+   flush with the photo's right edge. The RecallPopup contract places the
+   trigger inline in the question column, but on this screen that column
+   is covered by the absolutely positioned photo, so the control sits
+   with the fields it explains and reveals with them (group 2). Producer
+   placement, 2026-09-29. */
+#s2 .recall-btn {
+  position: absolute; right: 0; left: auto;
+  top: 272.9px; bottom: auto;
+  z-index: 3;
+}
+
+/* Backdrop — the shared popup backdrop: #FFFFFF at 80%, no blur. Same
+   canvas-filling geometry and layer as the hint overlays. */
+.recall-overlay {
+  position: absolute; inset: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex; align-items: center; justify-content: center;
+}
+.recall-overlay.hidden { display: none !important; }
+
+/* Panel — ContentPopup (white, 48px radius, clips its content) plus the
+   Recall-specific 1px Natural/800 outline drawn INSIDE (inset shadow, so
+   it changes no geometry). Width chosen for this canvas: 1100 of 1280. */
+.recall-popup {
+  position: relative;
+  width: 1100px; max-width: 94%;
+  box-sizing: border-box;
+  padding: 40px 48px 36px;
+  background: #fff; border-radius: 48px;
+  box-shadow: inset 0 0 0 1px #303030;
+  overflow: hidden;
+}
+/* General Popup Close Btn, property=close — 30×30, vector exported from
+   the component. 24px from the physical LEFT and top; not mirrored. */
+.recall-popup-close {
+  position: absolute; top: 24px; left: 24px;
+  width: 30px; height: 30px; padding: 0;
+  border: none; background: none; cursor: pointer;
+  display: block;
+}
+.recall-popup-close svg { width: 30px; height: 30px; display: block; }
+.recall-popup-close:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; border-radius: 50%; }
+
+/* Infographic — live text in the lomda's own roles: title Heading/H-8
+   (32 Bold) in Subject/500, body Body/B-4 (24 Regular), step headings
+   Body/B-6 (24 Bold), all Natural/800. The two steps sit side by side,
+   step 1 on the RIGHT (reading start), separated by a 1px Natural/300
+   rule; each keyboard fills its column. */
+.kb-info { direction: rtl; text-align: right; color: #303030; font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; }
+.kb-info-title {
+  margin: 0; font-size: 32px; font-weight: 700; line-height: normal;
+  color: var(--subject-500);
+}
+.kb-steps {
+  display: flex; align-items: stretch; gap: 32px;
+  margin-top: 24px;
+}
+.kb-step { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; text-align: right; }
+.kb-steps-divider { flex: 0 0 1px; background: #ECECEC; }
+.kb-step-head { display: flex; align-items: flex-start; gap: 12px; min-height: 70px; }
+.kb-step-num {
+  flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--subject-500); color: #fff;
+  font-size: 22px; font-weight: 700; line-height: 36px; text-align: center;
+}
+.kb-step-title { margin: 0; font-size: 24px; font-weight: 700; line-height: 36px; }
+.kb-step-line  { margin: 0; font-size: 24px; font-weight: 400; line-height: normal; }
+.kb-key { font-weight: 700; color: var(--subject-500); white-space: nowrap; }
+.kb-board { position: relative; margin-top: 16px; }
+.kb-step-img {
+  display: block; width: 100%; height: auto;
+  border-radius: 12px;
+}
+/* Key labels — live text over the render (producer approval for a very
+   small size, 2026-09-29): keys are ~27×24px at this width, so 8–9px.
+   Percent geometry comes from the measured key rectangles in the markup. */
+.kb-keys { position: absolute; inset: 0; direction: ltr; pointer-events: none; }
+.kb-k { position: absolute; color: #fff; font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; line-height: 1; }
+.kb-k-top  { position: absolute; left: 11%; top: 12%;    font-size: 8.5px; font-weight: 700; }
+.kb-k-main { position: absolute; left: 11%; bottom: 12%; font-size: 8.5px; font-weight: 700; }
+.kb-k-he   { position: absolute; right: 11%; bottom: 12%; font-size: 8.5px; font-weight: 400; direction: rtl; }
+.kb-k-c    { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 7.5px; font-weight: 700; white-space: nowrap; }
+
+/* ═══════════════════════════════════════════════════════
+   Feedback popup action row — View My Answer Toggle
+   720-templates → _global-components.md → Feedback popup system →
+   "View My Answer Toggle" → Spacing contract.
+
+   Ported VERBATIM from the approved sibling methodica-ar-math-ratio-03-04
+   (itself the canonical values -02 and -03 ship): 39px pill, 20px
+   horizontal padding, 1px #484848 stroke, radius 1000, white surface,
+   Assistant Regular 20 / #222222, weight-only hover.
+
+   `margin-top: 20px` is the documented way to reach the 24px gap between
+   the feedback body and the action row (20 + the popup's own base 4px
+   gap = 24 net) WITHOUT widening the popup's own `gap`, which the spec
+   explicitly rejects because that would also push the title away from
+   the body.
+
+   `direction: rtl` on the row: the scroll column is `direction: ltr`
+   purely so a native scrollbar would render on the physical right, and
+   without this the action row would inherit that flip and sit at the
+   physical LEFT while all the feedback text is right-aligned RTL.
+   ═══════════════════════════════════════════════════════ */
+.scq-popup-actions { margin-top: 20px; direction: rtl; }
+.popup-action {
+  height: 39px; padding: 0 20px;
+  border: 1px solid #484848; border-radius: 1000px; background: #fff;
+  color: #222222;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl; white-space: nowrap;
+}
+.popup-action:hover { font-weight: 600; }
+.popup-action:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* ═══════════════════════════════════════════════════════
+   Screen 03 (#s3) — FullImageWithTextOverlay · influencer clip
+   Source: slide 67. Presenter note (via slide67's own .rels →
+   notesSlide61.xml, cached slidenum "67"): FullImageWithTextOverlay,
+   image "משפיען אוכל מאפייה".
+
+   The band, the card's x/width/bottom and every type role are the
+   SHARED .fito-* rules S1 already ships — this block adds only what
+   this instance genuinely differs in. Nothing is forked.
+
+   SINGLE-LINE CARD. Both slides place their card at the same x, the
+   same width and the same bottom edge (render y 614 = 104px up from the
+   canvas bottom), so the composition constant is shared and lives in
+   the base rule. Only the vertical padding differs: measured on each
+   slide's own box, slide 65 is ~42px around two lines and slide 67
+   ~22px around one. Each screen matches its own slide rather than being
+   unified — a hand-drawn difference in the deck, easy to unify later if
+   the producer prefers, and unifying would change the already-approved
+   S1.
+   ═══════════════════════════════════════════════════════ */
+#s3 { background: #fff; }
+
+.fito-text--single { padding-top: 22px; padding-bottom: 22px; }
+
+/* The IMAGE FRAMING note that stood here justified the `object-position`
+   of S3's interim STILL IMAGE against slide 67's srcRect. That image and
+   its rule were replaced by the influencer clip on 2026-09-14, so the
+   note documented a rule this file no longer contains — removed
+   2026-09-15 with the rest of the still-image crop scaffolding. The
+   clip's own framing is documented where it lives, at the end of this
+   file. */
+
+/* ═══════════════════════════════════════════════════════
+   LONG-FEEDBACK SCROLL GATE — ported VERBATIM from the approved
+   sibling methodica-ar-math-ratio-03-04. S4 (slide 68) is this part's
+   first user of it: its presenter note asks for it outright —
+   "שימו לב שבמשוב ארוך, לאפשר גלילה."
+   ═══════════════════════════════════════════════════════ */
+.scq-popup.is-scroll {
+  /* height: auto, capped at the canonical 474px (producer, 2026-09-22):
+     a fixed 474px left visible dead space below short feedback bodies
+     (this box is anchored by `bottom` on .scq-popup, so shrinking it
+     only pulls the top edge down — nothing else moves). Feedback that
+     genuinely exceeds 474px still hits the cap and scrolls exactly as
+     before; pending-assets.md item 4's ruling to keep the gate wired even
+     when there is no overflow is unaffected — that is gate LOGIC, not
+     this box's height, and .scq-popup-scroll's own scrollHeight/
+     clientHeight check (scrollGateNeeded) is untouched by this rule. */
+  height: auto;
+  max-height: 474px;
+  padding: 24px 8px 24px 24px;
+  gap: 0;
+}
+/* The scroll container = Figma's single content column. `direction:
+   ltr` is a scrollbar-only flip so the native bar renders on the
+   physical RIGHT under RTL; every descendant restores its own
+   direction below. */
+.scq-popup.is-scroll .scq-popup-scroll {
+  flex: 1; min-height: 0; width: 100%;
+  overflow-y: auto;
+  direction: ltr;
+  padding-right: 12px;     /* Figma's gap between the text column and the scrollbar */
+  display: flex; flex-direction: column; gap: 24px;
+}
+.scq-popup.is-scroll .scq-popup-header,
+.scq-popup.is-scroll .scq-popup-body { width: 100%; }
+/* Content stays RTL regardless of the container flip above. */
+.scq-popup.is-scroll .scq-popup-body p { direction: rtl; text-align: right; }
+/* Right-aligned here too, and this is the rule that actually governs
+   S7 — its popup is scroll-gated, so `.is-scroll` is on and this
+   higher-specificity selector wins over the base one above. Changing
+   only the base rule would have looked correct in the stylesheet and
+   done nothing on screen. */
+.scq-popup.is-scroll .scq-popup-body p.scq-math { direction: ltr; text-align: right; }
+.scq-popup.is-scroll .scq-popup-scroll:focus-visible {
+  outline: 2px solid var(--subject-500); outline-offset: 2px;
+}
+/* Scrollbar — Figma's own track/thumb (node I2287:21175;2287:20826):
+   10px wide, track rgba(201,206,216,0.4) with a 0.5px #F3F4F5 hairline
+   and radius 16, thumb rgba(0,0,0,0.56) radius 24. A NATIVE scrollbar
+   is kept deliberately: it is the only implementation where wheel,
+   drag, touch and keyboard all work without rebuilding them. */
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar { width: 10px; }
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar-track {
+  background: rgba(201, 206, 216, 0.4);
+  border: 0.5px solid #f3f4f5;
+  border-radius: 16px;
+}
+.scq-popup.is-scroll .scq-popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.56);
+  border-radius: 24px;
+}
+
+/* ── Scrolling hint tooltip ──
+   Rebuilt 2026-09-09 against the canonical Figma component, inspected
+   live: file eSbp4bKHgBky0rakDb8l9N, node 2286:19351
+   "ScrollFeedbackTooltip". Its own structure, verbatim:
+
+     symbol  ScrollFeedbackTooltip   210 × 97
+       frame Hint Card               x=31  y=0   179 × 97   radius 24
+         text run text               x=20  y=24  139 × 49
+       regular-polygon Polygon 3     x=0   y=20   57 × 57
+
+   So the card is inset 31px from the tooltip's left edge, its padding
+   is 20px horizontal / 24px vertical (139 + 2×20 = 179; 49 + 2×24 =
+   97), and the text is Assistant Regular 24px white centred on two
+   hard-broken lines at 24.5px line-height (2 × 24.5 = the text node's
+   own 49px).
+
+   THE ARROW IS THE EXPORTED FIGMA VECTOR, not a redrawn triangle. The
+   previous build approximated it with a CSS border triangle, which is
+   a hard-edged isoceles wedge; the real Polygon 3 is a rounded-corner
+   triangle. Its exported path is inlined verbatim in index.html — only
+   the fill is rebound to `currentColor` so the shape follows the
+   Subject token instead of Figma's baked #3B2FC2 (identical in this
+   Math theme; hardcoding it would break the token contract).
+
+   ARROW PLACEMENT is derived from Figma's own transform stack rather
+   than guessed. The polygon sits in a 57×57 box at (0,20); inside it
+   the vector occupies inset top 7.02% / bottom 25% / left 11.83% /
+   right 11.83% (= 43.519 × 38.75, the exported viewBox), and the box
+   is `rotate(-90deg) scaleX(-1)`. Resolving that rotation about the
+   box centre puts the rendered arrow at x 4.001..42.751 and
+   y 26.743..70.257 within the tooltip — i.e. 38.75 wide × 43.519 tall,
+   its tip 4px in from the tooltip's left edge, its base 11.75px behind
+   the card, and its centre on the tooltip's exact vertical midline
+   (26.743 + 43.519/2 = 48.5 = 97/2). The triangle is symmetric, so the
+   scaleX(-1) is visually a no-op and only the rotation is baked in.
+
+   OFFSET — right: -210px, the component's own overall width. Because
+   the tooltip's first 4px are that transparent margin before the
+   arrow's tip, this places the whole component clear of the popup with
+   a 4px visual gap and NOTHING overlapping the title, body or
+   scrollbar. (The earlier -214px was compensating for a redrawn arrow
+   whose tip started at x=0.) ── */
+.scq-scroll-hint {
+  position: absolute; top: 0; right: -210px;
+  width: 210px; height: 97px;
+  pointer-events: none;                        /* never interactive */
+  display: none;
+}
+.scq-popup.is-scroll.needs-scroll .scq-scroll-hint { display: block; }
+.scq-scroll-hint-card {
+  position: absolute; inset: 0 0 0 31px;
+  box-sizing: border-box;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: var(--subject-500); color: #fff;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif; font-weight: 400;
+  font-size: 24px; line-height: 24.5px;
+  text-align: center; direction: rtl;
+}
+.scq-scroll-hint-arrow {
+  position: absolute;
+  left: 4.001px; top: 26.743px;
+  width: 38.75px; height: 43.519px;
+  display: block;
+  overflow: visible;             /* the exported path overruns its box by ~1px, as in Figma */
+  color: var(--subject-500);     /* drives the path's currentColor fill */
+}
+/* Narrow-fit flip: the whole component mirrors — card and the same
+   exported vector, not a substitute shape — when the canvas does not
+   leave room for its 210px on the popup's right. */
+.scq-scroll-hint.is-flipped { right: auto; left: -210px; }
+.scq-scroll-hint.is-flipped .scq-scroll-hint-card { inset: 0 31px 0 0; }
+.scq-scroll-hint.is-flipped .scq-scroll-hint-arrow {
+  left: auto; right: 4.001px;
+  transform: scaleX(-1);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — SingleChoiceQuestion (Screen 04 / #s4)
+   Peak sub-part 2. Source: slide 68. Answer capsules + radio ported
+   VERBATIM from methodica-ar-math-ratio-03-04's own S1, rescoped to #s4.
+   ═══════════════════════════════════════════════════════ */
+/* Answer capsules — content-driven width (SingleChoiceQuestion.md →
+   "Answer-capsule width"): fit-content up to this lomda's approved
+   604px ceiling, with the column's default align-items: stretch so all
+   three resolve to the widest one's width. All three options here are
+   short, so the column genuinely shrinks — the documented shrink case,
+   not a deviation. Slide 52 mocks the pills at the full 684px column
+   width; that is the deck's stock option chrome, and the template's
+   sizing rule (already shipped on both approved sibling question
+   screens) governs. align-self: flex-start is physically RIGHT under
+   direction: rtl. */
+#s4 .scq-answers {
+  width: fit-content; max-width: 604px;
+  align-self: flex-start;
+  margin-top: 24px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+#s4 .scq-opt {
+  width: auto; min-height: 46px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  overflow: visible;
+}
+#s4 .scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.15;
+}
+#s4 .scq-opt:disabled { cursor: default; }
+#s4 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s4 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+#s4 .scq-opt:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* Radio (22px) — RTL: sits at the capsule's RIGHT (reading start) via
+   order:-1, exactly where slide 52's own ellipses sit. The green/red
+   feedback colours are theme-independent and deliberately NOT subject
+   tokens. */
+#s4 .scq-radio {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  position: relative; box-sizing: border-box;
+  order: -1;
+}
+#s4 .scq-opt.selected .scq-radio { background: var(--subject-500); }
+#s4 .scq-opt.correct  .scq-radio { background: #609e12; border-color: #609e12; }
+#s4 .scq-opt.wrong    .scq-radio { background: #b20010; border-color: #b20010; }
+#s4 .scq-opt.correct .scq-radio::after,
+#s4 .scq-opt.wrong .scq-radio::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+#s4 .scq-opt.correct .scq-radio::after {
+  width: 13px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s4 .scq-opt.wrong .scq-radio::after {
+  width: 11px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════
+
+/* Stem column for #s4 — same roles as #s2 (Body/B-3 24px/1.45, bold
+   variant for the weight-only emphasis), just scoped to this screen.
+   Slide 68's stem box spans x 115.8..1214.4 (wider than slide 66's), but
+   the canonical .scq-question container governs, as on every question
+   screen in this lomda. */
+#s4 .scq-right-col {
+  width: 100%;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+#s4 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* PHRASE-LEVEL bold inside ¶2 ("גלי חשבה לעצמה: "). Weight only, plain
+   body colour — slide 68's stem textbox carries no <a:solidFill> on any
+   run and the render shows the line black, so no accent is invented. */
+#s4 .scq-intro strong { font-weight: 700; }
+/* ¶3 — whole-paragraph bold, same treatment. */
+#s4 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Screen 05 (#s5) — FullImageWithTextOverlay · the festival order
+   Source: slide 69. Presenter note (via slide69's own .rels →
+   notesSlide63.xml, cached slidenum "69"): FullImageWithTextOverlay,
+   image "מאפייה טלפון".
+
+   The band's inset, the card's x / width / bottom and every type role
+   are the SHARED .fito-* rules S1 already ships. This block adds only
+   the two things this instance genuinely differs in: its own card
+   padding, and the structural crop.
+   ═══════════════════════════════════════════════════════ */
+#s5 { background: #fff; }
+
+/* THREE-LINE CARD. Same x, width and bottom edge as S1's and S3's
+   (right 32px, bottom 104px — the composition constant, in the base
+   rule). Only the vertical padding differs: measured on slide 69's own
+   box, 148.8px around three 24px/1.2 lines (86.4px) gives ~31px. The
+   three screens' cards are 42 / 22 / 31 in the deck — hand-drawn, and
+   each matches its own slide per the producer's ruling of 2026-09-14.
+   Do not unify them. */
+#s5 .fito-text { padding-top: 31px; padding-bottom: 31px; }
+
+/* ── STRUCTURAL CROP ──────────────────────────────────────
+   Slide 69 crops this photo with srcRect t=985 b=23828: it keeps source
+   rows 0.985%..76.172% and discards the bottom quarter — the foreground
+   counter with the flour bowl and dough.
+
+   `object-fit: cover` CANNOT express a srcRect, and here it provably
+   breaks it rather than merely approximating it:
+
+     · at 1280×720 the band is 552px tall and the source scales to 854px,
+       so a CENTRED window reaches 82.3% down the image — past the
+       producer's 76.17% cut line, putting the counter back on screen;
+     · at 1280×900 the band is 732px, i.e. 85.8% of the scaled height,
+       while the producer kept only 75.2%. The window is LARGER than
+       their kept region, so no `object-position` value exists that
+       avoids reintroducing what they cut.
+
+   So the band gets an inner frame that IS the full source, pulled up by
+   the crop. `--frame-h` is sized from BOTH axes:
+
+     100cqh / 0.75187 = 133cqh   — tall enough that the KEPT 75.187% of
+                                   the frame still covers the band's
+                                   height;
+     100cqw / 1.49902 = 66.71cqw — tall enough that the frame's own
+                                   width (height × the 1535/1024 source
+                                   aspect) still covers the band's width.
+
+   A width-only frame stops covering once the canvas grows tall, leaving
+   a strip; a height-only frame stops covering a wide canvas. `max()` of
+   the two is what keeps it covered on every axis at every viewport.
+
+   `top: -0.985% × --frame-h` puts the producer's own first kept row at
+   the band's top edge, so the band shows their kept region from its top
+   down — never anything below their cut line. At 1280×900 the two
+   coincide almost exactly (kept 732.3 vs band 732.3), so that viewport
+   renders the producer's crop precisely.
+
+   `container-type: size` is what makes cqw/cqh resolve against the band.
+   It is applied through the `--framed` MODIFIER, never to the shared
+   `.fito-img`, so S1's and S3's approved plain-cover rule is untouched.
+
+   The `img` rule is scoped to `img.fito-photo` rather than a bare
+   descendant selector: a bare one would out-specify and stretch any
+   overlay image later added inside the frame. ── */
+.fito-img--framed { container-type: size; }
+.fito-img--framed .fito-img-frame {
+  --frame-h: max(133cqh, 66.71cqw);
+  position: absolute;
+  left: 50%;
+  top: calc(-0.00985 * var(--frame-h));
+  height: var(--frame-h);
+  width: calc(var(--frame-h) * 1535 / 1024);
+  transform: translateX(-50%);
+}
+.fito-img--framed img.fito-photo {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: fill;        /* the frame IS the source's own box */
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — MultipleChoiceQuestion (Screen 06 / #s6)
+   Peak sub-part 3. Source: slide 70. Presenter note (via slide70's own
+   .rels → notesSlide64.xml, cached slidenum "70"):
+   "מסך לא בתבנית, צריך להיות multiple choice", "שאלה 3 מתוך 4",
+   "שימו לב שבמשוב ארוך, לאפשר גלילה."
+
+   The pill chrome is this part's own #s4 capsule, re-scoped; the one
+   visual delta is the CHECKBOX marker replacing the radio, ported from
+   the approved sibling methodica-ar-math-ratio-03-04's S6 — the same
+   template, the same option count.
+   ═══════════════════════════════════════════════════════ */
+
+/* Stem column — the same Body/B-3 roles as #s2 and #s4 (24px/1.45, bold
+   variant for the weight-only emphasis). Slide 70's stem box is
+   x 328.8..1214.5, narrower than the canonical .scq-question container;
+   the shared container governs, as on every question screen here. */
+#s6 .scq-right-col {
+  width: 100%;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+#s6 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* ¶4 — whole-paragraph bold. Weight only, plain body colour: slide 70's
+   stem textbox carries no <a:solidFill> on any run and the deck's own
+   render shows the line black, so no accent is invented. */
+#s6 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+
+/* ¶2-¶3 — a REAL ordered list, because the source makes them one:
+   <a:buAutoNum type="arabicPeriod"/> with marL="457200" indent="-457200".
+   457200 EMU = 48px on this 1280-wide canvas, and the negative indent of
+   the same size is a hanging marker, i.e. the number sits at the list's
+   reading start (the physical RIGHT under rtl) and the text is inset by
+   48px. `list-style-position: outside` is what puts the marker in that
+   padding rather than in the text flow. Same 24px/1.45 body role as the
+   surrounding paragraphs — the list is authored at the same 20pt. */
+#s6 .scq-list {
+  margin: 0;
+  padding-inline-start: 48px;
+  list-style: decimal outside;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+}
+
+/* Latin/numeral groups, isolated so the browser cannot reorder them.
+   The CONTENT of each isolate is written in the left-to-right order the
+   deck's own export shows — see the block comment on this screen in
+   index.html for the glyph-by-glyph verification. */
+#s6 .scq-expr {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 400;
+  direction: ltr; unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+/* ── Answer pills ──
+   WIDTH IS CONTENT-DRIVEN (SingleChoiceQuestion.md → "Answer-capsule
+   width — content-driven sizing", inherited by name by the MCQ text
+   variant): fit-content up to this screen's own ceiling — slide 70's
+   916px capsule — with the column's default align-items: stretch
+   resolving all four to the widest one's width. The deck mocks all four
+   at the full 916px; the template's sizing rule governs, exactly as it
+   already does on this part's #s4 and on the approved sibling 03-04's
+   own #s6.
+   margin-top 32px = the slide's own stem-box bottom (265.2) → first
+   capsule top (296.9). gap 20px = the slide's own pitch (75 / 76.1 / 74
+   on a 54.5 pill). min-height 54px = the authored capsule.
+   align-self: flex-start is physically RIGHT under direction: rtl. */
+#s6 .scq-answers {
+  width: fit-content; max-width: 916px;
+  align-self: flex-start;
+  margin-top: 32px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+#s6 .scq-opt {
+  width: auto; min-height: 54px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  overflow: visible;
+}
+/* Same option text role as this part's own #s4 pills (22px) — one pill
+   component, one size, across the part. */
+#s6 .scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.15;
+}
+#s6 .scq-opt:disabled { cursor: default; }
+#s6 .scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+#s6 .scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+#s6 .scq-opt:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 2px; }
+
+/* CHECKBOX marker — the one visual delta from #s4's radio. A rounded
+   SQUARE, because more than one option can be checked at once and
+   because slide 70's own markers (ids 61 / 14 / 59 / 65) are 30.2×29.8
+   rounded squares rather than ellipses. `order: -1` puts it at the
+   pill's reading start, i.e. the physical RIGHT, where the deck places
+   it (x 1165.2 against a pill right edge of 1214.5). The green/red
+   feedback colours are theme-independent and deliberately NOT subject
+   tokens. */
+#s6 .scq-check {
+  width: 30px; height: 30px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 8px;
+  position: relative; box-sizing: border-box;
+  order: -1;
+}
+#s6 .scq-opt.selected .scq-check { background: var(--subject-500); }
+#s6 .scq-opt.correct  .scq-check { background: #609e12; border-color: #609e12; }
+#s6 .scq-opt.wrong    .scq-check { background: #b20010; border-color: #b20010; }
+#s6 .scq-opt.selected .scq-check::after,
+#s6 .scq-opt.correct  .scq-check::after,
+#s6 .scq-opt.wrong    .scq-check::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+/* A plain selected box and a correct box both carry the tick; only the
+   wrong box carries the cross. Type 1 icons, white on the fill. */
+#s6 .scq-opt.selected .scq-check::after,
+#s6 .scq-opt.correct .scq-check::after {
+  width: 17px; height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+#s6 .scq-opt.wrong .scq-check::after {
+  width: 14px; height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════
+   TEMPLATE — ValueInputQuestion (Screen 07 / #s7)
+   Peak sub-part 4 — the last scored sub-item. Source: slide 71.
+   Presenter note (via slide71's own .rels → notesSlide65.xml, cached
+   slidenum "71"): "שם המסך בפיגמה:ValueInputQuestion",
+   "שאלה 4 מתוך 4", image "< מאפייה הוספה>", key כוסמין 90 / חיטה 210,
+   "שימו לב שבמשוב ארוך, לאפשר גלילה."
+
+   The field, input and verdict-icon components are the canonical
+   .viq-* already shipped on #s2 — reused unchanged, not re-derived.
+   This block adds only what this instance genuinely differs in: a
+   LEFT-hand photo, a narrower stem column, the authored blank lines,
+   and fields that sit INLINE inside their sentences.
+   ═══════════════════════════════════════════════════════ */
+#s7 { background: #fff; }
+
+/* Photo on the physical LEFT — slide 71 puts it at x 50.7 y 146.4,
+   431.2 × 283.7. The `--left` modifier exists so #s2's approved
+   right-hand .viq-figure rule is untouched; it overrides only the
+   placement and the box, never the image's own fit.
+   The picture carries an EMPTY <a:srcRect/>, i.e. no crop, and the
+   source is 1536 × 1024 (1.500) against a box of 1.520 — a 1.3%
+   difference, so `contain` (inherited from .viq-figure-img) shows the
+   whole photo undistorted, exactly as on #s2. */
+.viq-figure--left {
+  /* Anchored to the same right edge as the stem column beside it (which sits
+     against the right of the canvas), so on a canvas wider than 1280 the
+     photo stays next to the text instead of pinning to the far left edge.
+     1280 - 50.7 - 431.2 = 798.1, so the design position is unchanged. */
+  right: 798.1px;
+  left: auto;
+  top: 146.4px;
+  width: 431.2px;
+}
+.viq-figure--left .viq-figure-img {
+  width: 431.2px; height: 283.7px;
+}
+
+/* Stem column — slide 71's own stem box is x 505.3..1214.4, i.e. 709px
+   wide, sitting to the RIGHT of the photo inside the canonical
+   .scq-question container (x 52..1240). `margin-left: auto` pins it to
+   that right edge regardless of writing direction; the remaining ~25px
+   drift from the slide's own box is the same one every stem in this
+   part carries. */
+#s7 .scq-right-col {
+  width: 709px;
+  margin-left: auto;
+  display: flex; flex-direction: column;
+  direction: rtl;
+}
+/* Same Body/B-3 roles as #s2, #s4 and #s6 — 24px/1.45, bold variant for
+   the weight-only emphasis. */
+#s7 .scq-intro {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+#s7 .scq-setup {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-size: 24px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl; line-height: 1.45;
+  margin: 0;
+}
+/* ¶3, ¶5 and ¶8 are authored EMPTY paragraphs. Reproduced as real blank
+   lines of exactly one body line-height — not as an invented margin on
+   the neighbouring paragraphs, which would not survive a copy edit that
+   removes one of them. */
+#s7 .stem-gap { height: 1em; margin: 0; font-size: 24px; line-height: 1.45; }
+
+/* A sentence that CONTAINS a field. The line grows to the field's 55px
+   box, so the flex column's own line-height no longer governs it;
+   `align-items: center` is what keeps the surrounding words on the
+   field's midline instead of on its top edge. The vertical padding is
+   what restores the authored line rhythm around the taller line. */
+#s7 .viq-line {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 0 8px;
+  padding: 4px 0;
+}
+/* Slide 71's boxes are 103.4 × 54.5 — the canonical .viq-field is
+   103 × 55, so no screen-specific size is needed. The answers are up to
+   three digits ("210"), so the input is the same 3.2ch #s2 uses rather
+   than 03-04's 2.2ch two-digit field. */
+#s7 .viq-input { width: 3.2ch; }
+
+/* Latin / numeral groups, isolated so the browser cannot reorder them.
+   Content is written in the left-to-right order the deck's own export
+   shows — see this screen's block comment in index.html. */
+#s7 .scq-expr {
+  font-family: Calibri, 'Segoe UI', Tahoma, sans-serif;
+  font-weight: 400;
+  direction: ltr; unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+/* The final-wrong panel's authored second bold line
+   ("לא נורא, בואו נסביר:"). It is carried as the FIRST BODY paragraph
+   rather than as part of the title, so the canonical terminal-wrong
+   second line stays adjacent to the authored title — but it keeps the
+   bold weight the source gives it. */
+#s7viq-popup .scq-popup-body p.scq-lead { font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════
+   Screen 08 (#s8) — FullImageWithTextOverlay · the festival payoff
+   The LAST screen of part 05. Source: slide 72. Presenter note (via
+   slide72's own .rels → notesSlide66.xml, cached slidenum "72"):
+   FullImageWithTextOverlay, image "פסטיבל אוכל".
+
+   Band inset, card x / width / bottom and every type role are the
+   shared .fito-* rules S1 already ships. This block adds only what
+   this instance genuinely differs in: its own card padding, and its
+   own structural crop.
+   ═══════════════════════════════════════════════════════ */
+#s8 { background: #fff; }
+
+/* TWO-LINE CARD. Same x, width and bottom edge as S1/S3/S5 (right 32px,
+   bottom 104px — the composition constant, in the base rule). Only the
+   vertical padding differs, measured on slide 72's own box: 94.8px
+   around two 24px/1.2 lines (57.6px) gives ~19px. The four cards in
+   this part are 42 / 22 / 31 / 19 in the deck — hand-drawn, each
+   matching its own slide per the producer's ruling of 2026-09-14.
+   Do not unify them. */
+#s8 .fito-text { padding-top: 19px; padding-bottom: 19px; }
+
+/* ── STRUCTURAL CROP ──────────────────────────────────────
+   Slide 72 crops this photo with srcRect t=5295 b=32031: it keeps
+   source rows 5.295%..67.969% and discards the bottom third.
+
+   `object-fit: cover` CANNOT express a srcRect, and here it holds at
+   three of the four verification viewports and breaks at the fourth:
+
+     · at 1280×720, 1366×768 and 1920×1080 the band is ~552px against a
+       source that scales to 1024px, so the window is 53.9% of the image
+       height — smaller than the kept 62.7%, so SOME object-position
+       would fit;
+     · at 1280×900 the band grows to 732px, i.e. 71.5% of the scaled
+       height, which is LARGER than the kept region. No object-position
+       exists there that avoids reintroducing what the producer cut.
+
+   One rule has to serve every viewport, so the band gets the same inner
+   frame S5 uses — the frame IS the full source, pulled up by the crop
+   and sized from BOTH axes:
+
+     100cqh / 0.62674 = 159.56cqh  — tall enough that the KEPT 62.674%
+                                     still covers the band's height;
+     100cqw / 1.24951 = 80.03cqw   — tall enough that the frame's own
+                                     width (height × the 1282/1026
+                                     source aspect) still covers the
+                                     band's width.
+
+   `top: -5.295% × --frame-h` puts the producer's first kept row at the
+   band's top edge, so the band shows their kept region from its top
+   down and never anything below their cut line. At 1280×900 the two
+   coincide almost exactly (67.97% vs their 67.969%), so that viewport
+   renders slide 72's crop precisely.
+
+   `.fito-img--framed` already carries `container-type: size` and the
+   `img.fito-photo` rule from S5; only the three numbers below are this
+   screen's own. They are scoped to #s8 so S5's approved values are
+   untouched. ── */
+#s8 .fito-img--framed .fito-img-frame {
+  --frame-h: max(159.56cqh, 80.03cqw);
+  top: calc(-0.05295 * var(--frame-h));
+  width: calc(var(--frame-h) * 1282 / 1026);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   Screen 03 (#s3) — the influencer video
+   Replaces the interim still image (producer instruction 2026-09-14).
+   Instructional video: native controls + sound, per
+   figma-lomda-builder → SKILL.md → "Non-negotiable video rules".
+
+   STRUCTURE (producer instruction 2026-09-15):
+
+     .fito-img            the approved full-width band
+       #s3-stage          the FULLSCREEN TARGET
+         #s3-frame        the clip's own box — query container
+           video          the clip
+           .fito-text     the approved light card, real HTML text
+           .video-play    play affordance
+           .video-fs      custom fullscreen control
+
+   Everything the learner needs is inside the fullscreen target, which
+   is the whole point: native per-element fullscreen would have taken
+   the <video> alone and left the Hebrew card behind, so it is
+   suppressed (`controlslist="… nofullscreen"` plus a bounce-out guard
+   in s3OnFullscreenChange) and replaced by .video-fs.
+   ═══════════════════════════════════════════════════════ */
+
+/* THE CROP IS NOW IN THE FILE, NOT IN CSS.
+
+   The clip's lower strip carried a mock app navigation bar whose Hebrew
+   is malformed ("ררחסית", "מסריות"). It used to be hidden by a CSS
+   height cap against the 1280×720 source. On the producer's instruction
+   it is now removed from the asset itself:
+
+     assets/video/Animate_smartphone_video_content.mp4            1280×720  (source — removed from the tree 2026-09-23, in git)
+     assets/video/Animate_smartphone_video_content_cropped_1280x548.mp4     (what S3 loads)
+
+   — rows 0..548 kept, everything below dropped, audio stream-copied,
+   duration/frame-rate/sync unchanged. The strings therefore cannot come
+   back in fullscreen, in picture-in-picture, or in any other player,
+   because they are not in the frame any more.
+
+   The `object-position: 50% 0%` that used to push the crop to the
+   bottom is GONE with the reason for it. The height cap stays, but for
+   a different and still-live reason — see below. */
+
+#s3 { background: #fff; }
+
+/* The stage fills the band exactly, so in the normal view it is
+   invisible: the composition is identical to the approved one. It only
+   becomes a box of its own in fullscreen. */
+#s3 .video-stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* THE CLIP'S BOX — full-width, bottom-anchored, and held at the video's
+   own 1280×548 aspect by the height cap.
+
+   The cap is NOT leftover crop simulation. The band's height varies
+   with the viewport (screenH − 93.73 − 74), and at 1280×900 it grows to
+   732px. Without the cap the element would be 1280×732, and `cover`
+   would crop the SIDES to fill it — losing the headline's edges and
+   changing the approved composition. `min(100%, 548px)` keeps the
+   element at exactly the clip's aspect at every supported viewport
+   (the canvas is 1280 wide at all four), so the picture is shown 1:1:
+   nothing cropped, nothing stretched.
+
+   BOTTOM-ANCHORED so the card still lands over the picture at 1280×900,
+   where the cap leaves the band taller than the clip.
+
+   `container-type: size` makes this box the unit of the composition —
+   see --u. It is the same technique .fito-img--framed already uses for
+   S5 and S8. */
+#s3 .video-frame {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: min(100%, 548px);
+  container-type: size;
+}
+
+/* --u is "one canvas pixel of this composition".
+
+   1cqw is 1% of the frame's width. The frame is 1280 canvas px wide at
+   every supported viewport, so 0.078125cqw resolves to exactly 1px in
+   the normal view and the card, the play affordance and the fullscreen
+   control render at precisely their approved sizes. In fullscreen the
+   frame grows and --u grows with it, so the card and the controls keep
+   their INTENDED RELATIVE COMPOSITION over the picture instead of
+   shrinking into a corner.
+
+   Declared on the CHILDREN, not on the frame: an element's own
+   container-type does not apply to itself, so cqw written on .video-frame
+   would resolve against an outer container. */
+#s3 .video-frame > * { --u: 0.078125cqw; }
+
+#s3 .fito-video {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+
+/* SUPPRESSING THE NATIVE FULLSCREEN BUTTON — belt, braces and a guard.
+
+   `controlslist="… nofullscreen"` is the standard route and it is on the
+   element, but it is NOT sufficient here: measured on Edg/153.0.4234.32
+   (2026-09-15) the attribute parses, controlsList.supports('nofullscreen')
+   returns true and controlsList.contains('nofullscreen') is true — and
+   the browser paints the button anyway. So the control is also removed
+   from the shadow controls directly. Every other control (play, timeline,
+   volume) is untouched and stays live.
+
+   The third layer is behavioural, in js/main.js: if any route still put
+   the bare <video> into fullscreen, s3OnFullscreenChange bounces it back
+   out. The point of all three is the same — the clip must never be shown
+   without the Hebrew card that explains it. */
+#s3 .fito-video::-webkit-media-controls-fullscreen-button { display: none !important; }
+
+/* THE CARD — the approved one, re-expressed against the frame.
+
+   Copy, typography, fill, radius, right anchor and padding are
+   unchanged; only the coordinate system is. The frame is bottom-anchored
+   to the band and the band's bottom is 74px above the canvas bottom, so
+   the approved `bottom: 182px` (from the canvas) is `108 × --u` (from
+   the frame) — the same pixels on screen. Likewise `right: 32px`.
+
+   Why 182px/108px in the first place — measured in the clip's own rows,
+   which hold at every viewport because the frame is displayed at a
+   uniform scale:
+
+     the loaf           rows ~440-555
+     native control bar rows  476-548 (drawn inside the element's bottom edge)
+     the card lands on  rows  367-440
+
+   i.e. it stops exactly where the loaf begins, clears the influencer's
+   face (rows ~200-300) and the headline entirely, and clears the
+   control bar by ~36 rows. It sits over the grain jar and the blurred
+   shelving right of the phone — the emptiest band the frame offers at
+   the card's width. A card at 156px took the top of the loaf; a card at
+   the shared 104px covered the control bar and would have swallowed the
+   learner's clicks (figma-lomda-builder → "Nav/video controls
+   conflict"). All of that is preserved verbatim in fullscreen, because
+   the numbers are proportions of the frame. */
+#s3 .fito-text {
+  right:  calc(32 * var(--u));
+  /* LOWERED 108 → 94 on the producer's note that the card sat slightly
+     too high (2026-09-15). The stop is not a guess: the native control
+     panel was measured on real pixels by differencing two captures of the
+     SAME paused frame, one with `controls` and one with the attribute
+     removed, so the only thing that changes is what the browser paints.
+
+       decorative scrim fades in from   source row ~437
+       DRAWN CONTROLS (the constraint)  source rows 474 – 547
+         · middle strip from 474, play/time ink from 476, volume from 492
+         · timeline track at 524
+
+     474 is the boundary that matters — it is the top of the progress bar,
+     time and volume, i.e. exactly what must not be covered. The card is
+     73 source rows tall, so `bottom: 94` puts it on rows 381–454 and
+     leaves a clear, constant **20-row gap** to the controls at every
+     viewport and in fullscreen, because the whole composition is in --u.
+     It still clears the influencer's face (rows ~195–300) and the
+     headline entirely. (The earlier record's "36 rows" was measured
+     against an assumed 72px bar; the real panel is 105px tall including
+     its scrim, and 74px of drawn controls.) */
+  /* LOWERED AGAIN 94 -> 80 on the producer's further note, 2026-09-22
+     (screenshot, arrow pointing down at the card) — same 14-unit
+     magnitude as the file's own prior 108->94 correction. Checked against
+     the SAME two constants that correction measured, not re-eyeballed:
+     frame height 548, drawn controls (progress/time/volume) begin at row
+     474, i.e. occupy the bottom 74px; the softer scrim above them starts
+     at row 443 (105px total including the drawn controls). At bottom:80
+     the card sits on rows 395-468 (still 73 rows tall) — a clear 6px
+     gap above row 474, so it never reaches the progress bar, time or
+     volume control and cannot swallow a click. Its bottom ~25px now
+     lands inside the soft scrim band (443-474), which only means a
+     darker video showing behind that strip — cosmetic, not functional.
+     If a future move needs the row-474 figure itself re-checked (a
+     browser/skin change could shift it), redo the original measurement:
+     difference two decoded captures of the same paused frame, with vs
+     without the `controls` attribute. */
+  bottom: calc(80 * var(--u));
+  max-width: calc(1216 * var(--u));
+  padding: calc(22 * var(--u)) calc(15 * var(--u));
+  border-radius: calc(12 * var(--u));
+}
+#s3 .fito-text p { font-size: calc(24 * var(--u)); }
+
+/* PLAY AFFORDANCE — the Design Guidelines' canonical Video Player button.
+   Producer ruling, 2026-09-15:
+
+     Video Player · size=Large, Type=Full screen
+     component 408:8444 · inner button 408:8446
+     icon variant type=play, color=black, size=large
+
+   MEASURED off 408:8446 by the producer (2026-09-15) and used verbatim —
+   the Figma connector is unauthenticated here, so these are the
+   component's numbers rather than an approximation:
+
+     button frame   80 × 80
+     dark circle    79.9 × 79.9  #303030   → r 39.95
+     white triangle 39 × 44  at x 25.3, y 18
+
+   The first build of this control carried a 28 × 32 glyph with a +3.2
+   nudge I had estimated; both are replaced. The offset now comes from
+   the component itself: x 25.3 puts the glyph's centre at 44.8, 4.8
+   right of the button's 40, and y 18 centres it vertically on 40
+   exactly. Nothing here is eyeballed.
+
+   TWO earlier answers were wrong and are recorded so neither returns:
+     · an invented 84px white disc with a purple glyph and a drop shadow;
+     · the 224px grey circle authored on slide 67 (Oval 10 + Isosceles
+       Triangle 11, fill bg2 lumMod 75% → #AEAEAE). The slide and its note
+       DO author a play affordance — that finding stands — but the producer
+       has ruled the deck is not the authoritative design source for it.
+       The full slide derivation is kept in tests/README.md rather than
+       here, because it no longer governs anything.
+
+   Centred on the CLIP's box, never on the band, so it stays centred when
+   the height cap leaves the band taller than the clip. At 80px it clears
+   the text card (rows 381-454) and the control strip (rows 474-547)
+   outright — the 33x44 contact the 224px circle had with the card's
+   corner is gone with it.
+
+   The glyph's own figures are above, taken from the component.
+
+   ONE central control. s3VideoOnPlay() removes it on the element's own
+   `play` and nothing restores it until the screen is re-entered, so it
+   cannot reappear mid-clip; the native strip stays live throughout as the
+   secondary control.
+
+   ---- superseded rationale, kept only as a record of what was here ----
+   The slide-derived placement used source coordinates (circle centre
+   568, 313.3 via slide67's own srcRect mapping) so the button sat on the
+   phone's screen rather than on the element's centre. That mapping is
+   still correct and is written up in tests/README.md; it simply no
+   longer governs this control, which the Design Guidelines centre. */
+.video-play {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width:  calc(80 * var(--u, 1px));
+  height: calc(80 * var(--u, 1px));
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+.video-play svg { display: block; width: 100%; height: 100%; }
+.video-play:hover { filter: brightness(1.25); }
+.video-play:focus-visible { outline: 3px solid var(--subject-500); outline-offset: 3px; border-radius: 50%; }
+.video-play.hidden { display: none; }
+
+/* CUSTOM FULLSCREEN CONTROL — TOP-RIGHT corner of the clip, per the
+   producer's ruling of 2026-09-15.
+
+   History, so neither earlier answer comes back: it started top-LEFT
+   (convenience, rejected); it then moved to the right edge just above
+   the card, chasing the native button's old spot at source (1256, 500),
+   which cannot be occupied because that point is inside the control
+   strip and the controls' own Shadow DOM. The producer has now placed it
+   in the top-right corner, which keeps the right-hand side the learner
+   navigates by and takes it out of the crowded band between the card and
+   the strip entirely.
+
+   A 16-unit corner inset, mirroring the inset the top-left placement
+   used. At rows 16–60 / cols 1204–1248 it is clear of everything: the
+   centred play control (rows 234–314), the card (rows 381–454), the
+   drawn controls (rows 474–547), the influencer's face, the headline and
+   the loaf. It sits on the blurred shelving at the frame's top right.
+
+   Dark pill rather than the card's white so it reads as a player
+   control, not as content. */
+.video-fs {
+  position: absolute;
+  right: calc(16 * var(--u, 1px));
+  top:   calc(16 * var(--u, 1px));
+  width:  calc(44 * var(--u, 1px));
+  height: calc(44 * var(--u, 1px));
+  border: none; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 4;
+}
+.video-fs svg {
+  width:  calc(24 * var(--u, 1px));
+  height: calc(24 * var(--u, 1px));
+}
+.video-fs .video-fs-exit { display: none; }
+.video-fs.is-on .video-fs-enter { display: none; }
+.video-fs.is-on .video-fs-exit  { display: block; }
+.video-fs:hover { background: rgba(0, 0, 0, 0.75); }
+.video-fs:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.video-fs.hidden { display: none; }
+
+/* ─── FULLSCREEN ────────────────────────────────────────────
+   The stage is the fullscreen element, so the clip, the Hebrew card,
+   the native control bar and the fullscreen control all go together.
+
+   The frame is sized to the clip's own aspect and centred, so the video
+   fills as much of the screen as it can WITHOUT distortion and the card
+   keeps its exact relative position over the picture (--u grows with
+   the frame). Whatever the aspect mismatch leaves over is stage, and
+   the stage is dark.
+
+   `:fullscreen` and `:-webkit-full-screen` are written as separate
+   rules on purpose: one unknown pseudo-class invalidates a whole
+   selector list, so pairing them would silently drop both. */
+#s3 .video-stage:fullscreen { background: #0b0b0b; }
+#s3 .video-stage:-webkit-full-screen { background: #0b0b0b; }
+
+#s3 .video-stage:fullscreen .video-frame {
+  left: 50%; top: 50%; right: auto; bottom: auto;
+  transform: translate(-50%, -50%);
+  width:  min(100vw, calc(100vh * 1280 / 548));
+  height: min(100vh, calc(100vw * 548 / 1280));
+}
+#s3 .video-stage:-webkit-full-screen .video-frame {
+  left: 50%; top: 50%; right: auto; bottom: auto;
+  transform: translate(-50%, -50%);
+  width:  min(100vw, calc(100vh * 1280 / 548));
+  height: min(100vh, calc(100vw * 548 / 1280));
+}
+
+/* `contain` rather than `cover` here: the frame is already at the
+   clip's aspect, so the two agree — but if rounding ever left them a
+   fraction apart, `contain` gives a hairline of the element's own black
+   against a dark stage instead of quietly clipping a row of picture. */
+#s3 .video-stage:fullscreen .fito-video { object-fit: contain; }
+#s3 .video-stage:-webkit-full-screen .fito-video { object-fit: contain; }
+
+/* Arabic build: the keyboard-guide label is longer than the Hebrew one; grow the pill with it. */
+#s2 .recall-btn { width: auto; min-width: 0; white-space: nowrap; padding: 0 24px; }
