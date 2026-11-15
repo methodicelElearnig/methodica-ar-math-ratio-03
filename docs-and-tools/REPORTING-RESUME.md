@@ -167,6 +167,20 @@ Every declared question has exactly one `reportQ` site, and the static check enf
 - `?v=3` → `?v=4` on all 102 references.
 - Test: `_test/scenarios/challenge-60.json` (0, 2, 4 of 7 fail; 5, 7 of 7 pass, each with the real score).
 
+## 6d. 03 reports what S0 promises (MOE sheet 08.11.26, fixes 1, 2, 4, 6, branch `vadimr/fix/score-success-2026-11`)
+
+- **03 — `partGateResult`.** S0 promises "3 שאלות … ענו נכון על 2 שאלות ומעלה כדי להתקדם". `success` and
+  `score.scaled` now come from one count: checkpoint 1's three questions (`mastery1State().correctCount`, each
+  correct only when all its sub-parts are, the count the S5 gate reads). `success = correct >= 2`,
+  `scaled = correct / 3`. Until now `success` also needed both harder questions (S7–S10) right, although S6
+  promises no threshold (fix 4), and the score was the share of all 9 catalogued sub-questions, the harder
+  ones included (fixes 1, 6). So 3/3 + harder wrong gave `success:false, 0.44` (fix 2). The harder questions keep
+  their own `answered`. The S5 gate and the S10 end are unchanged. 04 keeps the MOE 08.10 60% rule (6c).
+- `?v=4` → `?v=5` on all 102 references.
+- Test: `_test/scenarios/score-contract.json` (every count 0–3 with the harder questions all wrong / all right,
+  success ⇔ scaled ≥ 2/3 = the gate's verdict, a question with one sub-part wrong counts 0, the gate at 1/3 and
+  2/3). 4 of its 6 expectations FAIL on the pre-fix code (mutation check).
+
 ## 7. Open items
 
 - **Media, not optimised (by decision):**

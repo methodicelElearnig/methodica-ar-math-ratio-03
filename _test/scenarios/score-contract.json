@@ -1,0 +1,85 @@
+[
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "window.__scSeed = function (k, chal) {\n  const r = ok => ok ? 'correct' : 'wrong2';\n  Object.keys(XAPI_Q_RESULTS).forEach(x => delete XAPI_Q_RESULTS[x]);\n  const T = [\n    ok => { s1viqDone = true; s1viqResult = r(ok); s2viqDone = true; s2viqResult = r(ok); XAPI_Q_RESULTS['001/q1'] = ok; XAPI_Q_RESULTS['001/q2'] = ok; },\n    ok => { s3viqDone = true; s3viqResult = r(ok); XAPI_Q_RESULTS['002/q1'] = ok; },\n    ok => { s4mcDone = true; s4mcResult = ok ? 'correct' : 'wrong2'; const st = s5dqState(); st.done = true; st.selection = ok ? S5DQ.correct : '__wrong__'; XAPI_Q_RESULTS['003/q1'] = ok; XAPI_Q_RESULTS['003/q2'] = ok; }\n  ];\n  T.forEach((f, i) => f(i < k));\n  if (chal === null) return;\n  s7viqDone = true; s7viqResult = r(chal); XAPI_Q_RESULTS['004/q1'] = chal;\n  s8ddqDone = true; s8ddqResult = r(chal); s9ddqDone = true; s9ddqResult = r(chal); s10viqDone = true; s10viqResult = r(chal);\n  ['005/q1', '005/q2', '005/q3'].forEach(x => { XAPI_Q_RESULTS[x] = chal; });\n};\nwindow.__scRes = function () { const p = partResult(); return p.success + ':' + (p.score ? Math.round(p.score.scaled * 1000) / 1000 : 'none'); };\ntrue",
+  "expect": true,
+  "label": "03-03 score contract: seed helpers installed"
+ },
+ {
+  "eval": "(()=>{ const out=[]; for (const k of [0,1,2,3]) for (const c of [false,true]) { __scSeed(k,c); out.push(k+'/3 C'+(c?'+':'-')+' '+__scRes()); } return out })()",
+  "expect": [
+   "0/3 C- false:0",
+   "0/3 C+ false:0",
+   "1/3 C- false:0.333",
+   "1/3 C+ false:0.333",
+   "2/3 C- true:0.667",
+   "2/3 C+ true:0.667",
+   "3/3 C- true:1",
+   "3/3 C+ true:1"
+  ],
+  "label": "03-03 (08.11 sheet fixes 1, 2, 4): success = correct >= 2 of the 3 S0 questions, scaled = correct/3; the 2 harder questions never enter (each count with them all wrong / all right)"
+ },
+ {
+  "eval": "(()=>{ const out=[]; for (const k of [0,1,2,3]) { __scSeed(k,false); const p=partResult(); out.push(p.success === (p.score.scaled >= 2/3 - 1e-9) && p.success === mastery1State().passed); } return out })()",
+  "expect": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "label": "03-03: success <=> scaled >= K/N, and = the S5 gate's own verdict (mastery1State().passed)"
+ },
+ {
+  "eval": "(()=>{ const out=[]; __scSeed(3,false); s2viqResult='wrong2'; XAPI_Q_RESULTS['001/q2']=false; out.push(__scRes()); __scSeed(3,false); s5dqState().selection='__wrong__'; XAPI_Q_RESULTS['003/q2']=false; out.push(__scRes()); return out })()",
+  "expect": [
+   "true:0.667",
+   "true:0.667"
+  ],
+  "label": "03-03 (fix 6): Q1 with S2 wrong, and Q3 with S5 wrong, each count 0 — 2 of 3"
+ },
+ {
+  "eval": "(()=>{ __scSeed(1,null); goTo(5); advanceScreen(); advanceScreen(); const c=__stmts().filter(s=>s.verb==='completed'&&s.objectType==='onlinelesson'); const b=document.getElementById('s5dq-check'); return [currentScreen, c.length, c[0]&&c[0].result.success, c[0]&&Math.round(c[0].result.score.scaled*1000)/1000, b.disabled] })()",
+  "expect": [
+   5,
+   1,
+   false,
+   0.333,
+   true
+  ],
+  "label": "03-03 gate at 1/3: two clicks on S5 -> one completed success:false, scaled 1/3, stays on S5, button disabled"
+ },
+ {
+  "nav": "metadata/methodica-math-ratio-03_unit.json",
+  "after": 500
+ },
+ {
+  "eval": "sessionStorage.clear(); localStorage.clear(); true"
+ },
+ {
+  "nav": "methodica-math-ratio-03-03/index.html?xapiLib=../_test/xapi-720-k.js",
+  "after": 3500
+ },
+ {
+  "eval": "window.__scSeed = function (k, chal) {\n  const r = ok => ok ? 'correct' : 'wrong2';\n  Object.keys(XAPI_Q_RESULTS).forEach(x => delete XAPI_Q_RESULTS[x]);\n  const T = [\n    ok => { s1viqDone = true; s1viqResult = r(ok); s2viqDone = true; s2viqResult = r(ok); XAPI_Q_RESULTS['001/q1'] = ok; XAPI_Q_RESULTS['001/q2'] = ok; },\n    ok => { s3viqDone = true; s3viqResult = r(ok); XAPI_Q_RESULTS['002/q1'] = ok; },\n    ok => { s4mcDone = true; s4mcResult = ok ? 'correct' : 'wrong2'; const st = s5dqState(); st.done = true; st.selection = ok ? S5DQ.correct : '__wrong__'; XAPI_Q_RESULTS['003/q1'] = ok; XAPI_Q_RESULTS['003/q2'] = ok; }\n  ];\n  T.forEach((f, i) => f(i < k));\n  if (chal === null) return;\n  s7viqDone = true; s7viqResult = r(chal); XAPI_Q_RESULTS['004/q1'] = chal;\n  s8ddqDone = true; s8ddqResult = r(chal); s9ddqDone = true; s9ddqResult = r(chal); s10viqDone = true; s10viqResult = r(chal);\n  ['005/q1', '005/q2', '005/q3'].forEach(x => { XAPI_Q_RESULTS[x] = chal; });\n};\nwindow.__scRes = function () { const p = partResult(); return p.success + ':' + (p.score ? Math.round(p.score.scaled * 1000) / 1000 : 'none'); };\ntrue",
+  "expect": true,
+  "label": "03-03 score contract: seed helpers installed"
+ },
+ {
+  "eval": "(()=>{ __scSeed(2,null); goTo(5); advanceScreen(); const c=__stmts().filter(s=>s.verb==='completed'&&s.objectType==='onlinelesson'); return [currentScreen, c.length] })()",
+  "expect": [
+   6,
+   0
+  ],
+  "label": "03-03 gate at 2/3: on to S6, no completed"
+ }
+]

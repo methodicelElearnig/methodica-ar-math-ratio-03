@@ -23,6 +23,7 @@ folder, then drives headless Edge through the DevTools protocol on a random port
 | `routing.json` | Production / `?dev=1` / `?dev=1&registration` boots. The last click reports once and disables its button with no hop; the dev hop keeps the query; S0 Back is hidden; part 03's checkpoint-1 fail ends at S5. |
 | `report.json` | The issue dialog with `fetch` stubbed: gating, confirm-on-close, the payload fields, the thanks message plus its announcement, Escape. |
 | `challenge-60.json` | Part 04 (the challenge, MOE 2026-10-08): `success` only at ≥60% of the 7 declared questions, with the real score; unanswered = wrong. |
+| `score-contract.json` | Part 03 (MOE sheet 08.11.26): `success` and `scaled` from S0's 3 questions only (2 of 3), the harder ones never counted, a multi-part question right only when all parts are, the S5 gate at 1/3 and 2/3. |
 | `partnav.json` | The `?dev=1` walkthrough across parts: forward, Back shown, back lands on the same screen, the replay override. |
 | `resume-NN.json` | The resume oracle per part. |
 

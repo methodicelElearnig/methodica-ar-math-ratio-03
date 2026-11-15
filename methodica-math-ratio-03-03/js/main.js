@@ -3807,6 +3807,9 @@ function s10viqCloseHintOnBackdrop(e) { if (e.target === e.currentTarget) s10viq
                              cross to 03-04, landing on its S0.
      anything else          → Fail → remain on S10; המשך stays ENABLED and
                              nothing advances internally.
+   ⚠️ Since 2026-11-09 (08.11 sheet fix 4) checkpoint 2 no longer decides the REPORTED result: the
+   component 'completed' carries checkpoint 1 alone (partGateResult), the only threshold S0 promises.
+   The S10 end itself is the platform routing below (decision 2026-10-01), pass or fail.
 
    MECHANISM. Both Pass routes go through PartNav.forward() — the
    project's one cross-part contract (js/partnav.js, the same engine
@@ -3956,13 +3959,16 @@ function endAtCheckpoint1() {
   if (!mastery1State().allResolved) return;
   xapiEndPart(document.getElementById('s5dq-check'), null);
 }
-/* Two gates, as S0 and S6 promise: checkpoint 1 (2 of 3) and checkpoint 2 (both harder
-   questions right). The part passes only through both. Score = catalogued share. */
+/* The component result (2026-11-09, 08.11 sheet fixes 1, 2, 4, 6): exactly S0's promise, "3 שאלות
+   … ענו נכון על 2 שאלות ומעלה כדי להתקדם". success and score.scaled come from ONE count — checkpoint 1's
+   three questions (mastery1State, each correct only when all its sub-parts are), the count the S5 gate
+   reads. The two harder questions (S7–S10, checkpoint 2) report their own answered and never enter.
+   Until now: success also needed both harder questions right (S6 promises no such thing), and the
+   score was the share of all 9 catalogued sub-questions (partScaled). */
+const XAPI_PASS_K = 2, XAPI_PASS_N = 3;
 function partGateResult() {
-  const m1 = mastery1State();
-  const success = m1.allResolved && m1.passed ? !!mastery2State().passed : false;
-  const sc = partScaled();
-  return sc == null ? { success } : { success, score: { scaled: sc } };
+  const ok = mastery1State().correctCount;
+  return { success: ok >= XAPI_PASS_K, score: { scaled: ok / XAPI_PASS_N } };
 }
 /* Two end screens: S10 always, S5 only when checkpoint 1 failed there. */
 const PART_END_SCREENS = [5, 10];
