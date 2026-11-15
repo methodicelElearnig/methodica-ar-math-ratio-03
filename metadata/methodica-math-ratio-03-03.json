@@ -7,7 +7,7 @@
   "recommendedAfterFail": [
     "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/"
   ],
-  "isRequired": true,
+  "isRequired": false,
   "relativeDifficulty": 2,
   "masteryLevel": null,
   "order": 3,
@@ -123,12 +123,10 @@
       "questions": [
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-004/q1",
-          "questionType": "fill-in",
+          "questionType": "other",
           "questionText": "עמית ועומר שיחקו בארקייד וצברו כרטיסי פרס. היחס בין מספר הכרטיסים של עמית למספר הכרטיסים של עומר הוא 7 : 4. לאחר שעמית נתנה לעומר 15 כרטיסים, מספר הכרטיסים של עומר היה שווה למספר הכרטיסים של עמית. השלימו: מספר הכרטיסים שהיו לעמית בהתחלה הוא: __ מספר הכרטיסים שהיו לעומר בהתחלה הוא: __",
-          "answers": [],
-          "correctAnswers": [
-            "עמית: 70, עומר: 40"
-          ]
+          "answers": "עמית: 70, עומר: 40",
+          "correctAnswers": []
         }
       ]
     },
@@ -189,12 +187,10 @@
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-03/methodica-math-ratio-03-03-005/q3",
-          "questionType": "fill-in",
+          "questionType": "other",
           "questionText": "ג. קיבלנו את המשוואה: 3x + 120 = 7x. עזרו לנועה למלא את המכונות בכמות המתאימה: פתרו את המשוואה ומצאו כמה ממתקים עליה להכניס לכל מכונה. למכונה 1: __ ממתקים. למכונה 2: __ ממתקים.",
-          "answers": [],
-          "correctAnswers": [
-            "מכונה 1: 210, מכונה 2: 90"
-          ]
+          "answers": "מכונה 1: 210, מכונה 2: 90",
+          "correctAnswers": []
         }
       ]
     }

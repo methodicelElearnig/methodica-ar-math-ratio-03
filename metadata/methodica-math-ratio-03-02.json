@@ -73,12 +73,10 @@
       "questions": [
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-002/q1",
-          "questionType": "fill-in",
+          "questionType": "other",
           "questionText": "א. קבוצת מטיילים מתכננת מסלול טיול שאורכו 21 ק\"מ, חלקו במישור חלקו בעלייה. היחס בין אורך הדרך במישור לבין אורך הדרך בעלייה הוא 5 : 2. השלימו: המרחק שילכו במישור הוא __ ק\"מ. המרחק שילכו בעלייה הוא __ ק\"מ.",
-          "answers": [],
-          "correctAnswers": [
-            "במישור: 15, בעלייה: 6"
-          ]
+          "answers": "במישור: 15, בעלייה: 6",
+          "correctAnswers": []
         },
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720active/math/ratio/03/methodica-math-ratio-03-02/methodica-math-ratio-03-02-002/q2",
