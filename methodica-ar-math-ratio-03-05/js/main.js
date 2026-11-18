@@ -1137,7 +1137,7 @@ const S2_IMAGE = {
   /* Alt text is the producer's own, from slide 66's note
      ("אלט טקסט לתמונה: מימין: קמח חיטה  משמאל: קמח כוסמין"), written out
      as a sentence rather than as the note's two label fragments. */
-  alt: 'كيسا طحين بجانب بعضهما: على اليمين طحين قمح، وعلى اليسار طحين حنطة'
+  alt: 'كيسا طحين بجانب بعضهما: على اليمين طحين قمح، وعلى اليسار طحين سبلت'
 };
 
 const S2_KEY = { spelt: '3x', wheat: '7x' };
@@ -1265,11 +1265,11 @@ function s2viqClearMarks() {
    (S4 "להוסיף x גרם", S7 3x + 100 = 7x - 20) is well defined. Client QA
    wording, overriding the script. */
 const S2VIQ_EXPLAIN = [
-  'النسبة بين طحين الحنطة وطحين القمح في خليط العجين هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>.',
+  'النسبة بين طحين السبلت وطحين القمح في خليط العجين هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>.',
   '',
   'نوسّع النسبة بـ <bdi dir="ltr">x</bdi> مرات، بحيث إنّ  <bdi dir="ltr">x</bdi> هو عدد الغرامات، ونحصل على:',
-  '<bdi dir="ltr">3x</bdi> غرام من طحين الحنطة،',
-  'و-<bdi dir="ltr">7x</bdi> غرام من طحين القمح‎.'
+  '<bdi dir="ltr">3x</bdi> غرام من طحين السبلت،',
+  'و<bdi dir="ltr">7x</bdi> غرام من طحين القمح‎.'
 ];
 
 /* Popup config, in the shared shape every question screen in this lomda
@@ -1399,7 +1399,7 @@ function s2viqCheck() {
   if (s2viqDone) { advanceScreen(); return; }
   s2viqAttempts++;
   const allOk = ['spelt', 'wheat'].every(k => s2viqFieldCorrect(k));
-  reportQ(['001', 'q1'], allOk, allOk || s2viqAttempts >= S2_MAX_ATTEMPTS, 'طحين الحنطة: ' + String(s2viqInput('spelt').value).trim() + ', طحين القمح: ' + String(s2viqInput('wheat').value).trim());
+  reportQ(['001', 'q1'], allOk, allOk || s2viqAttempts >= S2_MAX_ATTEMPTS, 'طحين السبلت: ' + String(s2viqInput('spelt').value).trim() + ', طحين القمح: ' + String(s2viqInput('wheat').value).trim());
 
   if (allOk) {
     s2viqResult = 'correct';
@@ -1582,13 +1582,13 @@ const S4SC = { correctId: 'o2', maxAttempts: 2 };
    the popup's own 4px gap, so that leading blank is deliberately not
    reproduced — it would open the body with a spurious empty line. */
 const S4SC_EXPLAIN = [
-  'كمية طحين الحنطة هي <bdi dir="ltr">3x</bdi> غرام،',
+  'كمية طحين السبلت هي <bdi dir="ltr">3x</bdi> غرام،',
   'وكمية طحين القمح هي <bdi dir="ltr">7x</bdi> غرام.',
   '',
-  'إذا أضفنا<bdi dir="ltr">x</bdi> غرام إلى كمية طحين الحنطة،',
+  'إذا أضفنا <bdi dir="ltr">x</bdi> غرام إلى كمية طحين السبلت،',
   'نحصل على <bdi dir="ltr">4x</bdi> غرام.',
   '',
-  'إذا طرحنا<bdi dir="ltr">x</bdi> غرام من طحين القمح،',
+  'إذا طرحنا <bdi dir="ltr">x</bdi> غرام من طحين القمح،',
   'نحصل على <bdi dir="ltr">6x</bdi> غرام.',
   '',
   'النسبة الجديدة <bdi class="scq-expr" dir="ltr">4x : 6x</bdi> .',
@@ -1891,7 +1891,7 @@ const S6MC_GAP = '';
 const S6MC_EXPLAIN = [
   'نوسّع أولًا النسبة بـ <bdi class="scq-expr" dir="ltr">x</bdi> للحصول على الكمية الكلية من كل نوع طحين، ونحصل على النسبة <bdi class="scq-expr" dir="ltr">3x : 7x</bdi>.',
   S6MC_GAP,
-  'والآن نضيف <bdi class="scq-expr" dir="ltr">k</bdi> ونحصل على أن كمية طحين الحنطة هي <bdi class="scq-expr" dir="ltr">3x + k</bdi>، وكمية طحين القمح هي <bdi class="scq-expr" dir="ltr">7x + k</bdi>.',
+  'والآن نضيف <bdi class="scq-expr" dir="ltr">k</bdi> ونحصل على أن كمية طحين السبلت هي <bdi class="scq-expr" dir="ltr">3x + k</bdi>، وكمية طحين القمح هي <bdi class="scq-expr" dir="ltr">7x + k</bdi>.',
   S6MC_GAP,
   'ولذلك النسبة الجديدة ستكون',
   '<bdi class="scq-expr" dir="ltr">(3x + k) : (7x + k)</bdi>.',
@@ -2319,7 +2319,7 @@ function s7viqClearMarks() {
        correct and the final-wrong feedback changed together. */
 const S7_GAP = '';
 const S7VIQ_EXPLAIN = [
-  'نضيف إلى طحين الحنطة 100 غرام‎:',
+  'نضيف إلى طحين السبلت 100 غرام‎:',
   '@math:<bdi class="scq-expr" dir="ltr">3x + 100</bdi>',
   'نطرح من طحين القمح 20 غرام:',
   '@math:<bdi class="scq-expr" dir="ltr">7x - 20</bdi>',
@@ -2329,7 +2329,7 @@ const S7VIQ_EXPLAIN = [
   '@math:<bdi class="scq-expr" dir="ltr">120 = 4x / :4</bdi>',
   '@math:<bdi class="scq-expr" dir="ltr">x = 30</bdi>',
   S7_GAP,
-  'نعوّض <bdi class="scq-expr" dir="ltr">x = 30</bdi> ونحصل على أن الكمية الأصلية من طحين الحنطة هي‎:',
+  'نعوّض <bdi class="scq-expr" dir="ltr">x = 30</bdi> ونحصل على أن الكمية الأصلية من طحين السبلت هي‎:',
   '@math:<bdi class="scq-expr" dir="ltr">30 ⋅ 3 = 90</bdi>',
   S7_GAP,
   'الكمية الأصلية من طحين القمح هي‎:',
@@ -2520,7 +2520,7 @@ function s7viqCheck() {
   const allOk = ['spelt', 'wheat'].every(k => s7viqFieldCorrect(k));
   /* xAPI (2026-11-11): the layer writes Kata's form from the metadata — performance, 'קמח כוסמין[.]90[,]קמח חיטה[.]210' (proposed to Kata, `other` there) */
   reportQ(['001', 'q4'], allOk, allOk || s7viqAttempts >= S7_MAX_ATTEMPTS,
-    { steps: { 'طحين الحنطة': String(s7viqInput('spelt').value).trim(), 'طحين القمح': String(s7viqInput('wheat').value).trim() } });
+    { steps: { 'طحين السبلت': String(s7viqInput('spelt').value).trim(), 'طحين القمح': String(s7viqInput('wheat').value).trim() } });
 
   if (allOk) {
     s7viqResult = 'correct';

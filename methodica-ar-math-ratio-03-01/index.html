@@ -12,15 +12,15 @@
   <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
   <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
   <link rel="preconnect" href="https://kata.cet.ac.il">
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=8">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=8">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=8">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=8">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -1053,7 +1053,7 @@
                     <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">مانجو: 3 ملاعق</span></p>
                     <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">توت: 5 ملاعق</span></p>
                     <p class="is-bold frc-group">عندما نريد تكبير الكميات بـ <span class="frc-nobreak">x مرات:</span></p>
-                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">مانغو: 3x ملاعق</span></p>
+                    <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-mango.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">مانجو: 3x ملاعق</span></p>
                     <p class="frc-row"><span class="frc-slot"><img class="frc-shape frc-shape--fruit" src="assets/img/icon-strawberry.png" width="20" height="20" alt="" loading="lazy"></span><span class="frc-txt">توت: 5x ملاعق</span></p>
                     <p class="is-bold frc-group">ولذلك ستكون الكميات بنسبة <bdi dir="ltr" class="frc-expr">3x : 5x</bdi></p>
                   </div>
@@ -1817,7 +1817,7 @@
           <!-- The step card: text only. Slide 16 authors no title row, no
                bulb and no answer controls. -->
           <div class="gmp-step-card" data-reveal="2">
-            <p class="gmp-step-text">في النسبة <bdi dir="ltr" class="gmp-expr">1 : 5</bdi> توجد بطاقة واحدة رابحة و-5 بطاقات غير رابحة‎.</p>
+            <p class="gmp-step-text">في النسبة <bdi dir="ltr" class="gmp-expr">1 : 5</bdi> توجد بطاقة واحدة رابحة و5 بطاقات غير رابحة‎.</p>
             <p class="gmp-step-text">لذلك، أصغر عدد من البطاقات هو: <bdi dir="ltr" class="gmp-expr">1 + 5 = 6</bdi></p>
             <!-- ¶3 in the source is an authored EMPTY paragraph — a real
                  group break, reproduced as one line-height of space. -->
@@ -2293,11 +2293,11 @@
           <!-- The step card: question text + the three-way answer row. -->
           <div class="gmp-step-card" data-reveal="2">
             <p class="gmp-step-text">نفحص أيضًا الإجابة ث:</p>
-            <p class="gmp-step-text">لكي نفحص ما إذا كان التعبير مناسبًا، ننظر إلى الجزأين اللذين يتكوّن منهما: <bdi dir="ltr" class="gmp-expr">2x</bdi> و-<bdi dir="ltr" class="gmp-expr">5x</bdi>.</p>
+            <p class="gmp-step-text">لكي نفحص ما إذا كان التعبير مناسبًا، ننظر إلى الجزأين اللذين يتكوّن منهما: <bdi dir="ltr" class="gmp-expr">2x</bdi> و<bdi dir="ltr" class="gmp-expr">5x</bdi>.</p>
             <p class="gmp-step-text">أي نسبة يمثّلان؟</p>
             <!-- DOM order is 1:5, 2:5, 5:1 so that an RTL row renders them
                  physically 5 : 1 · 2 : 5 · 1 : 5, slide 21's own order. -->
-            <div class="gmp-options-row" role="radiogroup" aria-label="أي نسبة يمثّل 2x و-5x؟">
+            <div class="gmp-options-row" role="radiogroup" aria-label="أي نسبة يمثّل 2x و5x؟">
             <button class="gmp-opt" type="button" role="radio" aria-checked="false" data-id="r15" onclick="s17Pick('r15')">
               <span class="gmp-opt-text" data-label="1 : 5"><span dir="ltr" class="gmp-expr">1 : 5</span></span>
               <span class="gmp-opt-badge" aria-hidden="true"></span>
@@ -2394,7 +2394,7 @@
 
           <!-- The step card: text only. -->
           <div class="gmp-step-card" data-reveal="2">
-            <p class="gmp-step-text"><bdi dir="ltr" class="gmp-expr">2x</bdi> و-<bdi dir="ltr" class="gmp-expr">5x</bdi> يمثّلان النسبة <bdi dir="ltr" class="gmp-expr">2 : 5</bdi> .</p>
+            <p class="gmp-step-text"><bdi dir="ltr" class="gmp-expr">2x</bdi> و<bdi dir="ltr" class="gmp-expr">5x</bdi> يمثّلان النسبة <bdi dir="ltr" class="gmp-expr">2 : 5</bdi> .</p>
             <!-- Producer instruction 2026-09-11: "ולכן" drops to the second
                  line. The break is placed at the authored clause boundary —
                  the comma after the ratio — so the two lines are the
@@ -3190,18 +3190,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=7"></script>
-  <script src="../unit-js/08-partnav.js?v=7"></script>
+  <script src="../unit-js/05-motion.js?v=8"></script>
+  <script src="../unit-js/08-partnav.js?v=8"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=7"></script>
-  <script src="../unit-js/15-engine.js?v=7"></script>
-  <script src="../unit-js/20-xapi.js?v=7"></script>
-  <script src="../unit-js/22-scoring.js?v=7"></script>
-  <script src="../unit-js/25-report.js?v=7"></script>
-  <script src="../unit-js/40-resume.js?v=7"></script>
-  <script src="../unit-js/45-painters.js?v=7"></script>
-  <script src="../unit-js/50-loader.js?v=7"></script>
-  <script src="js/main.js?v=7"></script>
-  <script src="../unit-js/90-boot.js?v=7"></script>
+  <script src="../unit-js/10-identity.js?v=8"></script>
+  <script src="../unit-js/15-engine.js?v=8"></script>
+  <script src="../unit-js/20-xapi.js?v=8"></script>
+  <script src="../unit-js/22-scoring.js?v=8"></script>
+  <script src="../unit-js/25-report.js?v=8"></script>
+  <script src="../unit-js/40-resume.js?v=8"></script>
+  <script src="../unit-js/45-painters.js?v=8"></script>
+  <script src="../unit-js/50-loader.js?v=8"></script>
+  <script src="js/main.js?v=8"></script>
+  <script src="../unit-js/90-boot.js?v=8"></script>
 </body>
 </html>
