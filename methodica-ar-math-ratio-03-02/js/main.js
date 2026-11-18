@@ -2458,7 +2458,7 @@ const S7DQ_EXPLAIN = [
   '<bdi dir="ltr" class="viq-expr">3 : 4 = ' + s7dqFracHTML('3/4') + '</bdi>',
   '<bdi dir="ltr" class="viq-expr">7 : 4 = ' + s7dqFracHTML('7/4') + '</bdi>',
   null,
-  'لذلك، إذا كان محيط المربع بين 3 و-7 سم، فإن طول الضلع هو بين ' +
+  'لذلك، إذا كان محيط المربع بين 3 و7 سم، فإن طول الضلع هو بين ' +
     '<bdi dir="ltr" class="viq-expr">' + s7dqFracHTML('3/4') + '</bdi> و- ' +
     '<bdi dir="ltr" class="viq-expr">' + s7dqFracHTML('7/4') + '</bdi> سم.'
 ];

@@ -33,7 +33,7 @@
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-001/q1",
           "questionType": "fill-in",
-          "questionText": "يوجد في الصف x أولاد و-2x بنات. أ. ما هي النسبة المختزلة بين عدد الأولاد وعدد البنات؟ __ : __",
+          "questionText": "يوجد في الصف x أولاد و2x بنات. أ. ما هي النسبة المختزلة بين عدد الأولاد وعدد البنات؟ __ : __",
           "answers": [],
           "correctAnswers": [
             "1 : 2",
@@ -48,7 +48,7 @@
         {
           "questionId": "https://lomdot.education.gov.il/metodica/720/ar/math/ratio/03/methodica-ar-math-ratio-03-03/methodica-ar-math-ratio-03-03-001/q2",
           "questionType": "numeric",
-          "questionText": "يوجد في الصف x أولاد و-2x بنات. معلوم أن عدد البنات هو 24. ب. كم عدد الطلاب في الصف؟ __ طالبًا.",
+          "questionText": "يوجد في الصف x أولاد و2x بنات. معلوم أن عدد البنات هو 24. ب. كم عدد الطلاب في الصف؟ __ طالبًا.",
           "answers": [],
           "correctAnswers": [
             36

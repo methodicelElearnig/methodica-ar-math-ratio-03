@@ -12,15 +12,15 @@
   <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
   <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
   <link rel="preconnect" href="https://kata.cet.ac.il">
-  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=7">
-  <link rel="stylesheet" href="../unit-css/10-base.css?v=7">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="../unit-css/00-fonts.css?v=8">
+  <link rel="stylesheet" href="../unit-css/10-base.css?v=8">
+  <link rel="stylesheet" href="css/style.css?v=8">
   <!-- Animation System engine (unit-css/20-motion.css, shared by all parts),
        after the part stylesheet so its tokens and .m-animate rules win.
        Screens opt in with data-reveal; popups with .m-popup. -->
-  <link rel="stylesheet" href="../unit-css/20-motion.css?v=7">
+  <link rel="stylesheet" href="../unit-css/20-motion.css?v=8">
   <!-- Issue-report dialogs (after the part stylesheet, guide §7.1 constraint 9). -->
-  <link rel="stylesheet" href="../unit-css/25-report.css?v=7">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=8">
 </head>
 <!-- data-subject-theme activates the Math token override block in
      css/style.css. :root holds the Science defaults; this one attribute
@@ -480,7 +480,7 @@
            the scene it sits on). -->
       <div class="fito-text" data-reveal="2">
         <p>افتتحت سمر الخبازة مخبزًا جديدًا‎.</p>
-        <p>سر الرغيف المثالي هو الدمج بين نوعين من الطحين: طحين الحنطة وطحين القمح.</p>
+        <p>سر الرغيف المثالي هو الدمج بين نوعين من الطحين: طحين السبلت وطحين القمح.</p>
       </div>
 
       <!-- Continue is the standard UNGATED control for a non-question
@@ -679,7 +679,7 @@
                DISPLAYED physical order inside an LTR isolate; see the
                block comment above for the glyph-by-glyph verification
                and why plain bidi would not reproduce it. -->
-          <p class="scq-intro">النسبة بين طحين الحنطة وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>.</p>
+          <p class="scq-intro">النسبة بين طحين السبلت وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>.</p>
           <!-- ¶2 — the authored `x` is its own en-US run in the source;
                isolated so the Latin letter cannot be reordered by the
                surrounding RTL text. -->
@@ -719,7 +719,7 @@
           <span class="viq-field" id="s2viq-field-spelt">
             <input id="s2viq-input-spelt" class="viq-input" type="text" inputmode="text"
                    dir="ltr" autocomplete="off" spellcheck="false"
-                   aria-label="التعبير الجبري لكمية طحين الحنطة"
+                   aria-label="التعبير الجبري لكمية طحين السبلت"
                    oninput="s2viqOnInput()">
             <span class="viq-field-ico" id="s2viq-ico-spelt" aria-hidden="true"></span>
           </span>
@@ -860,7 +860,7 @@
                    labels track the image at any size. Latin top-left, Arabic
                    bottom-right, as on an Arabic-English keyboard (101 layout). -->
               <div class="kb-board">
-                <img class="kb-step-img" src="assets/img/keyboard-step1-alt-shift.jpg" width="960" height="355" alt="لوحة مفاتيح يظهر فيها المفتاحان ‎ Alt و-Shift  باللون الأخضر" loading="lazy">
+                <img class="kb-step-img" src="assets/img/keyboard-step1-alt-shift.jpg" width="960" height="355" alt="لوحة مفاتيح يظهر فيها المفتاحان ‎ Alt وShift  باللون الأخضر" loading="lazy">
                 <div class="kb-keys" aria-hidden="true">
                 <span class="kb-k" style="left:4.03%;top:7.73%;width:5.48%;height:14.02%"><span class="kb-k-c">Esc</span></span>
                 <span class="kb-k" style="left:10.00%;top:7.73%;width:5.58%;height:14.02%"><span class="kb-k-top">!</span><span class="kb-k-main">1</span></span>
@@ -1380,7 +1380,7 @@
           <!-- ¶1 — plain. The authored `x` runs are en-US in the source
                and are isolated so the Latin letter cannot be reordered
                by the surrounding RTL text. -->
-          <p class="scq-intro">أوصى المؤثر بإضافة  <bdi dir="ltr">x</bdi> غرام من طحين الحنطة وتقليل <bdi dir="ltr">x</bdi> غرام من طحين القمح، للحفاظ على النسبة بين نوعَيّ الطحين.</p>
+          <p class="scq-intro">أوصى المؤثر بإضافة  <bdi dir="ltr">x</bdi> غرام من طحين السبلت وتقليل <bdi dir="ltr">x</bdi> غرام من طحين القمح، للحفاظ على النسبة بين نوعَيّ الطحين.</p>
           <!-- ¶2 — PHRASE-LEVEL bold on "גלי חשבה לעצמה: " only; the
                quoted thought that follows is plain. Phrase-level
                contrast inside an otherwise plain paragraph is the
@@ -1789,7 +1789,7 @@
             <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
                     data-id="o2" onclick="s6mcToggle('o2')">
               <span class="scq-check" aria-hidden="true"></span>
-              <span class="scq-opt-text">زيادة كميات الطحين بـ <bdi class="scq-expr" dir="ltr">k</bdi> ستحافظ على النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi></span>
+              <span class="scq-opt-text">زيادة كميات الطحين بـ <bdi class="scq-expr" dir="ltr">k</bdi> مرات ستحافظ على النسبة <bdi class="scq-expr" dir="ltr">3 : 7</bdi></span>
             </button>
             <button class="scq-opt" type="button" role="checkbox" aria-checked="false"
                     data-id="o3" onclick="s6mcToggle('o3')">
@@ -2073,12 +2073,12 @@
                deck's own export shows and isolated so the browser cannot
                reorder it. The &#160; before the sentence period is
                authored: the source's third run is "3 ." with a space. -->
-          <p class="scq-intro">في وصفة سمر الأصلية، النسبة بين كمية طحين الحنطة وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>&#160;.</p>
-          <p class="scq-intro">بالإضافة إلى الخبز المعروف، تريد مفاجأة الزوار بوصفة جديدة تعتمد على كميات متساوية من طحين الحنطة وطحين القمح‎.</p>
+          <p class="scq-intro">في وصفة سمر الأصلية، النسبة بين كمية طحين السبلت وطحين القمح هي <bdi class="scq-expr" dir="ltr">3 : 7</bdi>&#160;.</p>
+          <p class="scq-intro">بالإضافة إلى الخبز المعروف، تريد مفاجأة الزوار بوصفة جديدة تعتمد على كميات متساوية من طحين السبلت وطحين القمح‎.</p>
           <!-- ¶3, ¶5 and ¶8 are AUTHORED empty paragraphs, reproduced as
                real blank lines rather than as invented margins. -->
           <p class="stem-gap" aria-hidden="true"></p>
-          <p class="scq-intro">ولذلك أضافت 100 غرام من طحين الحنطة وقلّلت 20 غرام من طحين القمح‎.</p>
+          <p class="scq-intro">ولذلك أضافت 100 غرام من طحين السبلت وقلّلت 20 غرام من طحين القمح‎.</p>
           <p class="stem-gap" aria-hidden="true"></p>
           <!-- ¶6 — whole-paragraph bold, WEIGHT only: slide 71's stem
                textbox carries no <a:solidFill> on any run. -->
@@ -2088,7 +2088,7 @@
                spaces with the drawn box laid over it). Each field's
                aria-label names its own flour, so the mapping never rests
                on position alone. -->
-          <p class="scq-intro viq-line">الكمية الأصلية من طحين الحنطة هي <span class="viq-field" id="s7viq-field-spelt"><input id="s7viq-input-spelt" class="viq-input" type="text" inputmode="numeric" dir="ltr" autocomplete="off" spellcheck="false" aria-label="الكمية الأصلية من طحين الحنطة بالغرام" oninput="s7viqOnInput()"><span class="viq-field-ico" id="s7viq-ico-spelt" aria-hidden="true"></span></span> غرام.</p>
+          <p class="scq-intro viq-line">الكمية الأصلية من طحين السبلت هي <span class="viq-field" id="s7viq-field-spelt"><input id="s7viq-input-spelt" class="viq-input" type="text" inputmode="numeric" dir="ltr" autocomplete="off" spellcheck="false" aria-label="الكمية الأصلية من طحين السبلت بالغرام" oninput="s7viqOnInput()"><span class="viq-field-ico" id="s7viq-ico-spelt" aria-hidden="true"></span></span> غرام.</p>
           <p class="stem-gap" aria-hidden="true"></p>
           <p class="scq-intro viq-line">الكمية الأصلية من طحين القمح هي <span class="viq-field" id="s7viq-field-wheat"><input id="s7viq-input-wheat" class="viq-input" type="text" inputmode="numeric" dir="ltr" autocomplete="off" spellcheck="false" aria-label="الكمية الأصلية من طحين القمح بالغرام" oninput="s7viqOnInput()"><span class="viq-field-ico" id="s7viq-ico-wheat" aria-hidden="true"></span></span> غرام.</p>
         </div>
@@ -2288,18 +2288,18 @@
   </div>
 
   <!-- motion.js BEFORE main.js: goTo() calls Motion.cancel/Motion.reveal. -->
-  <script src="../unit-js/05-motion.js?v=7"></script>
-  <script src="../unit-js/08-partnav.js?v=7"></script>
+  <script src="../unit-js/05-motion.js?v=8"></script>
+  <script src="../unit-js/08-partnav.js?v=8"></script>
   <!-- Shared layer (unit-js/, definitions only) → the part → 90-boot.js runs it. -->
-  <script src="../unit-js/10-identity.js?v=7"></script>
-  <script src="../unit-js/15-engine.js?v=7"></script>
-  <script src="../unit-js/20-xapi.js?v=7"></script>
-  <script src="../unit-js/22-scoring.js?v=7"></script>
-  <script src="../unit-js/25-report.js?v=7"></script>
-  <script src="../unit-js/40-resume.js?v=7"></script>
-  <script src="../unit-js/45-painters.js?v=7"></script>
-  <script src="../unit-js/50-loader.js?v=7"></script>
-  <script src="js/main.js?v=7"></script>
-  <script src="../unit-js/90-boot.js?v=7"></script>
+  <script src="../unit-js/10-identity.js?v=8"></script>
+  <script src="../unit-js/15-engine.js?v=8"></script>
+  <script src="../unit-js/20-xapi.js?v=8"></script>
+  <script src="../unit-js/22-scoring.js?v=8"></script>
+  <script src="../unit-js/25-report.js?v=8"></script>
+  <script src="../unit-js/40-resume.js?v=8"></script>
+  <script src="../unit-js/45-painters.js?v=8"></script>
+  <script src="../unit-js/50-loader.js?v=8"></script>
+  <script src="js/main.js?v=8"></script>
+  <script src="../unit-js/90-boot.js?v=8"></script>
 </body>
 </html>

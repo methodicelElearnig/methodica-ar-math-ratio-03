@@ -2613,7 +2613,7 @@ function s7viqResetInitial() {
 const S7VIQ_EXPLAIN = [
   'نرمز: عدد بطاقات حنان هو <bdi class="viq-expr" dir="ltr">7x</bdi> وعدد بطاقات سامر هو <bdi class="viq-expr" dir="ltr">4x</bdi>.',
   null,
-  'أعطت حنان لسامر عومر 15 بطاقة، لذلك‎:',
+  'أعطت حنان لسامر 15 بطاقة، لذلك‎:',
   'بقيَت لدى حنان <bdi class="viq-expr" dir="ltr">7x - 15</bdi> بطاقة.',
   'أصبح لدى سامر الآن <bdi class="viq-expr" dir="ltr">4x + 15</bdi> بطاقة.',
   null,

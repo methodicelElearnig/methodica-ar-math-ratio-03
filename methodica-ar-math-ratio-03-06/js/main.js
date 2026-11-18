@@ -1767,7 +1767,7 @@ function s5viqResetInitial() {
    the title. Every mathematical fragment is an isolated LTR island so
    the visible order is the authored order. */
 const S5VIQ_EXPLAIN = [
-  'لإيجاد <bdi class="scq-expr" dir="ltr">α</bdi> و-<bdi class="scq-expr" dir="ltr">β</bdi> نحل المعادلة‎ التالية:',
+  'لإيجاد <bdi class="scq-expr" dir="ltr">α</bdi> و<bdi class="scq-expr" dir="ltr">β</bdi> نحل المعادلة‎ التالية:',
   '<bdi class="scq-expr" dir="ltr">2x + 3x = 180°</bdi>',
   '<bdi class="scq-expr" dir="ltr">5x = 180°</bdi>',
   '<bdi class="scq-expr" dir="ltr">x = 36°</bdi>',

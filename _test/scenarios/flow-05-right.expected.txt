@@ -1,10 +1,10 @@
 initialized onlinelesson -
 initialized question 001
-answered.last question 001/q1 true 1 «طحين الحنطة: 3x, طحين القمح: 7x»
+answered.last question 001/q1 true 1 «طحين السبلت: 3x, طحين القمح: 7x»
 played question 001
 answered.last question 001/q2 true 1 «سمر»
 paused question 001
-answered.last question 001/q3 true 1 «زيادة كميات الطحين بـ k ستحافظ على النسبة 3 : 7[,]إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)»
-answered.last question 001/q4 true 1 «طحين الحنطة[.]90[,]طحين القمح[.]210»
+answered.last question 001/q3 true 1 «زيادة كميات الطحين بـ k مرات ستحافظ على النسبة 3 : 7[,]إضافة k غرام إلى كل نوع من الطحين ستعطينا نسبة جديدة، وهي (3x + k) : (7x + k)»
+answered.last question 001/q4 true 1 «طحين السبلت[.]90[,]طحين القمح[.]210»
 completed question 001 true 1
 completed onlinelesson - true 1
